@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include "SDL_mixer.h"
 #include "Minigin.h"
 #include <thread>
 #include "InputManager.h"
@@ -86,7 +87,7 @@ void dae::Minigin::Run()
 
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
-
+	
 	LoadGame();
 
 	{
