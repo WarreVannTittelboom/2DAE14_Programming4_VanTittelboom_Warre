@@ -8,6 +8,7 @@
 #include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
+//init push
 
 using namespace std;
 
