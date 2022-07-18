@@ -6,9 +6,10 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "Timer.h"
+#include "TextureComp.h"
 //init push
 
 using namespace std;
@@ -39,8 +40,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		int(m_WindowSize.x),
+		int(m_WindowSize.y),
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr) 
@@ -49,28 +50,10 @@ void dae::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
-}
+	//TO DO: register audio
 
-/**
- * Code constructing the scene world starts here
- */
-void dae::Minigin::LoadGame() const
-{
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
-	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
-	scene.Add(go);
-
-	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	scene.Add(go);
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
-	scene.Add(to);
+	// tell the resource manager where he can find the game data
+	ResourceManager::GetInstance().Init("../Data/");
 }
 
 void dae::Minigin::Cleanup()
@@ -83,25 +66,34 @@ void dae::Minigin::Cleanup()
 
 void dae::Minigin::Run()
 {
-	Initialize();
-
-	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance().Init("../Data/");
-	
-	LoadGame();
 
 	{
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 
-		// todo: this update loop could use some work.
+		auto lastTime = chrono::high_resolution_clock::now();
 		bool doContinue = true;
+		float lag = 0.0f;
 		while (doContinue)
 		{
+			const auto currentTime = chrono::high_resolution_clock::now();
+			float deltaTime = chrono::duration<float>(currentTime - lastTime).count();
+			lastTime = currentTime;
+			lag += deltaTime;
 			doContinue = input.ProcessInput();
 			sceneManager.Update();
+			while (lag >= m_FixedTimeStep)
+			{
+				sceneManager.FixedUpdate(m_FixedTimeStep);
+				lag -= m_FixedTimeStep;
+			}
+			sceneManager.LateUpdate();
+			//todo: update collision
 			renderer.Render();
+			Timer::GetInstance().Set(deltaTime);
+			auto sleepTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now());
+			this_thread::sleep_for(sleepTime);
 		}
 	}
 

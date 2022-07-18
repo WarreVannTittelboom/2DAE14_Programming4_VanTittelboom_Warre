@@ -13,6 +13,11 @@ Scene::~Scene() = default;
 void Scene::Add(const std::shared_ptr<SceneObject>& object)
 {
 	m_Objects.push_back(object);
+	object->Initialize();
+}
+void Scene::Remove(const std::shared_ptr<GameObject>& object)
+{
+	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
 }
 
 void Scene::Update()
@@ -23,6 +28,21 @@ void Scene::Update()
 	}
 }
 
+void Scene::FixedUpdate(float fDT)
+{
+	for (auto& object : m_Objects)
+	{
+		object->FixedUpdate(fDT);
+	}
+}
+
+void Scene::LateUpdate()
+{
+	for (auto& object : m_Objects)
+	{
+		object->LateUpdate();
+	}
+}
 void Scene::Render() const
 {
 	for (const auto& object : m_Objects)

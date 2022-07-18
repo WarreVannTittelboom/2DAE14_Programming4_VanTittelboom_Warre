@@ -164,6 +164,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Tron.cpp" />
+    <ClCompile Include="TronGame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TronGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

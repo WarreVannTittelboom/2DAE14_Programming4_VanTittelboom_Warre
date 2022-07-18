@@ -1,5 +1,7 @@
 #pragma once
+#include "MiniginPCH.h"
 #include "SceneManager.h"
+#include "GameObject.h"
 
 namespace dae
 {
@@ -9,8 +11,12 @@ namespace dae
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(const std::shared_ptr<SceneObject>& object);
+		void Remove(const std::shared_ptr<GameObject>& object);
+		std::string GetName() const { return m_Name; }
 
 		void Update();
+		void FixedUpdate(float fDT);
+		void LateUpdate();
 		void Render() const;
 
 		~Scene();
@@ -19,13 +25,14 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-	private: 
+		bool m_IsActive = true;
+	private:
 		explicit Scene(const std::string& name);
 
 		std::string m_Name;
 		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
 
-		static unsigned int m_IdCounter; 
+		static unsigned int m_IdCounter;
 	};
 
 }

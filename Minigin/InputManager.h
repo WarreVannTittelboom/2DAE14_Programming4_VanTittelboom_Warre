@@ -1,24 +1,38 @@
 #pragma once
-#include <XInput.h>
 #include "Singleton.h"
+#include <memory>
+#include <map>
+#include "Command.h"
+#include <XInput.h>
+#include "ControllerInput.h"
+
+class Command;
 
 namespace dae
 {
-	enum class ControllerButton
-	{
-		ButtonA,
-		ButtonB,
-		ButtonX,
-		ButtonY
-	};
-
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
+		explicit InputManager();
+		~InputManager();
+		InputManager(const InputManager& other) = delete;
+		InputManager(InputManager&& other) noexcept = delete;
+		InputManager& operator=(const InputManager& other) = delete;
+		InputManager& operator=(InputManager&& other) noexcept = delete;
+
 		bool ProcessInput();
-		bool IsPressed(ControllerButton button) const;
+		
+		void AddCommand(std::map<SDL_Scancode, std::shared_ptr<Command>>& inputCommands, unsigned int id);
+		void AddCommand(std::map<dae::controlButton, std::shared_ptr<Command>>& inputCommands, unsigned int id);
+	
 	private:
-		XINPUT_STATE m_CurrentState{};
+		using KeyBoardKey = std::pair<unsigned, SDL_Scancode>;
+		using KeyBoardCommandsMap = std::map<KeyBoardKey, std::shared_ptr<Command>>;
+		KeyBoardCommandsMap m_KeyboardCommands{};
+		
+		ControllerInput* m_pController;
+		bool GetControllerInput(std::vector < std::pair <dae::controlInput , std::shared_ptr<Command >> > & commands) const;
+
 	};
 
 }

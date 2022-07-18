@@ -13,17 +13,23 @@ namespace dae
 		SDL_Window* m_Window{};
 		SDL_Color m_clearColor{};	
 	public:
+		
 		void Init(SDL_Window* window);
 		void Render() const;
 		void Destroy();
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
-
+		void RenderTexture(const Texture2D& texture, const SDL_Rect& srcRect, const SDL_Rect& dstRct, bool isFlipped = false) const;
+		void RenderTexture(const Texture2D& texture, int x, int y, int width, int height) const;
+		void RenderTexture(const Texture2D& texture, int x, int y) const;
+	
+		
+		
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
+
+		glm::ivec2 GetScreenSize();
 	};
 }
 

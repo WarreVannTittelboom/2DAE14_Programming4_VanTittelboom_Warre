@@ -27,6 +27,8 @@ void dae::ResourceManager::Init(const std::string& dataPath)
 	{
 		throw std::runtime_error(std::string("Failed to load support for fonts: ") + SDL_GetError());
 	}
+
+	//todo :: open audio
 }
 
 std::shared_ptr<dae::Texture2D> dae::ResourceManager::LoadTexture(const std::string& file) const

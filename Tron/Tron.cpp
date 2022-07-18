@@ -7,9 +7,12 @@
 #endif
 
 #include "Minigin.h"
+#include"TronGame.h"
 
 int main(int, char* []) {
 	dae::Minigin engine;
+	engine.Initialize();
+	dae::TronGame::GetInstance().CreateScenes();
 	engine.Run();
 	return 0;
 }

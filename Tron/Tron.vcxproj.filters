@@ -18,5 +18,13 @@
     <ClCompile Include="Tron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TronGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TronGame.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
