@@ -10,14 +10,14 @@ GameObject::GameObject() : m_Parent(nullptr)
 {
 	auto screenSize = Renderer::GetInstance().GetScreenSize();
 	m_Transform.SetPosition(0, (float)(-screenSize.y), 0);
-	for (auto& comp : m_pComponents)
-	{
-		comp->Initialize();
-	}
 }
 
 void dae::GameObject::Initialize()
 {
+	for (auto& comp : m_pComponents)
+	{
+		comp->Initialize();
+	}
 }
 
 void dae::GameObject::Update()

@@ -13,8 +13,22 @@ public:
 	virtual void Release() = 0;
 protected:
 	
-	dae::GameObject* GetObject() const { return m_pGameObject; };
+	dae::GameObject* GetObj() const { return m_pGameObject; };
 private:
 	
 	dae::GameObject* m_pGameObject = nullptr;
 };
+
+class TestCommand : public Command
+{
+public:
+	TestCommand(dae::GameObject* go)
+		:Command(go)
+	{
+	};
+	void Execute() override { std::cout << "Test begin\n"; }
+	void Release() override { std::cout << "Test command end\n"; }
+
+	
+};
+

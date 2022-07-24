@@ -4,8 +4,6 @@
 
 using namespace dae;
 
-unsigned int Scene::m_IdCounter = 0;
-
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene() = default;
@@ -20,8 +18,18 @@ void Scene::Remove(const std::shared_ptr<GameObject>& object)
 	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
 }
 
+void dae::Scene::Initialize()
+{
+	for (auto& object : m_Objects)
+	{
+		object->Initialize();
+	}
+}
+
+
 void Scene::Update()
 {
+	m_CollManager.Update();
 	for(auto& object : m_Objects)
 	{
 		object->Update();
@@ -49,5 +57,10 @@ void Scene::Render() const
 	{
 		object->Render();
 	}
+}
+
+void dae::Scene::AddCollider(const std::shared_ptr<CollisionComp>& object)
+{
+	m_CollManager.AddCollider(object.get());
 }
 

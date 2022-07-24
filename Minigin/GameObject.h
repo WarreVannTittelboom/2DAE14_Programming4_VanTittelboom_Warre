@@ -71,7 +71,7 @@ namespace dae
 			
 			if ((compnt != nullptr))
 			{
-				return true;
+				return compnt;
 			}
 		}
 		return nullptr;

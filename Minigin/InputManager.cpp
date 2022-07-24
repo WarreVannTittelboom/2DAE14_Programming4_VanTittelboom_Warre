@@ -18,7 +18,7 @@ dae::InputManager::~InputManager()
 bool dae::InputManager::ProcessInput()
 {
 	std::vector<std::pair<dae::controlInput, std::shared_ptr<Command>>> commands{};
-
+	
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) 
 	{
@@ -96,6 +96,5 @@ bool dae::InputManager::GetControllerInput(std::vector<std::pair<dae::controlInp
 	{
 		return true; 
 	}
-	
 	return false;
 }

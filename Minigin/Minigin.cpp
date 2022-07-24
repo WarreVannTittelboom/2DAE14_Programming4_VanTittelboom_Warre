@@ -1,3 +1,4 @@
+#pragma once
 #include "MiniginPCH.h"
 #include "SDL_mixer.h"
 #include "Minigin.h"
@@ -10,7 +11,8 @@
 #include "Scene.h"
 #include "Timer.h"
 #include "TextureComp.h"
-//init push
+#include <iostream>
+#include "ServiceLocator.h"
 
 using namespace std;
 
@@ -31,10 +33,17 @@ void dae::Minigin::Initialize()
 {
 	PrintSDLVersion();
 	
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
+
+	
+	if (Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		std::cout << "Error: SDL_Mixer Init error";
+	}
+
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
@@ -50,14 +59,15 @@ void dae::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
-	//TO DO: register audio
 
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
+	ServiceLocator::GetInstance().RegisterSoundSystem(new dae::AudioSystem());
 }
 
 void dae::Minigin::Cleanup()
 {
+	ServiceLocator::GetInstance().ReleaseSoundSystem();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
@@ -75,6 +85,7 @@ void dae::Minigin::Run()
 		auto lastTime = chrono::high_resolution_clock::now();
 		bool doContinue = true;
 		float lag = 0.0f;
+		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1,20);
 		while (doContinue)
 		{
 			const auto currentTime = chrono::high_resolution_clock::now();
@@ -95,6 +106,7 @@ void dae::Minigin::Run()
 			auto sleepTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now());
 			this_thread::sleep_for(sleepTime);
 		}
+		ServiceLocator::GetInstance().GetSoundSystem().StopQueue();
 	}
 
 	Cleanup();

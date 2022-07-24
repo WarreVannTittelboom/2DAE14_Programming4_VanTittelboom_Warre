@@ -59,11 +59,21 @@ void dae::Renderer::Destroy()
 }
 
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const SDL_Rect& srcRect, const SDL_Rect& dstRct, bool isFlipped) const
+void dae::Renderer::RenderTexture(const Texture2D& texture, const SDL_Rect& srcRect, const SDL_Rect& dstRct, bool horizontalFlip, bool verticalFlip) const
 {
-	if (isFlipped)
+	if (horizontalFlip && verticalFlip)
+	{ 
+		//From SDL Wiki ->/* casts may be necessary for some compiler settings or languages (e.g. C++) */
+		SDL_RendererFlip flip = SDL_RendererFlip(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRct, 0, nullptr, flip);
+	}
+	else if (horizontalFlip)
 	{
 		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRct, 0, nullptr, SDL_FLIP_HORIZONTAL);
+	}
+	else if (verticalFlip)
+	{
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRct, 0, nullptr, SDL_FLIP_VERTICAL);
 	}
 	else
 	{

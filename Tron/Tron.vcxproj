@@ -163,10 +163,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PlayerCommands.cpp" />
+    <ClCompile Include="PlayerTank.cpp" />
     <ClCompile Include="Tron.cpp" />
     <ClCompile Include="TronGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PlayerCommands.h" />
+    <ClInclude Include="PlayerTank.h" />
     <ClInclude Include="TronGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

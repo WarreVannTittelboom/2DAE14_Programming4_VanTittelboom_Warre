@@ -2,6 +2,8 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
 #include "GameObject.h"
+#include "CollisionComp.h"
+#include "CollisionManager.h"
 
 namespace dae
 {
@@ -14,10 +16,12 @@ namespace dae
 		void Remove(const std::shared_ptr<GameObject>& object);
 		std::string GetName() const { return m_Name; }
 
+		void Initialize();
 		void Update();
 		void FixedUpdate(float fDT);
 		void LateUpdate();
 		void Render() const;
+		void AddCollider(const std::shared_ptr<CollisionComp>& object);
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -28,11 +32,10 @@ namespace dae
 		bool m_IsActive = true;
 	private:
 		explicit Scene(const std::string& name);
-
 		std::string m_Name;
 		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
 
-		static unsigned int m_IdCounter;
+		CollisionManager m_CollManager;
 	};
 
 }
