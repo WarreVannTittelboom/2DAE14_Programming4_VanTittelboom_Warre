@@ -167,11 +167,13 @@
     <ClCompile Include="PlayerTank.cpp" />
     <ClCompile Include="Tron.cpp" />
     <ClCompile Include="TronGame.cpp" />
+    <ClCompile Include="TronObservers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="PlayerTank.h" />
     <ClInclude Include="TronGame.h" />
+    <ClInclude Include="TronObservers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

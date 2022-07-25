@@ -23,7 +23,7 @@ void dae::CollisionManager::Update()
 				{ 
 					if (pOther->GetGameObject()) 
 					{ 
-						pCollider->GetSubject()->Notify(*(pOther->GetGameObject()), dae::Event::CollEvent); 
+						pCollider->GetSubject()->Notify((pCollider->GetGameObject()), dae::Event::CollEvent);
 					}
 				}
 			}

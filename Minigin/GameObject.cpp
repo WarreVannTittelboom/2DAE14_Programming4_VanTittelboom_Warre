@@ -76,7 +76,7 @@ void GameObject::AddToChildren(const std::shared_ptr<GameObject>& child)
 	m_Children.push_back(child);
 }
 
-glm::vec3 GameObject::GetWorldPosition()
+const glm::vec3 GameObject::GetWorldPosition()
 {
 	if (m_Parent != nullptr)
 	{

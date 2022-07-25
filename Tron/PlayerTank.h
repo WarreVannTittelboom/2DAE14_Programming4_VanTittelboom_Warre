@@ -22,7 +22,7 @@ namespace dae
 		//void FixedUpdate(float fDT) override;
 		//void LateUpdate() override;
 		void Render() const override;
-		void OnColl(GameObject* other) override;
+		void OnColl(const GameObject* other) override;
 	
 		void SetMoveLeft(bool moveLeft) { m_MoveLeft = moveLeft; }
 		void SetMoveRight(bool moveRight) { m_MoveRight = moveRight; }
@@ -43,6 +43,12 @@ namespace dae
 		bool m_MoveRight{ false };
 		bool m_MoveUp{ false };
 		bool m_MoveDown{ false };
+		
+		bool m_BlockMoveLeft{ false };
+		bool m_BlockMoveRight{ false };
+		bool m_BlockMoveUp{ false };
+		bool m_BlockMoveDown{ false };
+
 
 		bool m_DoShoot{ false };
 

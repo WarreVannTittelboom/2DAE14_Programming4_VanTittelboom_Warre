@@ -34,7 +34,7 @@ namespace dae
 		
 		
 
-		glm::vec3 GetWorldPosition();
+		const glm::vec3 GetWorldPosition();
 		void SetPosition(float x, float y);
 		void SetPosition(float x, float y,float z);
 		void SetPosition(int x, int y);

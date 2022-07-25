@@ -22,12 +22,9 @@ dae::PlayerTank::~PlayerTank()
 void dae::PlayerTank::Initialize()
 {
 	//init controls
-
-	CollisionObserver* collideObserver = new CollisionObserver();
 	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 32.f, 32.f, true);
 	m_pGameObject->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(collideObserver);
 	m_pGameObject->SetPosition(224, -320);
 	m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
 	m_pGameObject->AddComponent(m_playerHorizontalSprite);
@@ -41,16 +38,16 @@ void dae::PlayerTank::Initialize()
 	std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
 	std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
 
-	kInputMap[SDL_SCANCODE_A] = std::make_shared<MoveLeft>(m_pGameObject);
+	kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(m_pGameObject);
 	cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(m_pGameObject);
 
-	kInputMap[SDL_SCANCODE_D] = std::make_shared<MoveRight>(m_pGameObject);
+	kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(m_pGameObject);
 	cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(m_pGameObject);
 
-	kInputMap[SDL_SCANCODE_W] = std::make_shared<MoveUp>(m_pGameObject);
+	kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(m_pGameObject);
 	cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(m_pGameObject);
 
-	kInputMap[SDL_SCANCODE_S] = std::make_shared<MoveDown>(m_pGameObject);
+	kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(m_pGameObject);
 	cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(m_pGameObject);
 
 	kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(m_pGameObject);
@@ -75,35 +72,47 @@ void dae::PlayerTank::Update()
 
 	if (m_MoveLeft)
 	{
-		m_pGameObject->SetPosition(m_pGameObject->GetPosition().x - (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
-		m_playerHorizontalSprite.get()->m_IsActive = true;
-		m_playerVerticalSprite.get()->m_IsActive = false;
-		m_playerHorizontalSprite.get()->m_FlipHorizontal = true;
-		m_playerHorizontalSprite.get()->m_FlipVertical = false;
+		if (!m_BlockMoveLeft)
+		{
+			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x - (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
+			m_playerHorizontalSprite.get()->m_IsActive = true;
+			m_playerVerticalSprite.get()->m_IsActive = false;
+			m_playerHorizontalSprite.get()->m_FlipHorizontal = true;
+			m_playerHorizontalSprite.get()->m_FlipVertical = false;
+		}
 	}
 	else if (m_MoveRight)
 	{
-		m_pGameObject->SetPosition(m_pGameObject->GetPosition().x + (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
-		m_playerHorizontalSprite.get()->m_IsActive = true;
-		m_playerVerticalSprite.get()->m_IsActive = false;
-		m_playerHorizontalSprite.get()->m_FlipHorizontal = false;
-		m_playerHorizontalSprite.get()->m_FlipVertical = false;
+		if (!m_BlockMoveRight)
+		{
+			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x + (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
+			m_playerHorizontalSprite.get()->m_IsActive = true;
+			m_playerVerticalSprite.get()->m_IsActive = false;
+			m_playerHorizontalSprite.get()->m_FlipHorizontal = false;
+			m_playerHorizontalSprite.get()->m_FlipVertical = false;
+		}
 	}
 	else if (m_MoveUp)
 	{
-		m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y + (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().z);
-		m_playerHorizontalSprite.get()->m_IsActive = false;
-		m_playerVerticalSprite.get()->m_IsActive = true;
-		m_playerVerticalSprite.get()->m_FlipHorizontal = false;
-		m_playerVerticalSprite.get()->m_FlipVertical = false;
+		if (!m_BlockMoveUp)
+		{
+			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y + (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().z);
+			m_playerHorizontalSprite.get()->m_IsActive = false;
+			m_playerVerticalSprite.get()->m_IsActive = true;
+			m_playerVerticalSprite.get()->m_FlipHorizontal = false;
+			m_playerVerticalSprite.get()->m_FlipVertical = false;
+		}
 	}
 	else if (m_MoveDown)
 	{
-		m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y - (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().z);
-		m_playerHorizontalSprite.get()->m_IsActive = false;
-		m_playerVerticalSprite.get()->m_IsActive = true;
-		m_playerVerticalSprite.get()->m_FlipHorizontal = false;
-		m_playerVerticalSprite.get()->m_FlipVertical = true;
+		if (!m_BlockMoveDown)
+		{
+			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y - (deltaTime * m_PlayerSpeed), m_pGameObject->GetPosition().z);
+			m_playerHorizontalSprite.get()->m_IsActive = false;
+			m_playerVerticalSprite.get()->m_IsActive = true;
+			m_playerVerticalSprite.get()->m_FlipHorizontal = false;
+			m_playerVerticalSprite.get()->m_FlipVertical = true;
+		}
 	}
 
 	if (m_DoShoot)
@@ -149,7 +158,10 @@ void dae::PlayerTank::Update()
 		m_MoveCannonCooldown += deltaTime;
 	}
 
-
+	m_BlockMoveRight = false;
+	m_BlockMoveLeft = false;
+	m_BlockMoveUp = false;
+	m_BlockMoveDown = false;
 }
 
 void dae::PlayerTank::Render() const
@@ -158,11 +170,55 @@ void dae::PlayerTank::Render() const
 	//check if cannon is rotated the right if not rotate it accordingly
 }
 
-void dae::PlayerTank::OnColl(GameObject* other)
+void dae::PlayerTank::OnColl(const GameObject* other)
 {
-	//check if collding with enemy or bullet if so kill and lose life
-	//also call during update to check if colliding with wall?
+	std::cout << "test\n";
+	//std::cout << "testyes\n";
+	//check if colliding with wall or enemy tank
+	//if colliding with wall, move back
+	//if colliding with enemy tank, damage enemy tank
+	// If one rectangle is on left side of the other
+		/*if (((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width - 2) > m_pGameObject->GetWorldPosition().x) && ((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x))
+
+		{
+			m_BlockMoveRight = true;
+		}
+		else if (((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width) > m_pGameObject->GetWorldPosition().x) && ((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2))
+		{
+			m_BlockMoveLeft = true;
+		}
+
+	else if ((m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2< (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)) && other->GetComponent<dae::CollisionComp>()->m_Pos.y  < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height))
+	{
+		m_BlockMoveUp = true;
+	}
+	else if ((m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y  < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)) && other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height -2))
+	{
+		m_BlockMoveDown = true;
+	}
+	*/
+
+	if((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width -2) > m_pGameObject->GetWorldPosition().x) 
+
+	{
+		m_BlockMoveRight = true;
+	}
+	if (((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2))
+	{
+		m_BlockMoveLeft = true;
+	}
+
+	if (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2 < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height))
+	{
+		m_BlockMoveUp = true;
+	}
+	if (other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2))
+	{
+		m_BlockMoveDown = true;
+	}
+
 }
+
 
 void dae::PlayerTank::InitTurretSprites()
 {

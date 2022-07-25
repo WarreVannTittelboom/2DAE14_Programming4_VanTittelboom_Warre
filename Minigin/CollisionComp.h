@@ -20,10 +20,11 @@ namespace dae
 		bool CheckCollision(CollisionComp* pCollider);
 
 		bool m_Active;
-	private:
 		glm::ivec2 m_Pos{};
 		float m_Width;
 		float m_Height;
+	private:
+		
 	};
 }
 

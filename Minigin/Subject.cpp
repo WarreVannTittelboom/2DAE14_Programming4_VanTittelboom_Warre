@@ -10,7 +10,7 @@ dae::Subject::~Subject()
 		observer = nullptr;
 	}
 }
-void dae::Subject::Notify(const dae::GameObject& e, Event event)
+void dae::Subject::Notify(const dae::GameObject* e, Event event)
 {
 	for (size_t i = 0; i < m_pObservers.size(); ++i)
 	{

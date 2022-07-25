@@ -34,7 +34,7 @@ bool dae::CollisionComp::CheckCollision(CollisionComp* pCollider)
 	}
 
 	// If one rectangle is under the other
-	if (m_Pos.y > (pCollider->m_pGameObject->GetWorldPosition().y + pCollider->m_Height) || pCollider->m_pGameObject->GetWorldPosition().y > (m_Pos.y + m_Height ) )
+	if (m_Pos.y > (pCollider->m_pGameObject->GetWorldPosition().y + m_Height) || pCollider->m_pGameObject->GetWorldPosition().y  > (m_Pos.y  + pCollider->m_Height) )
 	{
 		return false;
 	}

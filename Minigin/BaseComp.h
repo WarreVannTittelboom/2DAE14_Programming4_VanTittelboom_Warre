@@ -21,7 +21,7 @@ namespace dae
 		virtual void FixedUpdate(float fDT) {};
 		virtual void LateUpdate() {};
 		virtual void Render() const {};
-		virtual void OnColl(GameObject* other) {};
+		virtual void OnColl(const GameObject* other) {};
 
 		void SetGameObject(GameObject* object);
 		GameObject* GetGameObject() const;
