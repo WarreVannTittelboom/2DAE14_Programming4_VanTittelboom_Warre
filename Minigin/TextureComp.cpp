@@ -18,7 +18,7 @@ void dae::TextureComp::Render() const
 	if(m_IsActive)
 	{
 	auto pos = glm::ivec2{ m_pGameObject->GetWorldPosition().x, m_pGameObject->GetWorldPosition().y };
-	dae::Renderer::GetInstance().RenderTexture(*m_Texture, SDL_Rect{ 0,0,(int)m_Size.x,(int)m_Size.y }, { pos.x, -pos.y,(int)m_Size.x,(int)m_Size.y }, m_FlipHorizontal, m_FlipVertical);
+	dae::Renderer::GetInstance().RenderTexture(*m_Texture, SDL_Rect{ 0,0,(int)m_Size.x,(int)m_Size.y }, { pos.x + m_OffSetX, -(pos.y + m_OffSetY),(int)m_Size.x,(int)m_Size.y }, m_FlipHorizontal, m_FlipVertical);
 	}
 }
 

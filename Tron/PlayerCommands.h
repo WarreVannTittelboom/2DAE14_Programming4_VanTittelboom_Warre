@@ -76,8 +76,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { std::cout << "Test begin\n"; }
-	void Release() override { std::cout << "Test command end\n"; }
+	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(true); }
+	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(false); }
 
 
 };
@@ -90,8 +90,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { std::cout << "Test begin\n"; }
-	void Release() override { std::cout << "Test command end\n"; }
+	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(true); }
+	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(false); }
 
 
 };

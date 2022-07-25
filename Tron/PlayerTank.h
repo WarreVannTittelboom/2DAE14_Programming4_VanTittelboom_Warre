@@ -32,11 +32,13 @@ namespace dae
 		void SetDoShoot(bool doShoot) { m_DoShoot = doShoot; }
 		
 		void SetMoveCannonLeft(bool moveCannonLeft) { m_MoveCannonLeft = moveCannonLeft; }
-		void SetMoveCannonRiight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
+		void SetMoveCannonRight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
 	
 	private:
+		void InitTurretSprites();
 		float m_PlayerSpeed{50.f};
-			
+		int m_TurretMoveIter{0};
+		float m_MoveCannonCooldown{ 0.f };
 		bool m_MoveLeft{ false };
 		bool m_MoveRight{ false };
 		bool m_MoveUp{ false };
@@ -50,6 +52,7 @@ namespace dae
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_playerHorizontalSprite;
 		std::shared_ptr<TextureComp> m_playerVerticalSprite;
+		std::vector <std::shared_ptr<TextureComp>> m_playerCannonSprites;
 	};
 }
 
