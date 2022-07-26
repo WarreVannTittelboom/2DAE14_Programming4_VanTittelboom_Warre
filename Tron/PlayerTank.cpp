@@ -69,7 +69,6 @@ void dae::PlayerTank::Update()
 	//check for input for shooting
 	//no moveent if colliding in that direction
 	float deltaTime = Timer::GetInstance().GetDeltaTime();
-
 	if (m_MoveLeft)
 	{
 		if (!m_BlockMoveLeft)
@@ -117,8 +116,14 @@ void dae::PlayerTank::Update()
 
 	if (m_DoShoot)
 	{
+		if (m_ShootCannonCooldown >= 0.5f)
+		{
+			m_ShootCannonCooldown = 0.0f;
+			
+		}
 		//check if not on cooldown and if not shoot bullet
 	}
+	m_ShootCannonCooldown += deltaTime;
 
 
 	//xor for checking if cannon should be turned
@@ -131,7 +136,7 @@ void dae::PlayerTank::Update()
 			if (m_MoveCannonLeft)
 			{
 				++m_TurretMoveIter;
-				if (m_TurretMoveIter >= m_playerCannonSprites.size())
+				if ((size_t)m_TurretMoveIter >= m_playerCannonSprites.size())
 				{
 					m_TurretMoveIter -= unsigned int(m_playerCannonSprites.size());
 				}
@@ -198,23 +203,24 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 	}
 	*/
 
-	if((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width -2) > m_pGameObject->GetWorldPosition().x) 
+	if(!((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width -2) > m_pGameObject->GetWorldPosition().x))
 
+	{
+		
+		m_BlockMoveLeft = true;
+	}
+	if (!(((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2)))
 	{
 		m_BlockMoveRight = true;
 	}
-	if (((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2))
-	{
-		m_BlockMoveLeft = true;
-	}
 
-	if (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2 < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height))
-	{
-		m_BlockMoveUp = true;
-	}
-	if (other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2))
+	if (!(m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2 < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)))
 	{
 		m_BlockMoveDown = true;
+	}
+	if (!(other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2)))
+	{
+		m_BlockMoveUp = true;
 	}
 
 }

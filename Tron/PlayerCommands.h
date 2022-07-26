@@ -62,8 +62,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { std::cout << "Test begin\n"; }
-	void Release() override { std::cout << "Test command end\n"; }
+	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(true); }
+	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(false); }
 
 
 };

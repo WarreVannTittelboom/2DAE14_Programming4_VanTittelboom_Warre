@@ -103,8 +103,8 @@ void dae::Minigin::Run()
 			//todo: update collision
 			renderer.Render();
 			Timer::GetInstance().Set(deltaTime);
-			auto sleepTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now());
-			this_thread::sleep_for(sleepTime);
+			/*auto sleepTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now());
+			this_thread::sleep_for(sleepTime);*/
 		}
 		ServiceLocator::GetInstance().GetSoundSystem().StopQueue();
 	}

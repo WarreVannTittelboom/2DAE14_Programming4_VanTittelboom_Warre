@@ -39,6 +39,7 @@ namespace dae
 		float m_PlayerSpeed{50.f};
 		int m_TurretMoveIter{0};
 		float m_MoveCannonCooldown{ 0.f };
+		float m_ShootCannonCooldown{ 0.f };
 		bool m_MoveLeft{ false };
 		bool m_MoveRight{ false };
 		bool m_MoveUp{ false };
