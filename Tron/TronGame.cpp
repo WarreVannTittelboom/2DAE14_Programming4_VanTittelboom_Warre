@@ -12,6 +12,7 @@
 #include "Observer.h"
 #include "PlayerTank.h"
 #include "TronObservers.h"
+#include"PlayerBullet.h"
 
 void dae::TronGame::CreateScenes()
 {

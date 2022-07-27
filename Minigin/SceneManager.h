@@ -10,7 +10,7 @@ namespace dae
 		Scene& CreateScene(const std::string& name);
 		void SetScene(const std::string& name);
 		Scene& GetScene(const std::string& name);
-
+		Scene& GetActiveScene();
 		void Update();
 		void FixedUpdate(float fDT);
 		void LateUpdate();

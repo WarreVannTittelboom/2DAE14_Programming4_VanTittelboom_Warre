@@ -6,6 +6,7 @@ void dae::SceneManager::Update()
 {
 	for(auto& scene : m_Scenes)
 	{
+		if (scene->m_IsActive)
 		scene->Update();
 	}
 }
@@ -49,6 +50,18 @@ dae::Scene& dae::SceneManager::GetScene(const std::string& name)
 	for (auto& scene : m_Scenes)
 	{
 		if (scene->GetName() == name)
+			
+			return *scene;
+	}
+	throw std::runtime_error("Scene not found");
+}
+
+dae::Scene& dae::SceneManager::GetActiveScene()
+{
+	for (auto& scene : m_Scenes)
+	{
+		if (scene->m_IsActive)
+
 			return *scene;
 	}
 	throw std::runtime_error("Scene not found");

@@ -36,6 +36,7 @@ namespace dae
 	
 	private:
 		void InitTurretSprites();
+		void Test();
 		float m_PlayerSpeed{50.f};
 		int m_TurretMoveIter{0};
 		float m_MoveCannonCooldown{ 0.f };

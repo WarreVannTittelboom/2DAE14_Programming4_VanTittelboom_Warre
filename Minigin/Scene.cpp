@@ -29,10 +29,9 @@ void dae::Scene::Initialize()
 
 void Scene::Update()
 {
-	m_CollManager.Update();
-	for(auto& object : m_Objects)
+	for(size_t i = 0; i < m_Objects.size(); i++)
 	{
-		object->Update();
+		m_Objects[i]->Update();
 	}
 }
 
