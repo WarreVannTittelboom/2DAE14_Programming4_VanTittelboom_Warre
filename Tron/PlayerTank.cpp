@@ -13,12 +13,13 @@
 #include <Scene.h>
 #include <SceneManager.h>
 #include<SceneObject.h>
+#include "Teleporter.h"
 
 #define PI 3.14159265
 
-dae::PlayerTank::PlayerTank(dae::GameObject* gameObject)
+dae::PlayerTank::PlayerTank(dae::GameObject* gameObject,Scene& scene)
 	: BaseComp(gameObject)
-	, m_Scene(dae::SceneManager::GetInstance().GetScene("Menu"))
+	, m_Scene(scene)
 {
 
 }
@@ -33,7 +34,6 @@ void dae::PlayerTank::Initialize()
 	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 32.f, 32.f, true);
 	m_pGameObject->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	m_pGameObject->SetPosition(224, -320);
 	m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
 	m_pGameObject->AddComponent(m_playerHorizontalSprite);
 	m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", 32, 32, true);
@@ -69,14 +69,6 @@ void dae::PlayerTank::Initialize()
 
 	dae::InputManager::GetInstance().AddCommand(kInputMap, 0);
 	dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
-	auto bulletGo = std::make_shared<dae::GameObject>();
-	float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY);
-	bulletGo->AddComponent(bulletComp);
-	auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
-	scene.Add(bulletGo);
-	//Test();
 }
 
 void dae::PlayerTank::Update()
@@ -138,7 +130,7 @@ void dae::PlayerTank::Update()
 			auto bulletGo = std::make_shared<dae::GameObject>();
 			float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
 			float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY);
+			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene);
 			bulletGo->AddComponent(bulletComp);
 			auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 			scene.Add(bulletGo);
@@ -225,10 +217,15 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 	}
 	*/
 
+	if (other->GetComponent<dae::Teleporter>())
+	{
+		m_pGameObject->SetPosition(300, -50);
+	}
+	else 
+	{ 
 	if(!((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width -2) > m_pGameObject->GetWorldPosition().x))
 
 	{
-		
 		m_BlockMoveLeft = true;
 	}
 	if (!(((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2)))
@@ -243,6 +240,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 	if (!(other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2)))
 	{
 		m_BlockMoveUp = true;
+	}
 	}
 
 }
@@ -436,7 +434,7 @@ void dae::PlayerTank::Test()
 	auto bulletGo = std::make_shared<dae::GameObject>();
 	float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
 	float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY);
+	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene);
 	bulletGo->AddComponent(bulletComp);
 	auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 	scene.Add(bulletGo);

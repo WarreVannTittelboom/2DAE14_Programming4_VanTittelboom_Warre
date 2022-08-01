@@ -6,16 +6,27 @@ using namespace dae;
 
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
-Scene::~Scene() = default;
+Scene::~Scene()
+{
+	m_Objects.clear();
+}
 
 void Scene::Add(const std::shared_ptr<SceneObject>& object)
 {
 	m_Objects.push_back(object);
 	object->Initialize();
 }
-void Scene::Remove(const std::shared_ptr<GameObject>& object)
+void Scene::Remove(GameObject*  object)
 {
-	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
+	for (size_t i = 0; i < m_Objects.size(); i++)
+	{
+		if (m_Objects[i].get() == object)
+		{
+			m_Objects[i] = m_Objects.back();
+			m_Objects.pop_back();
+			return;
+		}
+	}
 }
 
 void dae::Scene::Initialize()
@@ -29,6 +40,7 @@ void dae::Scene::Initialize()
 
 void Scene::Update()
 {
+	m_CollManager.Update();
 	for(size_t i = 0; i < m_Objects.size(); i++)
 	{
 		m_Objects[i]->Update();

@@ -45,7 +45,7 @@ namespace dae
 		std::vector<std::shared_ptr<BaseComp>> GetComponents() { return m_pComponents; }
 
 		explicit GameObject();
-		virtual ~GameObject() = default;
+		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;

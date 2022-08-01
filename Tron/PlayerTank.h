@@ -10,7 +10,7 @@ namespace dae
 	class PlayerTank : public dae::BaseComp
 	{
 	public:
-		explicit PlayerTank(dae::GameObject* gameObject);
+		explicit PlayerTank(dae::GameObject* gameObject,Scene& scene);
 		~PlayerTank();
 		PlayerTank(const PlayerTank& other) = delete;
 		PlayerTank(PlayerTank&& other) = delete;

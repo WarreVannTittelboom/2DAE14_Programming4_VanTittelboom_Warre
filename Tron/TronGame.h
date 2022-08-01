@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-
+#include <memory>
 namespace dae
 {
 	class TronGame : public Singleton<TronGame>
@@ -14,6 +14,7 @@ namespace dae
 		TronGame& operator=(TronGame&& other) noexcept = delete;
 
 		void CreateScenes();
+		
 	};
 }
 

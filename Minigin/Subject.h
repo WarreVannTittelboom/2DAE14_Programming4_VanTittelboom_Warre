@@ -14,7 +14,7 @@ namespace dae
 		~Subject();
 		void AddObserver(Observer* observer);
 		void RemoveObserver(const Observer* observer);
-		void Notify(const dae::GameObject* e, Event event);
+		void Notify(const dae::GameObject* o, const dae::GameObject* e, Event event);
 	private:
 		std::vector<Observer*> m_pObservers{};
 	};

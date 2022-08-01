@@ -12,44 +12,48 @@ GameObject::GameObject() : m_Parent(nullptr)
 	m_Transform.SetPosition(0, (float)(-screenSize.y), 0);
 }
 
+dae::GameObject::~GameObject()
+{
+	m_pComponents.clear();
+}
+
 void dae::GameObject::Initialize()
 {
-	for (auto& comp : m_pComponents)
+	for(size_t i = 0; i <  m_pComponents.size(); i++)
 	{
-		comp->Initialize();
+		m_pComponents[i]->Initialize();
 	}
 }
 
 void dae::GameObject::Update()
 {
-	for (auto& comp : m_pComponents)
+	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		comp.get()->Update();
+		m_pComponents[i]->Update();
 	}
 }
 
 void dae::GameObject::FixedUpdate(float fDT)
 {
-	for (auto& comp : m_pComponents)
+	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		comp.get()->FixedUpdate(fDT);
+		m_pComponents[i]->FixedUpdate(fDT);
 	}
-
 }
 
 void dae::GameObject::LateUpdate()
 {
-	for (auto& comp : m_pComponents)
+	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		comp.get()->LateUpdate();
+		m_pComponents[i]->LateUpdate();
 	}
 }
 
 void dae::GameObject::Render() const
 {
-	for (auto& comp : m_pComponents)
+	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		comp.get()->Render();
+		m_pComponents[i]->Render();
 	}
 }
 

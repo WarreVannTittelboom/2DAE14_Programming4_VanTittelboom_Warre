@@ -33,7 +33,10 @@ bool dae::InputManager::ProcessInput()
 			{
 				if (e.key.keysym.scancode == k.first.second)
 				{
-					k.second->Execute();
+					for(auto c : k.second)
+					{
+						c->Execute();
+					}
 				}
 			}
 		}
@@ -43,7 +46,10 @@ bool dae::InputManager::ProcessInput()
 			{
 				if (e.key.keysym.scancode == k.first.second)
 				{
-					k.second->Release();
+					for (auto c : k.second)
+					{
+						c->Release();
+					}
 				}
 			}
 		}
@@ -78,7 +84,7 @@ void dae::InputManager::AddCommand(std::map<SDL_Scancode, std::shared_ptr<Comman
 {
 	for (auto& c : inputCommands)
 	{
-		m_KeyboardCommands[std::make_pair(id, c.first)] = std::move(c.second);
+		m_KeyboardCommands[std::make_pair(id, c.first)].push_back(c.second);
 	}
 }
 

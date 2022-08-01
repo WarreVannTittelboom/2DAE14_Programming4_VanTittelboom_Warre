@@ -31,10 +31,16 @@ void dae::SceneManager::LateUpdate()
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_Scenes)
+	for(auto & scene : m_Scenes)
 	{
-		scene->Render();
+		if (scene->m_IsActive)
+			scene->Render();
 	}
+}
+
+dae::SceneManager::~SceneManager()
+{
+	m_Scenes.clear();
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)

@@ -163,19 +163,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PlayerCommands.cpp" />
     <ClCompile Include="PlayerTank.cpp" />
+    <ClCompile Include="Teleporter.cpp" />
     <ClCompile Include="Tron.cpp" />
     <ClCompile Include="TronGame.cpp" />
     <ClCompile Include="TronObservers.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="PlayerTank.h" />
+    <ClInclude Include="Teleporter.h" />
     <ClInclude Include="TronGame.h" />
     <ClInclude Include="TronObservers.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

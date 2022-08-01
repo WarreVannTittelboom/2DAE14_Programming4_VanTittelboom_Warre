@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 #include "PlayerTank.h"
+#include "PlayerBullet.h"
+#include "Button.h"
+#include "Teleporter.h"
 
 namespace dae
 {
@@ -16,7 +19,7 @@ public:
 		m_pPlayerTank = playerTank;
 	}
 	~CollisionObserver() override = default;
-	void OnNotify(const dae::GameObject* entity, Event event) override
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
 	{
 		switch (event)
 		{
@@ -24,7 +27,10 @@ public:
 		{
 			//check if colling with enemy or bullet
 			//if (auto pEnemy = entity->GetComponent<dae::test>())
-			m_pPlayerTank->GetComponent<dae::PlayerTank>()->OnColl(entity);
+			if (auto pPlayerBullet = o->GetComponent<dae::PlayerTank>())
+			{
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
 		}
 		break;
 		}
@@ -32,4 +38,78 @@ public:
 private:
 	std::shared_ptr<GameObject>  m_pPlayerTank{};
 };
+
+class PlayerBulletObserver : public Observer
+{
+public:
+	explicit PlayerBulletObserver()
+	{
+	}
+	~PlayerBulletObserver() override = default;
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e,Event event) override
+	{
+		switch (event)
+		{
+		case dae::Event::CollEvent:
+		{
+			if (auto pPlayerBullet = e->GetComponent<dae::PlayerBullet>())
+			{
+				pPlayerBullet->OnColl(o);
+			} 
+		}
+		break;
+		}
+	}
+};
+
+class ButtonObserver : public Observer
+{
+public:
+	explicit ButtonObserver()
+	{
+	}
+	~ButtonObserver() override = default;
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
+	{
+		switch (event)
+		{
+		case dae::Event::CollEvent:
+		{
+			if (auto pPlayerBullet = e->GetComponent<dae::Button>())
+			{
+				pPlayerBullet->OnColl(o);
+			}
+		}
+		break;
+		}
+	}
+};
+class TeleportCollisionObserver : public Observer
+{
+public:
+	explicit TeleportCollisionObserver(std::shared_ptr<GameObject> playerTank)
+	{
+		m_pPlayerTank = playerTank;
+	}
+	~TeleportCollisionObserver() override = default;
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
+	{
+		switch (event)
+		{
+		case dae::Event::CollEvent:
+		{
+			//check if colling with enemy or bullet
+			//if (auto pEnemy = entity->GetComponent<dae::test>())
+			if (auto pPlayerBullet = o->GetComponent<dae::PlayerTank>())
+			{
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
+		}
+		break;
+		}
+	}
+private:
+	std::shared_ptr<GameObject>  m_pPlayerTank{};
+};
+
 }

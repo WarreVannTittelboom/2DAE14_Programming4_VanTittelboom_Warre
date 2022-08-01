@@ -49,14 +49,20 @@ public:
 			{
 				input.isPressed = true;
 				input.id = b.first.first;
-				command.push_back(std::make_pair(input, (b.second)));
+				for (auto c : b.second)
+				{
+					command.push_back(std::make_pair(input, c));
+				}
 			}
 			
 			if (IsUp(b.first))
 			{
 				input.isPressed = false;
 				input.id = b.first.first;
-				command.push_back(std::make_pair(input, (b.second)));
+				for (auto c : b.second)
+				{
+					command.push_back(std::make_pair(input, c));
+				}
 			}
 		}
 		
@@ -87,13 +93,13 @@ public:
 	{
 		for (auto& c : inputCommands)
 		{
-			m_controllerCommands[std::make_pair(id, c.first)] = std::move(c.second);
+			m_controllerCommands[std::make_pair(id, c.first)].push_back(c.second);
 		}
 	}
 
 private:
 	using ControllerKey = std::pair<unsigned, controlButton>;
-	using ControllerCommandsMap = std::map<ControllerKey, std::shared_ptr<Command>>;
+	using ControllerCommandsMap = std::map<ControllerKey, std::vector <std::shared_ptr<Command>>>;
 
 	ControllerCommandsMap m_controllerCommands{};
 

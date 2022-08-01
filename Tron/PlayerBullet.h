@@ -8,7 +8,7 @@ namespace dae
 class PlayerBullet : public BaseComp
 {
 public:
-	explicit PlayerBullet(GameObject* gameObject,float x,float y, float cosx, float siny);
+	explicit PlayerBullet(GameObject* gameObject, float x, float y, float cosx, float siny, Scene& scene);
 	~PlayerBullet();
 	PlayerBullet(const PlayerBullet& other) = delete;
 	PlayerBullet(PlayerBullet&& other) = delete;
@@ -23,7 +23,7 @@ public:
 	void OnColl(const GameObject* other) override;
 private:
 	float m_BulletSpeed{ 80.f };
-	int m_BounceCount{ 3 };
+	int m_BounceCount{ 0 };
 	float m_StartPosX{ 0.f };
 	float m_StartPosY{ 0.f };
 	float m_CosX{ 0.f };

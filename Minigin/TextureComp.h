@@ -9,7 +9,6 @@ namespace dae
 	class TextureComp : public BaseComp
 	{
 	public:
-		TextureComp() = delete;
 		TextureComp(dae::GameObject* gameObject, const std::string& filename,int w,int h, bool isActive);
 		void Initialize() override {  };
 		void Render() const override;
