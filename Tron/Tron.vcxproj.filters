@@ -42,6 +42,12 @@
     <ClCompile Include="Teleporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BasicEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecognizerEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TronGame.h">
@@ -66,6 +72,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Teleporter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicEnemy.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecognizerEnemy.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

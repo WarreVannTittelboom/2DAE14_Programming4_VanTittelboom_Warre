@@ -22,6 +22,7 @@ namespace dae
 		void LateUpdate();
 		void Render() const;
 		void AddCollider(const std::shared_ptr<CollisionComp>& object);
+		void RemoveCollider(CollisionComp* object);
 
 		~Scene();
 		Scene(const Scene& other) = delete;

@@ -1,0 +1,14 @@
+[
+  {
+    "object": "Player1",
+    "transform": [ 224, -300 ]
+  },
+  {
+    "object": "Player2",
+    "transform": [ 224, -350 ]
+  },
+  {
+    "object": "Walls",
+    "transform": [ 20, 20, 120, 120, "../Data/test.png" ]
+  }
+]

@@ -10,7 +10,7 @@ namespace dae
 	class PlayerTank : public dae::BaseComp
 	{
 	public:
-		explicit PlayerTank(dae::GameObject* gameObject,Scene& scene);
+		explicit PlayerTank(dae::GameObject* gameObject,Scene& scene, unsigned int id);
 		~PlayerTank();
 		PlayerTank(const PlayerTank& other) = delete;
 		PlayerTank(PlayerTank&& other) = delete;
@@ -33,6 +33,7 @@ namespace dae
 		
 		void SetMoveCannonLeft(bool moveCannonLeft) { m_MoveCannonLeft = moveCannonLeft; }
 		void SetMoveCannonRight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
+		unsigned int GetId() { return m_Id; }
 	
 	private:
 		void InitTurretSprites();
@@ -57,6 +58,7 @@ namespace dae
 		bool m_MoveCannonLeft{ false };
 		bool m_MoveCannonRight{ false };
 
+		unsigned int m_Id;
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_playerHorizontalSprite;
 		std::shared_ptr<TextureComp> m_playerVerticalSprite;

@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseComp.h"
 #include "Transform.h"
+#include "CollisionManager.h"
 
 namespace dae
 {
@@ -8,7 +9,7 @@ namespace dae
 	{
 	public:
 		CollisionComp(GameObject* gameObject, float width, float height, bool active = true);
-		~CollisionComp() override = default;
+		~CollisionComp() override;
 		CollisionComp(const CollisionComp& other) = delete;
 		CollisionComp(CollisionComp&& other) noexcept = delete;
 		CollisionComp& operator=(const CollisionComp& other) = delete;

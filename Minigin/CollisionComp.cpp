@@ -1,6 +1,8 @@
 #include "MiniginPCH.h"
 #include "CollisionComp.h"
 #include "GameObject.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 dae::CollisionComp::CollisionComp(GameObject* gameObject,float width, float height, bool active)
 	: BaseComp(gameObject)
@@ -8,6 +10,11 @@ dae::CollisionComp::CollisionComp(GameObject* gameObject,float width, float heig
 	, m_Height(height)
 	, m_Active(active)
 {
+}
+
+dae::CollisionComp::~CollisionComp()
+{
+	SceneManager::GetInstance().GetActiveScene().RemoveCollider(this);
 }
 
 void dae::CollisionComp::Initialize()

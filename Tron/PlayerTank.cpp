@@ -17,9 +17,10 @@
 
 #define PI 3.14159265
 
-dae::PlayerTank::PlayerTank(dae::GameObject* gameObject,Scene& scene)
+dae::PlayerTank::PlayerTank(dae::GameObject* gameObject,Scene& scene,unsigned int id)
 	: BaseComp(gameObject)
 	, m_Scene(scene)
+	, m_Id(id)
 {
 
 }
@@ -66,9 +67,11 @@ void dae::PlayerTank::Initialize()
 
 	kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(m_pGameObject);
 	cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
-
-	dae::InputManager::GetInstance().AddCommand(kInputMap, 0);
-	dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
+	if (m_Id == 0)
+	{ 
+	dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
+	}
+	dae::InputManager::GetInstance().AddCommand(cInputMap, m_Id);
 }
 
 void dae::PlayerTank::Update()
@@ -130,7 +133,7 @@ void dae::PlayerTank::Update()
 			auto bulletGo = std::make_shared<dae::GameObject>();
 			float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
 			float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene);
+			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene,m_Id);
 			bulletGo->AddComponent(bulletComp);
 			auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 			scene.Add(bulletGo);
@@ -434,7 +437,7 @@ void dae::PlayerTank::Test()
 	auto bulletGo = std::make_shared<dae::GameObject>();
 	float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
 	float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene);
+	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene,m_Id);
 	bulletGo->AddComponent(bulletComp);
 	auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 	scene.Add(bulletGo);

@@ -8,6 +8,7 @@
 #include "PlayerBullet.h"
 #include "Button.h"
 #include "Teleporter.h"
+#include "Wall.h"
 
 namespace dae
 {
@@ -53,7 +54,7 @@ public:
 		case dae::Event::CollEvent:
 		{
 			if (auto pPlayerBullet = e->GetComponent<dae::PlayerBullet>())
-			{
+			{		
 				pPlayerBullet->OnColl(o);
 			} 
 		}

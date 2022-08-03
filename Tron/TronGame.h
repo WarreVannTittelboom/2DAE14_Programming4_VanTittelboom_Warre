@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include <memory>
+#include "Scene.h"
 namespace dae
 {
 	class TronGame : public Singleton<TronGame>
@@ -14,7 +15,8 @@ namespace dae
 		TronGame& operator=(TronGame&& other) noexcept = delete;
 
 		void CreateScenes();
-		
+
+		void ReadJsonFile(const std::string& name,Scene& scene);
 	};
 }
 

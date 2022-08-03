@@ -8,7 +8,7 @@ namespace dae
 class PlayerBullet : public BaseComp
 {
 public:
-	explicit PlayerBullet(GameObject* gameObject, float x, float y, float cosx, float siny, Scene& scene);
+	explicit PlayerBullet(GameObject* gameObject, float x, float y, float cosx, float siny, Scene& scene, unsigned int id);
 	~PlayerBullet();
 	PlayerBullet(const PlayerBullet& other) = delete;
 	PlayerBullet(PlayerBullet&& other) = delete;
@@ -29,6 +29,7 @@ private:
 	float m_CosX{ 0.f };
 	float m_SinY{ 0.f };
 	Scene& m_Scene;
+	unsigned int m_Id;
 };
 }
 

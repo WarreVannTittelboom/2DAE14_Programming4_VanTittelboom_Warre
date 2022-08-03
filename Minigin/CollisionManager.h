@@ -16,9 +16,11 @@ namespace dae
 		void Update();
 
 		void AddCollider(dae::CollisionComp* pCollider);
-
+		void RemoveCollider(dae::CollisionComp* pCollider);
 	private:
 		std::vector<CollisionComp*> m_pColliders{};
+
+		bool m_ShouldSkipLoop{ false };
 	};
 }
 

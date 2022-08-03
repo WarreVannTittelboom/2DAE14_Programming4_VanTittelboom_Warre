@@ -7,13 +7,14 @@
 #include "TronObservers.h"
 #include "Wall.h"
 
-dae::PlayerBullet::PlayerBullet(GameObject* gameObject, float x, float y,float cosx,float siny,Scene& scene)
+dae::PlayerBullet::PlayerBullet(GameObject* gameObject, float x, float y,float cosx,float siny,Scene& scene,unsigned int id)
 	: BaseComp(gameObject)
 	, m_Scene(scene)
 	, m_StartPosX(x)
 	, m_StartPosY(y)
 	, m_CosX(cosx)
 	, m_SinY(siny)
+	,m_Id(id)
 {
 }
 
@@ -97,5 +98,14 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 				m_SinY *= -1;
 			}
 		}
+	}
+	else if (auto pTank = other->GetComponent<dae::PlayerTank>())
+	{
+		if(m_Id != pTank->GetId())
+	{
+		m_Scene.Remove(pTank->GetGameObject());
+		m_Scene.Remove(m_pGameObject);
+		std::cout << "test";
+	}
 	}
 }
