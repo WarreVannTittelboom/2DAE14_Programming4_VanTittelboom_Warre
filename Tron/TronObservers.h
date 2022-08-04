@@ -10,7 +10,8 @@
 #include "Teleporter.h"
 #include "Wall.h"
 #include "BasicEnemy.h"
-
+#include "EnemyBullet.h"
+#include "RecognizerEnemy.h"
 namespace dae
 {
 class CollisionObserver : public Observer
@@ -30,13 +31,17 @@ public:
 			//check if colling with enemy or bullet
 			//if (auto pEnemy = entity->GetComponent<dae::test>())
 			
-			if (o->GetComponent<dae::BasicEnemy>())
+			if (o->GetComponent<dae::PlayerTank>())
+			{
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
+			else if (o->GetComponent<dae::BasicEnemy>())
 			{
 				o->GetComponent<dae::BasicEnemy>()->OnColl(e);
 			}
-			else if (o->GetComponent<dae::PlayerTank>())
+			else if (o->GetComponent<dae::RecognizerEnemy>())
 			{
-				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+				o->GetComponent<dae::RecognizerEnemy>()->OnColl(e);
 			}
 			
 		}
@@ -60,10 +65,14 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			if (auto pPlayerBullet = e->GetComponent<dae::PlayerBullet>())
+			if (auto pPlayerBullet1 = e->GetComponent<dae::PlayerBullet>())
 			{		
-				pPlayerBullet->OnColl(o);
+				pPlayerBullet1->OnColl(o);
 			} 
+			else if (auto pPlayerBullet = e->GetComponent<dae::EnemyBullet>())
+			{
+				pPlayerBullet->OnColl(o);
+			}
 		}
 		break;
 		}
@@ -144,12 +153,43 @@ public:
 			{
 				o->GetComponent<dae::BasicEnemy>()->OnColl(e);
 			}
+  			else if (o->GetComponent<dae::RecognizerEnemy>() && !(e->GetComponent<dae::BasicEnemy>()))
+			{
+				o->GetComponent<dae::RecognizerEnemy>()->OnColl(e);
+			}
 		}
 		break;
 		}
 	}
 private:
 	std::shared_ptr<GameObject>  m_pPlayerTank{};
+};
+
+class EnemyBulletObserver : public Observer
+{
+public:
+	explicit EnemyBulletObserver()
+	{
+	}
+	~EnemyBulletObserver() override = default;
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
+	{
+		switch (event)
+		{
+		case dae::Event::CollEvent:
+		{
+			if (o->GetComponent<dae::PlayerTank>() && e->GetComponent<dae::EnemyBullet>())
+			{
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
+			else if (o->GetComponent<dae::PlayerTank>() && e->GetComponent<dae::EnemyBullet>())
+			{
+				e->GetComponent<dae::EnemyBullet>()->OnColl(o);
+			}
+		}
+		break;
+		}
+	}
 };
 
 }

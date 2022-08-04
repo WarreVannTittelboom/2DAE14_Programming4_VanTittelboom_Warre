@@ -23,7 +23,11 @@ namespace dae
 		//void LateUpdate() override;
 		//void Render() const override;
 		void OnColl(const GameObject* other) override;
+
+		void ShootCannon(float degreesAngle);
+		void DoDamage();
 	private:
+		int m_Health{3};
 		float m_EnemySpeed{ 50.f };
 		float m_ShootCannonCooldown{ 0.f };
 		float m_PosX{};

@@ -6,6 +6,7 @@
 #include <SceneManager.h>
 #include "TronObservers.h"
 #include "Wall.h"
+#include "RecognizerEnemy.h"
 
 dae::PlayerBullet::PlayerBullet(GameObject* gameObject, float x, float y,float cosx,float siny,Scene& scene,unsigned int id)
 	: BaseComp(gameObject)
@@ -107,5 +108,15 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		m_Scene.Remove(m_pGameObject);
 		std::cout << "test";
 	}
+	}
+	else if (auto pEnemy = other->GetComponent<dae::BasicEnemy>())
+	{
+		pEnemy->DoDamage();
+		m_Scene.Remove(m_pGameObject);
+	}
+	else if (auto pEnemyspecial = other->GetComponent<dae::RecognizerEnemy>())
+	{
+		pEnemyspecial->DoDamage();
+		m_Scene.Remove(m_pGameObject);
 	}
 }

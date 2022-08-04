@@ -96,3 +96,16 @@ public:
 
 };
 
+class NextScene : public Command
+{
+public:
+	NextScene(dae::GameObject* go)
+		:Command(go)
+	{
+	};
+	void Execute() override { }
+	void Release() override { }
+
+
+};
+

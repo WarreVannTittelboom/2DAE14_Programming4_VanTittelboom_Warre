@@ -1,3 +1,4 @@
+#pragma once
 #include "PlayerTank.h"
 #include <CollisionComp.h>
 #include <Scene.h>
@@ -15,6 +16,8 @@
 #include<SceneObject.h>
 #include "Teleporter.h"
 #include "BasicEnemy.h"
+#include "EnemyBullet.h"
+#include "RecognizerEnemy.h"
 
 #define PI 3.14159265
 
@@ -68,6 +71,9 @@ void dae::PlayerTank::Initialize()
 
 	kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(m_pGameObject);
 	cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
+
+	kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(m_pGameObject);
+	cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(m_pGameObject);
 	if (m_Id == 0)
 	{ 
 	dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
@@ -226,6 +232,14 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 		m_pGameObject->SetPosition(300, -50);
 	}
 	else if (other->GetComponent<dae::BasicEnemy>())
+	{
+		m_Scene.Remove(m_pGameObject);
+	}
+	else if (other->GetComponent<dae::RecognizerEnemy>())
+	{
+		m_Scene.Remove(m_pGameObject);
+	}
+	else if (other->GetComponent<dae::EnemyBullet>())
 	{
 		m_Scene.Remove(m_pGameObject);
 	}

@@ -34,11 +34,12 @@ namespace dae
 		void SetMoveCannonLeft(bool moveCannonLeft) { m_MoveCannonLeft = moveCannonLeft; }
 		void SetMoveCannonRight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
 		unsigned int GetId() { return m_Id; }
+		void AddScore(int score){m_Score += score;}
 	
 	private:
 		void InitTurretSprites();
 		void Test();
-		float m_PlayerSpeed{50.f};
+		float m_PlayerSpeed{80.f};
 		int m_TurretMoveIter{0};
 		float m_MoveCannonCooldown{ 0.f };
 		float m_ShootCannonCooldown{ 0.f };
@@ -58,6 +59,9 @@ namespace dae
 		bool m_MoveCannonLeft{ false };
 		bool m_MoveCannonRight{ false };
 
+		int m_Score{0};
+		int m_Lives{ 3 };
+		
 		unsigned int m_Id;
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_playerHorizontalSprite;

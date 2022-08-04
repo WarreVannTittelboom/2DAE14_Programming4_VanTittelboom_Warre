@@ -20,6 +20,7 @@
 #include "rapidjson/document.h"
 #include <fstream>
 #include "BasicEnemy.h"
+#include "RecognizerEnemy.h"
 
 
 void dae::TronGame::CreateScenes()
@@ -112,6 +113,11 @@ void dae::TronGame::CreateScenes()
 	auto basicenmeyComp1 = std::make_shared<dae::BasicEnemy>(basicenmey1.get(), 280.f, -50.f, 32.f, 32.f, playerTank2, versusScene);
 	basicenmey1->AddComponent(basicenmeyComp1);
 	versusScene.Add(basicenmey1);
+
+	auto specialenmey1 = std::make_shared<dae::GameObject>();
+	auto specialenmeyComp1 = std::make_shared<dae::RecognizerEnemy>(specialenmey1.get(), 280.f, -50.f, 32.f, 32.f, playerTank2, versusScene);
+	specialenmey1->AddComponent(specialenmeyComp1);
+	versusScene.Add(specialenmey1);
 
 	/*auto wall2 = std::make_shared<dae::GameObject>();
 	auto wallComp2 = std::make_shared<dae::Wall>(wall2.get(), 280.f, 0.f, 120.f, 120.f, "../Data/test.png", playerTank,coopScene);
