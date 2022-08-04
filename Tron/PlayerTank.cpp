@@ -14,6 +14,7 @@
 #include <SceneManager.h>
 #include<SceneObject.h>
 #include "Teleporter.h"
+#include "BasicEnemy.h"
 
 #define PI 3.14159265
 
@@ -223,6 +224,10 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 	if (other->GetComponent<dae::Teleporter>())
 	{
 		m_pGameObject->SetPosition(300, -50);
+	}
+	else if (other->GetComponent<dae::BasicEnemy>())
+	{
+		m_Scene.Remove(m_pGameObject);
 	}
 	else 
 	{ 

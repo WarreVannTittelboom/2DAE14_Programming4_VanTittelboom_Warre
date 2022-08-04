@@ -9,6 +9,7 @@
 #include "Button.h"
 #include "Teleporter.h"
 #include "Wall.h"
+#include "BasicEnemy.h"
 
 namespace dae
 {
@@ -28,10 +29,16 @@ public:
 		{
 			//check if colling with enemy or bullet
 			//if (auto pEnemy = entity->GetComponent<dae::test>())
-			if (auto pPlayerBullet = o->GetComponent<dae::PlayerTank>())
+			
+			if (o->GetComponent<dae::BasicEnemy>())
+			{
+				o->GetComponent<dae::BasicEnemy>()->OnColl(e);
+			}
+			else if (o->GetComponent<dae::PlayerTank>())
 			{
 				o->GetComponent<dae::PlayerTank>()->OnColl(e);
 			}
+			
 		}
 		break;
 		}
@@ -104,6 +111,38 @@ public:
 			if (auto pPlayerBullet = o->GetComponent<dae::PlayerTank>())
 			{
 				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
+		}
+		break;
+		}
+	}
+private:
+	std::shared_ptr<GameObject>  m_pPlayerTank{};
+};
+
+class EnemyCollisionObserver : public Observer
+{
+public:
+	explicit EnemyCollisionObserver(std::shared_ptr<GameObject> playerTank)
+	{
+		m_pPlayerTank = playerTank;
+	}
+	~EnemyCollisionObserver() override = default;
+	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
+	{
+		switch (event)
+		{
+		case dae::Event::CollEvent:
+		{
+			//check if colling with enemy or bullet
+			//if (auto pEnemy = entity->GetComponent<dae::test>())
+			if (o->GetComponent<dae::PlayerTank>())
+			{
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+			}
+			else if (o->GetComponent<dae::BasicEnemy>())
+			{
+				o->GetComponent<dae::BasicEnemy>()->OnColl(e);
 			}
 		}
 		break;

@@ -40,6 +40,7 @@ void dae::Scene::Initialize()
 
 void Scene::Update()
 {
+	m_CollManager.Update();
 	for(size_t i = 0; i < m_Objects.size(); i++)
 	{
 		m_Objects[i]->Update();
@@ -52,7 +53,6 @@ void Scene::FixedUpdate(float fDT)
 	{
 		object->FixedUpdate(fDT);
 	}
-	m_CollManager.Update();
 }
 
 void Scene::LateUpdate()

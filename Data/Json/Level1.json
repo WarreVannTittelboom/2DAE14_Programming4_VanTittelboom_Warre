@@ -9,6 +9,9 @@
   },
   {
     "object": "Walls",
-    "transform": [ 20, 20, 120, 120, "../Data/test.png" ]
+    "transform": [
+      [ 200, 0, 120, 120, "../Data/test.png" ],
+      [ 200, -240, 120, 120, "../Data/test.png" ]
+    ]
   }
 ]

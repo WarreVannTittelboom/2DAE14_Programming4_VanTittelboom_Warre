@@ -19,6 +19,7 @@
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
 #include <fstream>
+#include "BasicEnemy.h"
 
 
 void dae::TronGame::CreateScenes()
@@ -39,6 +40,7 @@ void dae::TronGame::CreateScenes()
 	versusScene.Add(background);
 
 	ReadJsonFile("Level1", menuScene);
+	ReadJsonFile("Level2", versusScene);
 	
 	//player tank
 	/*auto playerTank = std::make_shared<dae::GameObject>();
@@ -78,10 +80,10 @@ void dae::TronGame::CreateScenes()
 	//wall2->AddComponent(wallComp2);
 	//menuScene.Add(wall2);
 	
-	auto wall3 = std::make_shared<dae::GameObject>();
+	/*auto wall3 = std::make_shared<dae::GameObject>();
 	auto wallComp3 = std::make_shared<dae::Wall>(wall3.get(), 200.f, -80.f, 120.f, 120.f, "../Data/test.png", playerTank2, versusScene);
 	wall3->AddComponent(wallComp3);
-	versusScene.Add(wall3);
+	versusScene.Add(wall3);*/
 
 	/*auto wall2 = std::make_shared<dae::GameObject>();
 	auto wallComp2 = std::make_shared<dae::Wall>(wall2.get(), 280.f, 0.f, 120.f, 120.f, "../Data/test.png", playerTank,coopScene);
@@ -105,6 +107,16 @@ void dae::TronGame::CreateScenes()
 	auto button3Comp = std::make_shared<dae::Button>(button3.get(), 100.f, 100.f);
 	button3->AddComponent(button3Comp); 
 	menuScene.Add(button3);
+
+	auto basicenmey1 = std::make_shared<dae::GameObject>();
+	auto basicenmeyComp1 = std::make_shared<dae::BasicEnemy>(basicenmey1.get(), 280.f, -50.f, 32.f, 32.f, playerTank2, versusScene);
+	basicenmey1->AddComponent(basicenmeyComp1);
+	versusScene.Add(basicenmey1);
+
+	/*auto wall2 = std::make_shared<dae::GameObject>();
+	auto wallComp2 = std::make_shared<dae::Wall>(wall2.get(), 280.f, 0.f, 120.f, 120.f, "../Data/test.png", playerTank,coopScene);
+	wall2->AddComponent(wallComp2);
+	coopScene.Add(wall2);*/
 
 
 	coopScene.Add(background);
@@ -176,13 +188,19 @@ void dae::TronGame::ReadJsonFile(const std::string& name,Scene& scene)
 				//}
 				if (objectName == wallTag.c_str())
 				{
-					const auto& playerTransform = levelJson["transform"];
-					auto transform = playerTransform.GetArray();
-					
-					auto wall1 = std::make_shared<dae::GameObject>();
-					auto wallComp1 = std::make_shared<dae::Wall>(wall1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), std::string(transform[4].GetString()), pTank1, scene);
-					wall1->AddComponent(wallComp1);
-					scene.Add(wall1);
+					const auto& playerTransformsJson = levelJson["transform"];
+					auto playerTransforms = playerTransformsJson.GetArray();
+
+					for (unsigned int j{}; j < playerTransforms.Size(); j++)
+					{
+						auto transform = playerTransforms[j].GetArray();
+
+						auto wall1 = std::make_shared<dae::GameObject>();
+						auto wallComp1 = std::make_shared<dae::Wall>(wall1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), std::string(transform[4].GetString()), pTank1, scene);
+						wall1->AddComponent(wallComp1);
+						scene.Add(wall1);
+
+					}
 				}
 
 			}
