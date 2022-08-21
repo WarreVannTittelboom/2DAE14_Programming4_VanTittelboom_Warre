@@ -111,12 +111,18 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 	}
 	else if (auto pEnemy = other->GetComponent<dae::BasicEnemy>())
 	{
-		pEnemy->DoDamage();
+		if (pEnemy->DoDamage())
+		{
+			
+		}
 		m_Scene.Remove(m_pGameObject);
 	}
 	else if (auto pEnemyspecial = other->GetComponent<dae::RecognizerEnemy>())
 	{
-		pEnemyspecial->DoDamage();
+		if (pEnemyspecial->DoDamage())
+		{
+		
+		}
 		m_Scene.Remove(m_pGameObject);
 	}
 }

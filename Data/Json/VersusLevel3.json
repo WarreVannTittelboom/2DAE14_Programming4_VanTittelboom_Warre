@@ -1,0 +1,29 @@
+[
+  {
+    "object": "Player1",
+    "transform": [ 224, -300 ]
+  },
+  {
+    "object": "Player2",
+    "transform": [ 224, -350 ]
+  },
+  {
+    "object": "Walls",
+    "transform": [
+      [ 200, 0, 120, 120, "../Data/wall.png" ],
+      [ 200, -240, 120, 120, "../Data/wall.png" ]
+    ]
+  },
+  {
+    "object": "Enemies",
+    "transform": [
+      [ 280, 500, 32, 32 ]
+    ]
+  },
+  {
+    "object": "RecEnemies",
+    "transform": [
+      [ 280, 500, 32, 32 ]
+    ]
+  }
+]

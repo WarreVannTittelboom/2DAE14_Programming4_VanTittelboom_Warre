@@ -29,7 +29,7 @@ void dae::EnemyBullet::Initialize()
 	auto playerBulletCol = std::make_shared<dae::CollisionComp>(m_pGameObject, 8.f, 8.f, true);
 	m_pGameObject->AddComponent(playerBulletCol);
 	m_Scene.AddCollider(playerBulletCol);
-	auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerBullet.png", 8, 8, true);
+	auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/EnemyBullet.png", 8, 8, true);
 	m_pGameObject->AddComponent(playerBulletSprite);
 	m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
 	m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new EnemyBulletObserver());

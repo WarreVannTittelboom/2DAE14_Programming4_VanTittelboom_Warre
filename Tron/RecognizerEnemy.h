@@ -24,7 +24,7 @@ namespace dae
 		//void Render() const override;
 		void OnColl(const GameObject* other) override;
 		
-		void DoDamage();
+		bool DoDamage();
 	private:
 		int m_Health{3};
 		float m_EnemySpeed{ 60.f };

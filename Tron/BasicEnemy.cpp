@@ -23,9 +23,9 @@ dae::BasicEnemy::~BasicEnemy()
 void dae::BasicEnemy::Initialize()
 {
 	m_pGameObject->SetPosition(m_PosX, -m_PosY);
-	m_enemyHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", (int)m_Width, (int)m_Height, false);
+	m_enemyHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/EnemyTankHorizontal.png", (int)m_Width, (int)m_Height, false);
 	m_pGameObject->AddComponent(m_enemyHorizontalSprite);
-	m_enemyVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", (int)m_Width, (int)m_Height, true);
+	m_enemyVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/EnemyTankVertical.png", (int)m_Width, (int)m_Height, true);
 	m_pGameObject->AddComponent(m_enemyVerticalSprite);
 	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, m_Width, m_Height, true);
 	m_pGameObject->AddComponent(playercol);
@@ -255,13 +255,15 @@ void dae::BasicEnemy::ShootCannon(float degreesAngle)
 	}
 }
 
-void dae::BasicEnemy::DoDamage()
+bool dae::BasicEnemy::DoDamage()
 {
 	--m_Health;
 	if(m_Health <= 0)
 	{
 		m_Scene.Remove(m_pGameObject);
-		m_PlayerTank->GetComponent<dae::PlayerTank>()->AddScore(100);
+		return true;
+		
 	}
+	return false;
 }
 

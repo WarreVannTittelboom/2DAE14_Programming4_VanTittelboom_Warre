@@ -42,17 +42,17 @@ void dae::Button::OnColl(const GameObject* other)
 {
 	if (m_pGameObject->GetPosition().x < 160.f)
 	{
-		dae::SceneManager::GetInstance().SetScene("coop");
+		dae::SceneManager::GetInstance().SetScene("coop1");
 		std::cout << "coop\n";
 	}
 	else if (m_pGameObject->GetPosition().x >  290.f)
 	{
-		dae::SceneManager::GetInstance().SetScene("versus");
+		dae::SceneManager::GetInstance().SetScene("versus1");
 		std::cout << "versus\n";
 	}
 	else
 	{
-		dae::SceneManager::GetInstance().SetScene("solo");
+		dae::SceneManager::GetInstance().SetScene("solo1");
 		std::cout << "solo\n";
 	}
 }

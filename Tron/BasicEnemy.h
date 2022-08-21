@@ -25,7 +25,7 @@ namespace dae
 		void OnColl(const GameObject* other) override;
 
 		void ShootCannon(float degreesAngle);
-		void DoDamage();
+		bool DoDamage();
 	private:
 		int m_Health{3};
 		float m_EnemySpeed{ 50.f };
