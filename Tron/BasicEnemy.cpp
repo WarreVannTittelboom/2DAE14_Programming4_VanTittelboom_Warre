@@ -94,7 +94,7 @@ void dae::BasicEnemy::Update()
 	}
 	else
 	{
-		if (m_BlockMoveLeft && diffY > 0 && (!m_BlockMoveUp))
+		if (m_BlockMoveLeft && (!m_BlockMoveUp))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y + (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = false;
@@ -104,7 +104,7 @@ void dae::BasicEnemy::Update()
 			ShootCannon(90.f);
 			
 		}
-		else if (m_BlockMoveLeft && diffY < 0 && (!m_BlockMoveDown))
+		else if (m_BlockMoveLeft && m_BlockMoveUp && (!m_BlockMoveDown))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y - (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = false;
@@ -123,7 +123,7 @@ void dae::BasicEnemy::Update()
 			m_enemyHorizontalSprite.get()->m_FlipVertical = false;
 			ShootCannon(0.f);
 		}
-		else if (m_BlockMoveRight && diffY > 0 && (!m_BlockMoveUp))
+		else if (m_BlockMoveRight && (!m_BlockMoveUp))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y + (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = false;
@@ -132,7 +132,7 @@ void dae::BasicEnemy::Update()
 			m_enemyVerticalSprite.get()->m_FlipVertical = false;
 			ShootCannon(90.f);
 		}
-		else if (m_BlockMoveRight && diffY < 0 && (!m_BlockMoveDown))
+		else if (m_BlockMoveRight && m_BlockMoveUp && (!m_BlockMoveDown))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y - (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = false;
@@ -152,7 +152,7 @@ void dae::BasicEnemy::Update()
 			ShootCannon(180.f);
 		}
 		
-		else if (m_BlockMoveUp && diffX < 0 && (!m_BlockMoveLeft))
+		else if (m_BlockMoveUp && (!m_BlockMoveLeft))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x - (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = true;
@@ -161,7 +161,7 @@ void dae::BasicEnemy::Update()
 			m_enemyHorizontalSprite.get()->m_FlipVertical = false;
 			ShootCannon(180.f);
 		}
-		else if (m_BlockMoveUp && diffX > 0 && (!m_BlockMoveRight))
+		else if (m_BlockMoveUp && m_BlockMoveLeft && (!m_BlockMoveRight))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x + (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = true;
@@ -181,7 +181,7 @@ void dae::BasicEnemy::Update()
 			ShootCannon(270.f);
 		}
 
-		else if (m_BlockMoveDown && diffX < 0 && (!m_BlockMoveLeft))
+		else if (m_BlockMoveDown && (!m_BlockMoveLeft))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x - (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = true;
@@ -190,7 +190,7 @@ void dae::BasicEnemy::Update()
 			m_enemyHorizontalSprite.get()->m_FlipVertical = false;
 			ShootCannon(180.f);
 		}
-		else if (m_BlockMoveDown && diffX > 0 && (!m_BlockMoveRight))
+		else if (m_BlockMoveDown && m_BlockMoveLeft && (!m_BlockMoveRight))
 		{
 			m_pGameObject->SetPosition(m_pGameObject->GetPosition().x + (deltaTime * m_EnemySpeed), m_pGameObject->GetPosition().y, m_pGameObject->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = true;
