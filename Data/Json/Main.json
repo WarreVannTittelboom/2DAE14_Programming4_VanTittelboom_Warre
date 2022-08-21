@@ -6,16 +6,5 @@
   {
     "object": "Player2",
     "transform": [ 224, -350 ]
-  },
-  {
-    "object": "Teleporter",
-    "transform": [ 0, 0, 120, 120, "../Data/Teleport.png" ]
-  },
-  {
-    "object": "Walls",
-    "transform": [
-      [ 200, 0, 120, 120, "../Data/wall.png" ],
-      [ 200, -240, 120, 120, "../Data/wall.png" ]
-    ]
   }
 ]

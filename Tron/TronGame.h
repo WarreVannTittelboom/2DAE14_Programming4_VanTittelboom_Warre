@@ -17,6 +17,9 @@ namespace dae
 		void CreateScenes();
 
 		void ReadJsonFile(const std::string& name,Scene& scene);
+
+		int m_Score = 0;
+		int m_Lives = 10;
 	};
 }
 

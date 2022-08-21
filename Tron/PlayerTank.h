@@ -34,7 +34,6 @@ namespace dae
 		void SetMoveCannonLeft(bool moveCannonLeft) { m_MoveCannonLeft = moveCannonLeft; }
 		void SetMoveCannonRight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
 		unsigned int GetId() { return m_Id; }
-		void AddScore(int score){m_Score += score;}
 	
 	private:
 		void InitTurretSprites();
@@ -58,9 +57,6 @@ namespace dae
 
 		bool m_MoveCannonLeft{ false };
 		bool m_MoveCannonRight{ false };
-
-		int m_Score{0};
-		int m_Lives{ 3 };
 		
 		unsigned int m_Id;
 		Scene& m_Scene;

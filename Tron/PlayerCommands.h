@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include <Command.h>
 #include "PlayerTank.h"
+#include <SceneManager.h>
+#include "TronGame.h"
+#include <Scene.h>
 
 class MoveLeft : public Command
 {
@@ -101,11 +104,49 @@ class NextScene : public Command
 public:
 	NextScene(dae::GameObject* go)
 		:Command(go)
-	{
+	{	
 	};
-	void Execute() override { }
+	void Execute() override 
+	{ 
+		if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop1")
+
+		{
+			dae::SceneManager::GetInstance().SetScene("coop2");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop2")
+		{
+			dae::SceneManager::GetInstance().SetScene("coop3");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop3")
+		{
+			dae::SceneManager::GetInstance().SetScene("coop1");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo1")
+		{
+			dae::SceneManager::GetInstance().SetScene("solo2");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo2")
+		{
+			dae::SceneManager::GetInstance().SetScene("solo3");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo3")
+		{
+			dae::SceneManager::GetInstance().SetScene("solo1");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1")
+		{
+			dae::SceneManager::GetInstance().SetScene("versus2");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2")
+		{
+			dae::SceneManager::GetInstance().SetScene("versus3");
+		}
+		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3")
+		{
+			dae::SceneManager::GetInstance().SetScene("versus1");
+		}
+	}
 	void Release() override { }
 
 
 };
-

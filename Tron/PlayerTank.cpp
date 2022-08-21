@@ -18,6 +18,8 @@
 #include "BasicEnemy.h"
 #include "EnemyBullet.h"
 #include "RecognizerEnemy.h"
+#include <Font.h>
+#include <TextComp.h>
 
 #define PI 3.14159265
 
@@ -39,10 +41,21 @@ void dae::PlayerTank::Initialize()
 	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 32.f, 32.f, true);
 	m_pGameObject->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
-	m_pGameObject->AddComponent(m_playerHorizontalSprite);
-	m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", 32, 32, true);
-	m_pGameObject->AddComponent(m_playerVerticalSprite);
+	if (m_Id == 1)
+	{
+		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankHorizontal.png", 32, 32, false);
+		m_pGameObject->AddComponent(m_playerHorizontalSprite);
+		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankVertical.png", 32, 32, true);
+		m_pGameObject->AddComponent(m_playerVerticalSprite);
+	}
+	else
+	{
+		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
+		m_pGameObject->AddComponent(m_playerHorizontalSprite);
+		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", 32, 32, true);
+		m_pGameObject->AddComponent(m_playerVerticalSprite);
+	}
+	
 
 	InitTurretSprites();
 
@@ -233,15 +246,54 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 	}
 	else if (other->GetComponent<dae::BasicEnemy>())
 	{
+		dae::TronGame::GetInstance().m_Lives -= 1;
 		m_Scene.Remove(m_pGameObject);
+		if (dae::TronGame::GetInstance().m_Lives <= 0)
+		{
+			auto value = dae::TronGame::GetInstance().m_Score;
+			auto text = std::make_shared<dae::GameObject>();
+			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
+			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
+			textcomp->SetPos(185, 270);
+			text->AddComponent(textcomp);
+			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
+			
+			dae::SceneManager::GetInstance().SetScene("gameoverscene");
+		}
 	}
 	else if (other->GetComponent<dae::RecognizerEnemy>())
 	{
+		dae::TronGame::GetInstance().m_Lives -= 1;
 		m_Scene.Remove(m_pGameObject);
+		if (dae::TronGame::GetInstance().m_Lives <= 0)
+		{
+			auto value = dae::TronGame::GetInstance().m_Score;
+			auto text = std::make_shared<dae::GameObject>();
+			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
+			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
+			textcomp->SetPos(185, 270);
+			text->AddComponent(textcomp);
+			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
+
+			dae::SceneManager::GetInstance().SetScene("gameoverscene");
+		}
 	}
 	else if (other->GetComponent<dae::EnemyBullet>())
 	{
+		dae::TronGame::GetInstance().m_Lives -= 1;
 		m_Scene.Remove(m_pGameObject);
+		if (dae::TronGame::GetInstance().m_Lives <= 0)
+		{
+			auto value = dae::TronGame::GetInstance().m_Score;
+			auto text = std::make_shared<dae::GameObject>();
+			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
+			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
+			textcomp->SetPos(185, 270);
+			text->AddComponent(textcomp);
+			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
+
+			dae::SceneManager::GetInstance().SetScene("gameoverscene");
+		}
 	}
 	else 
 	{ 

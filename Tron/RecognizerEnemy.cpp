@@ -229,6 +229,7 @@ bool dae::RecognizerEnemy::DoDamage()
 	--m_Health;
 	if (m_Health <= 0)
 	{
+		dae::TronGame::GetInstance().m_Score += 250;
 		m_Scene.Remove(m_pGameObject);
 		return true;
 	}

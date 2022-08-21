@@ -27,7 +27,7 @@ namespace dae
 		bool DoDamage();
 	private:
 		int m_Health{3};
-		float m_EnemySpeed{ 60.f };
+		float m_EnemySpeed{ 80.f };
 		float m_PosX{};
 		float m_PosY{};
 		float m_Width{};

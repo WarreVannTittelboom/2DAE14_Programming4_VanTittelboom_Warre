@@ -7,6 +7,8 @@
 #include "TronObservers.h"
 #include "Wall.h"
 #include "RecognizerEnemy.h"
+#include <Font.h>
+#include <TextComp.h>
 
 dae::PlayerBullet::PlayerBullet(GameObject* gameObject, float x, float y,float cosx,float siny,Scene& scene,unsigned int id)
 	: BaseComp(gameObject)
@@ -28,10 +30,20 @@ void dae::PlayerBullet::Initialize()
 	auto playerBulletCol = std::make_shared<dae::CollisionComp>(m_pGameObject, 8.f, 8.f, true);
 	m_pGameObject->AddComponent(playerBulletCol);
 	m_Scene.AddCollider(playerBulletCol);
-	auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerBullet.png", 8, 8, true);
-	m_pGameObject->AddComponent(playerBulletSprite);
-	m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
-	m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
+	if (m_Id == 1)
+	{
+		auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2Bullet.png", 8, 8, true);
+		m_pGameObject->AddComponent(playerBulletSprite);
+		m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
+		m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
+	}
+	else
+	{
+		auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerBullet.png", 8, 8, true);
+		m_pGameObject->AddComponent(playerBulletSprite);
+		m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
+		m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
+	}
 }
 
 void dae::PlayerBullet::Update()
@@ -102,11 +114,19 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 	}
 	else if (auto pTank = other->GetComponent<dae::PlayerTank>())
 	{
-		if(m_Id != pTank->GetId())
+		if(m_Id != pTank->GetId() && (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3"))
 	{
-		m_Scene.Remove(pTank->GetGameObject());
-		m_Scene.Remove(m_pGameObject);
-		std::cout << "test";
+			if (!((dae::SceneManager::GetInstance().GetActiveScene().GetName() == "Menu") || (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "gameoverscene")))
+			{
+			auto text = std::make_shared<dae::GameObject>();
+			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
+			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Player " + std::to_string((m_Id + 1)) + " won", font);
+			textcomp->SetPos(185, 270);
+			text->AddComponent(textcomp);
+			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
+
+			dae::SceneManager::GetInstance().SetScene("gameoverscene");
+			}
 	}
 	}
 	else if (auto pEnemy = other->GetComponent<dae::BasicEnemy>())

@@ -21,6 +21,9 @@
 #include <fstream>
 #include "BasicEnemy.h"
 #include "RecognizerEnemy.h"
+#include <Font.h>
+#include <TextComp.h>
+
 
 
 void dae::TronGame::CreateScenes()
@@ -35,6 +38,7 @@ void dae::TronGame::CreateScenes()
 	auto& coopScene3 = dae::SceneManager::GetInstance().CreateScene("coop3");
 	auto& versusScene3 = dae::SceneManager::GetInstance().CreateScene("versus3");
 	auto& soloScene3 = dae::SceneManager::GetInstance().CreateScene("solo3");
+	dae::SceneManager::GetInstance().CreateScene("gameoverscene");
 	
 
 		
@@ -51,8 +55,8 @@ void dae::TronGame::CreateScenes()
 	ReadJsonFile("SingleLevel2", soloScene2);
 	ReadJsonFile("SingleLevel3", soloScene3);
 	ReadJsonFile("CoopLevel1", coopScene1);
-	ReadJsonFile("CoopleLevel2", coopScene2);
-	ReadJsonFile("CoopleLevel3", coopScene3);
+	ReadJsonFile("CoopLevel2", coopScene2);
+	ReadJsonFile("CoopLevel3", coopScene3);
 	ReadJsonFile("VersusLevel1", versusScene1);
 	ReadJsonFile("VersusLevel2", versusScene2);
 	ReadJsonFile("VersusLevel3", versusScene3);
@@ -75,7 +79,14 @@ void dae::TronGame::CreateScenes()
 	auto button3Comp = std::make_shared<dae::Button>(button3.get(), 100.f, 100.f);
 	button3->AddComponent(button3Comp); 
 	menuScene.Add(button3);
-	
+
+	//game over scene text 
+	/*auto text = std::make_shared<dae::GameObject>();
+	auto font = std::make_shared<dae::Font>("../Data/Lingua.otf",40);
+	auto textcomp = std::make_shared<dae::TextComp>(text.get(),"0", font);
+	textcomp->SetPos(185, 270);
+	text->AddComponent(textcomp);
+	gameoverScene.Add(text);*/
 	dae::SceneManager::GetInstance().SetScene("Menu");
 }
 

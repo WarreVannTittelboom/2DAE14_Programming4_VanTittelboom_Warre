@@ -1,29 +1,38 @@
 [
   {
     "object": "Player1",
-    "transform": [ 224, -300 ]
-  },
-  {
-    "object": "Player2",
     "transform": [ 224, -350 ]
   },
   {
     "object": "Walls",
     "transform": [
-      [ 200, 0, 120, 120, "../Data/wall.png" ],
-      [ 200, -240, 120, 120, "../Data/wall.png" ]
+      [ 50, 200, 60, 60, "../Data/wall.png" ],
+      [ 100, 450, 50, 60, "../Data/wall.png" ],
+      [ 600, 200, 30, 60, "../Data/wall.png" ],
+      [ 0, 0, 15, 512, "../Data/wall.png" ],
+      [ 0, 0, 480, 15, "../Data/wall.png" ],
+      [ 0, 502, 480, 10, "../Data/wall.png" ],
+      [ 470, 0, 15, 512, "../Data/wall.png" ],
+      [ 100, 100, 15, 200, "../Data/wall.png" ],
+      [ 360, 80, 15, 300, "../Data/wall.png" ],
+      [ 140, 400, 250, 15, "../Data/wall.png" ]
+
     ]
   },
   {
     "object": "Enemies",
     "transform": [
-      [ 280, 500, 32, 32 ]
+      [ 280, 440, 32, 32 ]
     ]
   },
   {
     "object": "RecEnemies",
     "transform": [
-      [ 280, 500, 32, 32 ]
+      [ 400, 30, 32, 32 ]
     ]
+  },
+  {
+    "object": "Teleporter",
+    "transform": [ 192, 256, 64, 64, "../Data/Teleport.png" ]
   }
 ]
