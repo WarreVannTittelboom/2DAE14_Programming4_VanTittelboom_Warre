@@ -100,7 +100,6 @@ void dae::Minigin::Run()
 				lag -= m_FixedTimeStep;
 			}
 			sceneManager.LateUpdate();
-			//todo: update collision
 			renderer.Render();
 			Timer::GetInstance().Set(deltaTime);
 			/*auto sleepTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now());

@@ -121,7 +121,7 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 			auto text = std::make_shared<dae::GameObject>();
 			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
 			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Player " + std::to_string((m_Id + 1)) + " won", font);
-			textcomp->SetPos(185, 270);
+			textcomp->SetPos(135, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 

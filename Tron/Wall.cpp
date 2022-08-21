@@ -33,15 +33,6 @@ dae::Wall::Wall(GameObject* gameObject, float x, float y, float w, float h, cons
 
 void dae::Wall::Initialize()
 {
-	/*m_pGameObject->SetPosition(40, -50);
-	auto texture = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/menu.png", 120, 120, true);
-	m_pGameObject->AddComponent(texture);
-	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 120.f, 120.f, true);
-	m_pGameObject->AddComponent(playercol);
-	m_Scene.AddCollider(playercol);
-	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 32.f, 32.f, true);
-	m_pGameObject->AddComponent(playercol);
-	m_Scene.AddCollider(playercol);*/
 	m_pGameObject->SetPosition(m_PosX, -m_PosY);
 	auto sprite = std::make_shared<dae::TextureComp>(m_pGameObject, m_FileName, (int)m_Width, (int)m_Height, true);
 	m_pGameObject->AddComponent(sprite);

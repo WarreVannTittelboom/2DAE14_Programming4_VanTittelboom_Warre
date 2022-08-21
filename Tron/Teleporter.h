@@ -16,9 +16,6 @@ namespace dae
 		explicit Teleporter(GameObject* gameObject, float x, float y, float w, float h, const std::string& filename, std::shared_ptr<GameObject> playerTank, Scene& scene);
 
 		void Initialize() override;
-		//void FixedUpdate(float fDT) override;
-		//void LateUpdate() override;
-		//void Render() const override;
 		void OnColl(const GameObject* other) override;
 		float m_PosX{ 0.f };
 		float m_PosY{ 0.f };

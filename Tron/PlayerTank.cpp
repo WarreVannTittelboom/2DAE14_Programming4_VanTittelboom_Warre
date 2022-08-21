@@ -157,7 +157,6 @@ void dae::PlayerTank::Update()
 			bulletGo->AddComponent(bulletComp);
 			auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 			scene.Add(bulletGo);
-			//Test();
 		}
 		//check if not on cooldown and if not shoot bullet
 	}
@@ -209,40 +208,16 @@ void dae::PlayerTank::Update()
 
 void dae::PlayerTank::Render() const
 {
-	//check if facing the right way if not flip the sprite accordingly
-	//check if cannon is rotated the right if not rotate it accordingly
 }
 
 void dae::PlayerTank::OnColl(const GameObject* other)
 {
-	//std::cout << "testyes\n";
-	//check if colliding with wall or enemy tank
-	//if colliding with wall, move back
-	//if colliding with enemy tank, damage enemy tank
-	// If one rectangle is on left side of the other
-		/*if (((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width - 2) > m_pGameObject->GetWorldPosition().x) && ((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x))
-
-		{
-			m_BlockMoveRight = true;
-		}
-		else if (((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width) > m_pGameObject->GetWorldPosition().x) && ((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2))
-		{
-			m_BlockMoveLeft = true;
-		}
-
-	else if ((m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2< (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)) && other->GetComponent<dae::CollisionComp>()->m_Pos.y  < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height))
-	{	
-		m_BlockMoveUp = true;
-	}
-	else if ((m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y  < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)) && other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height -2))
-	{
-		m_BlockMoveDown = true;
-	}
-	*/
 
 	if (other->GetComponent<dae::Teleporter>())
 	{
-		m_pGameObject->SetPosition(300, -50);
+		int randomx = 20 + (std::rand() % (440 - 20 + 1));
+		int randomy = 20 + (std::rand() % (482 - 20 + 1));
+		m_pGameObject->SetPosition(randomx, -randomy);
 	}
 	else if (other->GetComponent<dae::BasicEnemy>())
 	{
@@ -254,7 +229,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			auto text = std::make_shared<dae::GameObject>();
 			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
 			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(185, 270);
+			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 			
@@ -271,7 +246,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			auto text = std::make_shared<dae::GameObject>();
 			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
 			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(185, 270);
+			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 
@@ -288,7 +263,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			auto text = std::make_shared<dae::GameObject>();
 			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
 			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(185, 270);
+			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 
@@ -501,15 +476,4 @@ void dae::PlayerTank::InitTurretSprites()
 	m_playerCannonSprites.back().get()->m_OffSetY = -8;
 	m_playerCannonSprites.back().get()->m_FlipVertical = true;
 	m_pGameObject->AddComponent(m_playerCannonSprites.back());
-}
-
-void dae::PlayerTank::Test()
-{
-	auto bulletGo = std::make_shared<dae::GameObject>();
-	float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-	auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene,m_Id);
-	bulletGo->AddComponent(bulletComp);
-	auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
-	scene.Add(bulletGo);
 }

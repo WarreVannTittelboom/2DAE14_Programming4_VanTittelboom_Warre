@@ -19,8 +19,6 @@ namespace dae
 
 		void Initialize() override;
 		void Update() override;
-		//void FixedUpdate(float fDT) override;
-		//void LateUpdate() override;
 		void Render() const override;
 		void OnColl(const GameObject* other) override;
 	
@@ -37,7 +35,6 @@ namespace dae
 	
 	private:
 		void InitTurretSprites();
-		void Test();
 		float m_PlayerSpeed{80.f};
 		int m_TurretMoveIter{0};
 		float m_MoveCannonCooldown{ 0.f };

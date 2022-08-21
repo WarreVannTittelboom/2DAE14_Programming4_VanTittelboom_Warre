@@ -79,14 +79,7 @@ void dae::TronGame::CreateScenes()
 	auto button3Comp = std::make_shared<dae::Button>(button3.get(), 100.f, 100.f);
 	button3->AddComponent(button3Comp); 
 	menuScene.Add(button3);
-
-	//game over scene text 
-	/*auto text = std::make_shared<dae::GameObject>();
-	auto font = std::make_shared<dae::Font>("../Data/Lingua.otf",40);
-	auto textcomp = std::make_shared<dae::TextComp>(text.get(),"0", font);
-	textcomp->SetPos(185, 270);
-	text->AddComponent(textcomp);
-	gameoverScene.Add(text);*/
+	
 	dae::SceneManager::GetInstance().SetScene("Menu");
 }
 

@@ -19,9 +19,6 @@ namespace dae
 
 		void Initialize() override;
 		void Update() override;
-		//void FixedUpdate(float fDT) override;
-		//void LateUpdate() override;
-		//void Render() const override;
 		void OnColl(const GameObject* other) override;
 
 		void ShootCannon(float degreesAngle);
