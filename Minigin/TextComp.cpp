@@ -38,7 +38,7 @@ void dae::TextComp::Render() const
 {
 	if (m_Texture != nullptr)
 	{
-		const glm::ivec3& pos = m_Transform.GetPosition();
+		const glm::ivec3& pos = m_Transform.GetLocalPosition();
 
 		Renderer::GetInstance().RenderTexture(*m_Texture, static_cast<int>(pos.x), static_cast<int>(pos.y));
 	}

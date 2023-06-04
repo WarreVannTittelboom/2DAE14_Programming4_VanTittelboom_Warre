@@ -39,9 +39,9 @@ void dae::TronGame::CreateScenes()
 	auto& versusScene3 = dae::SceneManager::GetInstance().CreateScene("versus3");
 	auto& soloScene3 = dae::SceneManager::GetInstance().CreateScene("solo3");
 	dae::SceneManager::GetInstance().CreateScene("gameoverscene");
-	
 
-		
+
+
 	//menu background
 	auto background = std::make_shared<dae::GameObject>();
 	background->SetPosition(0, 0);
@@ -67,7 +67,7 @@ void dae::TronGame::CreateScenes()
 	auto button1Comp = std::make_shared<dae::Button>(button1.get(), 100.f, 100.f);
 	button1->AddComponent(button1Comp);
 	menuScene.Add(button1);
-	
+
 	auto button2 = std::make_shared<dae::GameObject>();
 	button2->SetPosition(300, -300);
 	auto button2Comp = std::make_shared<dae::Button>(button2.get(), 100.f, 100.f);
@@ -77,13 +77,13 @@ void dae::TronGame::CreateScenes()
 	auto button3 = std::make_shared<dae::GameObject>();
 	button3->SetPosition(170, -150);
 	auto button3Comp = std::make_shared<dae::Button>(button3.get(), 100.f, 100.f);
-	button3->AddComponent(button3Comp); 
+	button3->AddComponent(button3Comp);
 	menuScene.Add(button3);
-	
+
 	dae::SceneManager::GetInstance().SetScene("Menu");
 }
 
-void dae::TronGame::ReadJsonFile(const std::string& name,Scene& scene)
+void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 {
 	std::string file{ "../Data/Json/" };
 	file += name;
@@ -98,6 +98,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name,Scene& scene)
 		rapidjson::Document doc;
 		doc.ParseStream(inputWrapper);
 
+		const std::string player0Tag = "Player0";
 		const std::string player1Tag = "Player1";
 		const std::string player2Tag = "Player2";
 		const std::string enemyTag = "Enemies";
@@ -115,15 +116,27 @@ void dae::TronGame::ReadJsonFile(const std::string& name,Scene& scene)
 				const char* object = objectJson.GetString();
 				std::string objectName{ object };
 
+				if (objectName == player0Tag.c_str())
+				{
+					const auto& playerTransform = levelJson["transform"];
+					auto transform = playerTransform.GetArray();
+
+					auto playerTank0 = std::make_shared<dae::GameObject>();
+					playerTank0->SetPosition(transform[0].GetInt(), transform[1].GetInt());
+					auto playerTankComp0 = std::make_shared<dae::PlayerTank>(playerTank0.get(), scene, 0);
+					playerTank0->AddComponent(playerTankComp0);
+					scene.Add(playerTank0);
+					pTank1 = playerTank0;
+				}
 				if (objectName == player1Tag.c_str())
 				{
 					const auto& playerTransform = levelJson["transform"];
 					auto transform = playerTransform.GetArray();
-					
+
 					auto playerTank1 = std::make_shared<dae::GameObject>();
 					playerTank1->SetPosition(transform[0].GetInt(), transform[1].GetInt());
-					auto playerTankComp = std::make_shared<dae::PlayerTank>(playerTank1.get(), scene, 0);
-					playerTank1->AddComponent(playerTankComp);
+					auto playerTankComp1 = std::make_shared<dae::PlayerTank>(playerTank1.get(), scene, 1);
+					playerTank1->AddComponent(playerTankComp1);
 					scene.Add(playerTank1);
 					pTank1 = playerTank1;
 				}
@@ -134,7 +147,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name,Scene& scene)
 
 					auto playerTank2 = std::make_shared<dae::GameObject>();
 					playerTank2->SetPosition(transform[0].GetInt(), transform[1].GetInt());
-					auto playerTankComp2 = std::make_shared<dae::PlayerTank>(playerTank2.get(), scene, 1);
+					auto playerTankComp2 = std::make_shared<dae::PlayerTank>(playerTank2.get(), scene, 2);
 					playerTank2->AddComponent(playerTankComp2);
 					scene.Add(playerTank2);
 				}

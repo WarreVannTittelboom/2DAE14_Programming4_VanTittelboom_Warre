@@ -23,7 +23,7 @@
 
 #define PI 3.14159265
 
-dae::PlayerTank::PlayerTank(dae::GameObject* gameObject,Scene& scene,unsigned int id)
+dae::PlayerTank::PlayerTank(dae::GameObject* gameObject, Scene& scene, unsigned int id)
 	: BaseComp(gameObject)
 	, m_Scene(scene)
 	, m_Id(id)
@@ -41,57 +41,142 @@ void dae::PlayerTank::Initialize()
 	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, 32.f, 32.f, true);
 	m_pGameObject->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	if (m_Id == 1)
+	if (m_Id == 0)
 	{
-		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankHorizontal.png", 32, 32, false);
-		m_pGameObject->AddComponent(m_playerHorizontalSprite);
-		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankVertical.png", 32, 32, true);
-		m_pGameObject->AddComponent(m_playerVerticalSprite);
-	}
-	else
-	{
+		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
+
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(m_pGameObject);
+
+		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(m_pGameObject);
+
+		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(m_pGameObject);
+
+		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(m_pGameObject);
+
+		cInputMap[controlButton::LeftShoulder] = std::make_shared<CannonLeft>(m_pGameObject);
+
+		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(m_pGameObject);
+
+
+		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
+
+		std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
+
+		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_Z] = std::make_shared<CannonLeft>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(m_pGameObject);
+
+
+		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
+
+
+
 		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
 		m_pGameObject->AddComponent(m_playerHorizontalSprite);
 		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", 32, 32, true);
 		m_pGameObject->AddComponent(m_playerVerticalSprite);
 	}
-	
+	if (m_Id == 1)
+	{
+
+		std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
+
+		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_Z] = std::make_shared<CannonLeft>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(m_pGameObject);
+
+		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(m_pGameObject);
+
+
+		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
+
+		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
+
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(m_pGameObject);
+
+		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(m_pGameObject);
+
+		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(m_pGameObject);
+
+		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(m_pGameObject);
+
+		cInputMap[controlButton::LeftShoulder] = std::make_shared<CannonLeft>(m_pGameObject);
+
+		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(m_pGameObject);
+
+
+		dae::InputManager::GetInstance().AddCommand(cInputMap, 1);
+
+
+
+		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankHorizontal.png", 32, 32, false);
+		m_pGameObject->AddComponent(m_playerHorizontalSprite);
+		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerTankVertical.png", 32, 32, true);
+		m_pGameObject->AddComponent(m_playerVerticalSprite);
+	}
+	if (m_Id == 2)
+	{
+		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
+
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(m_pGameObject);
+
+		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(m_pGameObject);
+
+		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(m_pGameObject);
+
+		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(m_pGameObject);
+
+		cInputMap[controlButton::LeftShoulder] = std::make_shared<CannonLeft>(m_pGameObject);
+
+		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
+
+		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(m_pGameObject);
+
+
+		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
+
+
+
+		m_playerHorizontalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankHorizontal.png", 32, 32, false);
+		m_pGameObject->AddComponent(m_playerHorizontalSprite);
+		m_playerVerticalSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2TankVertical.png", 32, 32, true);
+		m_pGameObject->AddComponent(m_playerVerticalSprite);
+	}
+
 
 	InitTurretSprites();
-
-	
-
-	std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
-	std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
-
-	kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(m_pGameObject);
-	cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(m_pGameObject);
-	cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(m_pGameObject);
-	cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(m_pGameObject);
-	cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(m_pGameObject);
-	cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_Z] = std::make_shared<CannonLeft>(m_pGameObject);
-	cInputMap[controlButton::LeftShoulder] = std::make_shared<CannonLeft>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(m_pGameObject);
-	cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(m_pGameObject);
-
-	kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(m_pGameObject);
-	cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(m_pGameObject);
-	if (m_Id == 0)
-	{ 
-	dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
-	}
-	dae::InputManager::GetInstance().AddCommand(cInputMap, m_Id);
 }
 
 void dae::PlayerTank::Update()
@@ -153,7 +238,7 @@ void dae::PlayerTank::Update()
 			auto bulletGo = std::make_shared<dae::GameObject>();
 			float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
 			float sinY = float(sin((m_TurretMoveIter * 10.f) * (PI / 180.0f)));
-			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY,m_Scene,m_Id);
+			auto bulletComp = std::make_shared<dae::PlayerBullet>(bulletGo.get(), m_pGameObject->GetPosition().x, m_pGameObject->GetPosition().y, cosX, sinY, m_Scene, m_Id);
 			bulletGo->AddComponent(bulletComp);
 			auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
 			scene.Add(bulletGo);
@@ -232,7 +317,6 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-			
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
 		}
 	}
@@ -249,7 +333,6 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
 		}
 	}
@@ -266,30 +349,29 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			textcomp->SetPos(145, 270);
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
 		}
 	}
-	else 
-	{ 
-	if(!((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width -2) > m_pGameObject->GetWorldPosition().x))
+	else
+	{
+		if (!((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width - 2) > m_pGameObject->GetWorldPosition().x))
 
-	{
-		m_BlockMoveLeft = true;
-	}
-	if (!(((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2)))
-	{
-		m_BlockMoveRight = true;
-	}
+		{
+			m_BlockMoveLeft = true;
+		}
+		if (!(((m_pGameObject->GetWorldPosition().x + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Width) > other->GetComponent<dae::CollisionComp>()->m_Pos.x + 2)))
+		{
+			m_BlockMoveRight = true;
+		}
 
-	if (!(m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2 < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)))
-	{
-		m_BlockMoveDown = true;
-	}
-	if (!(other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2)))
-	{
-		m_BlockMoveUp = true;
-	}
+		if (!(m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + 2 < (other->GetComponent<dae::CollisionComp>()->m_Pos.y + m_pGameObject->GetComponent<dae::CollisionComp>()->m_Height)))
+		{
+			m_BlockMoveDown = true;
+		}
+		if (!(other->GetComponent<dae::CollisionComp>()->m_Pos.y < (m_pGameObject->GetComponent<dae::CollisionComp>()->m_Pos.y + other->GetComponent<dae::CollisionComp>()->m_Height - 2)))
+		{
+			m_BlockMoveUp = true;
+		}
 	}
 
 }

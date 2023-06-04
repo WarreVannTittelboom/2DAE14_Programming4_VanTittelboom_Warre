@@ -24,23 +24,22 @@ namespace dae
 		template <typename T> bool RemoveComponent();
 		bool RemoveComponent(std::shared_ptr<dae::BaseComp> comp);
 
+		void SetLocalPos(const glm::vec3& pos);
+
+
+	
+
+		void SetParent(GameObject* pParent, bool keepWorldPos);
 
 		
-		void AddToChildren(const std::shared_ptr<GameObject>& child);
-		std::vector<std::shared_ptr<GameObject>> GetChildren() const { return m_Children; }
-
-		void SetParent(GameObject* parent);
-		GameObject* GetParent() { return m_Parent; }
-		
 		
 
-		const glm::vec3 GetWorldPosition();
+		
 		void SetPosition(float x, float y);
 		void SetPosition(float x, float y,float z);
 		void SetPosition(int x, int y);
 		void SetPosition(int x, int y, int z);
-		glm::vec3 GetPosition() const { return m_Transform.GetPosition(); }
-		const Transform& GetTransform() const { return m_Transform; }
+		
 
 		std::vector<std::shared_ptr<BaseComp>> GetComponents() { return m_pComponents; }
 
@@ -51,13 +50,32 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
+		const glm::vec3& GetLocalPos() { return m_localPosition; };
+		const glm::vec3& GetPosition() { return m_localPosition; };
+		const glm::vec3 GetWorldPosition();
+		void UpdateWorldPos();
+
+		void SetPositionDirty()
+		{
+			m_PositionIsDirty = true;
+			for (auto child : m_pChildren)
+				child->SetPositionDirty();
+		}
+
 	private:
-		Transform m_Transform;
+
+		void AddChild(GameObject* pChild) { m_pChildren.push_back(pChild); }
+		void RemoveChild(GameObject* pChild) { m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), pChild), m_pChildren.end()); }
 		
 		std::vector<std::shared_ptr<BaseComp>> m_pComponents;
 		
-		GameObject* m_Parent;
-		std::vector<std::shared_ptr<GameObject>> m_Children;
+		GameObject* m_pParent;
+		std::vector<GameObject*> m_pChildren;
+
+		bool m_PositionIsDirty = true;
+
+		glm::vec3 m_worldPosition;
+		glm::vec3 m_localPosition;
 		
 	};
 

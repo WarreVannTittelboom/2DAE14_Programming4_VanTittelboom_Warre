@@ -9,7 +9,6 @@ namespace dae
 	class BaseComp
 	{
 	public:
-		BaseComp(GameObject* gameObject);
 		virtual ~BaseComp() = default;
 		BaseComp(const BaseComp& other) = delete;
 		BaseComp(BaseComp&& other) = delete;
@@ -23,14 +22,16 @@ namespace dae
 		virtual void Render() const {};
 		virtual void OnColl(const GameObject* other) {};
 
-		void SetGameObject(GameObject* object);
-		GameObject* GetGameObject() const;
+		GameObject* GetGameObject() { return m_pGameObject; };
+		void SetGameObject(GameObject* pGameObject) { m_pGameObject = pGameObject; };
 
 		const std::unique_ptr<Subject>& GetSubject() const { return m_pSubject; };
 
 	protected:
-		GameObject* m_pGameObject = nullptr;
+		explicit BaseComp(GameObject* pOwner) : m_pGameObject(pOwner) { m_pSubject = std::make_unique<Subject>(); }
 		std::unique_ptr<Subject> m_pSubject;
+		GameObject* m_pGameObject;
+	private:
 	};
 }
 
