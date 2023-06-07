@@ -13,7 +13,7 @@ namespace dae
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(const std::shared_ptr<SceneObject>& object);
-		void Remove(GameObject* object);
+		void Remove(SceneObject* object);
 		std::string GetName() const { return m_Name; }
 
 		void Initialize();
@@ -23,6 +23,7 @@ namespace dae
 		void Render() const;
 		void AddCollider(const std::shared_ptr<CollisionComp>& object);
 		void RemoveCollider(CollisionComp* object);
+		void RemoveMarkedObjects();
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -35,6 +36,7 @@ namespace dae
 		explicit Scene(const std::string& name);
 		std::string m_Name;
 		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
+		std::vector < SceneObject*> m_DestroyMarkedObjects{};
 
 		CollisionManager m_CollManager;
 	};

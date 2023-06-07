@@ -88,6 +88,7 @@ void dae::Minigin::Run()
 		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1,20);
 		while (doContinue)
 		{
+			sceneManager.RemoveMarkedObjects();
 			const auto currentTime = chrono::high_resolution_clock::now();
 			float deltaTime = chrono::duration<float>(currentTime - lastTime).count();
 			lastTime = currentTime;

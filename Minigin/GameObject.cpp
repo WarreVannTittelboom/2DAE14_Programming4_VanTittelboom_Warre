@@ -1,8 +1,8 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
-
-#include "BaseComp.h"
 #include "Renderer.h"
+#include "BaseComp.h"
+#include "Scene.h"
 using namespace dae;
 
 
@@ -168,6 +168,16 @@ void dae::GameObject::SetPosition(float x, float y)
 void dae::GameObject::SetPosition(int x, int y, int z)
 {
 	SetLocalPos(glm::vec3((float)x, (float)y, (float)z));
+}
+
+void dae::GameObject::MarkDestroy()
+{
+	m_MarkedForDestroy = true;
+	for (auto child : m_pChildren)
+	{
+		child->SetMarkedForDestroy();
+	}
+	dae::SceneManager::GetInstance().GetActiveScene().Remove(this);
 }
 
 

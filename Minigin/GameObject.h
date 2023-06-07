@@ -39,6 +39,10 @@ namespace dae
 		void SetPosition(float x, float y,float z);
 		void SetPosition(int x, int y);
 		void SetPosition(int x, int y, int z);
+
+		void MarkDestroy();
+		bool IsMarkedForDestroy() const { return m_MarkedForDestroy; }
+		void SetMarkedForDestroy() { m_MarkedForDestroy = true; }
 		
 
 		std::vector<std::shared_ptr<BaseComp>> GetComponents() { return m_pComponents; }
@@ -76,6 +80,8 @@ namespace dae
 
 		glm::vec3 m_worldPosition;
 		glm::vec3 m_localPosition;
+
+		bool m_MarkedForDestroy = false;
 		
 	};
 
@@ -83,6 +89,12 @@ namespace dae
 	template <typename T>
 	T* GameObject::GetComponent() const
 	{
+		if (m_MarkedForDestroy)
+		{
+			return nullptr;
+		}
+			
+
 		for (auto& component : m_pComponents)
 		{
 			T* compnt = dynamic_cast<T*>(component.get());

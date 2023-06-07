@@ -38,6 +38,14 @@ void dae::SceneManager::Render()
 	}
 }
 
+void dae::SceneManager::RemoveMarkedObjects()
+{
+	for (auto scene : m_Scenes)
+	{
+		scene->RemoveMarkedObjects();
+	}
+}
+
 dae::SceneManager::~SceneManager()
 {
 	m_Scenes.clear();

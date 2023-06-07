@@ -16,18 +16,29 @@ void Scene::Add(const std::shared_ptr<SceneObject>& object)
 	m_Objects.push_back(object);
 	object->Initialize();
 }
-void Scene::Remove(GameObject*  object)
+void Scene::Remove(SceneObject*  object)
 {
-	for (size_t i = 0; i < m_Objects.size(); i++)
+	m_DestroyMarkedObjects.push_back(object);
+	
+}
+
+void dae::Scene::RemoveMarkedObjects()
+{
+	for (int i{}; i < (int)m_DestroyMarkedObjects.size(); ++i)
 	{
-		if (m_Objects[i].get() == object)
+		for (size_t j = 0; j < m_Objects.size(); ++j)
 		{
-			m_Objects[i] = m_Objects.back();
-			m_Objects.pop_back();
-			return;
+			if (m_Objects[j].get() == m_DestroyMarkedObjects[i])
+			{
+				m_Objects[j] = m_Objects.back();
+				m_Objects.pop_back();
+			}
 		}
 	}
+	
 }
+
+
 
 void dae::Scene::Initialize()
 {
