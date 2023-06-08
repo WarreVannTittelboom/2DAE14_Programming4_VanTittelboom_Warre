@@ -19,13 +19,13 @@ dae::CollisionComp::~CollisionComp()
 
 void dae::CollisionComp::Initialize()
 {
-	m_Pos = glm::ivec2{ m_pGameObject->GetWorldPosition().x, m_pGameObject->GetWorldPosition().y };
+	m_Pos = glm::ivec2{ GetGameObject()->GetWorldPosition().x, GetGameObject()->GetWorldPosition().y};
 }
 
 
 void dae::CollisionComp::Update()
 {
-	m_Pos = glm::ivec2{ m_pGameObject->GetWorldPosition().x, m_pGameObject->GetWorldPosition().y };
+	m_Pos = glm::ivec2{ GetGameObject()->GetWorldPosition().x, GetGameObject()->GetWorldPosition().y };
 }
 
 bool dae::CollisionComp::CheckCollision(CollisionComp* pCollider) 
@@ -35,13 +35,13 @@ bool dae::CollisionComp::CheckCollision(CollisionComp* pCollider)
 	if (!pCollider->m_Active || !m_Active) { return false; }
 	
 	// If one rectangle is on left side of the other
-	if ( (m_Pos.x + m_Width) < pCollider->m_pGameObject->GetWorldPosition().x || (pCollider->m_pGameObject->GetWorldPosition().x + pCollider->m_Width) < m_Pos.x)
+	if ( (m_Pos.x + m_Width) < pCollider->GetGameObject()->GetWorldPosition().x || (pCollider->GetGameObject()->GetWorldPosition().x + pCollider->m_Width) < m_Pos.x)
 	{
 		return false;
 	}
 
 	// If one rectangle is under the other
-	if (m_Pos.y > (pCollider->m_pGameObject->GetWorldPosition().y + m_Height) || pCollider->m_pGameObject->GetWorldPosition().y  > (m_Pos.y  + pCollider->m_Height) )
+	if (m_Pos.y > (pCollider->GetGameObject()->GetWorldPosition().y + m_Height) || pCollider->GetGameObject()->GetWorldPosition().y  > (m_Pos.y  + pCollider->m_Height) )
 	{
 		return false;
 	}

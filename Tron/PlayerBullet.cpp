@@ -27,34 +27,34 @@ dae::PlayerBullet::~PlayerBullet()
 
 void dae::PlayerBullet::Initialize()
 {
-	auto playerBulletCol = std::make_shared<dae::CollisionComp>(m_pGameObject, 8.f, 8.f, true);
-	m_pGameObject->AddComponent(playerBulletCol);
+	auto playerBulletCol = std::make_shared<dae::CollisionComp>(GetGameObject(), 8.f, 8.f, true);
+	GetGameObject()->AddComponent(playerBulletCol);
 	m_Scene.AddCollider(playerBulletCol);
 	if (m_Id == 1)
 	{
-		auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/Player2Bullet.png", 8, 8, true);
-		m_pGameObject->AddComponent(playerBulletSprite);
-		m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
-		m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
+		auto playerBulletSprite = std::make_shared<dae::TextureComp>(GetGameObject(), "../Data/Player2Bullet.png", 8, 8, true);
+		GetGameObject()->AddComponent(playerBulletSprite);
+		GetGameObject()->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
+		GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
 	}
 	else
 	{
-		auto playerBulletSprite = std::make_shared<dae::TextureComp>(m_pGameObject, "../Data/PlayerBullet.png", 8, 8, true);
-		m_pGameObject->AddComponent(playerBulletSprite);
-		m_pGameObject->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
-		m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
+		auto playerBulletSprite = std::make_shared<dae::TextureComp>(GetGameObject(), "../Data/PlayerBullet.png", 8, 8, true);
+		GetGameObject()->AddComponent(playerBulletSprite);
+		GetGameObject()->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
+		GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
 	}
 }
 
 void dae::PlayerBullet::Update()
 {
 	float deltaTime = Timer::GetInstance().GetDeltaTime();
-	float newX = m_pGameObject->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
-	float newY = m_pGameObject->GetWorldPosition().y + m_SinY * m_BulletSpeed * deltaTime;
-	m_pGameObject->SetPosition(newX, newY);
+	float newX = GetGameObject()->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
+	float newY = GetGameObject()->GetWorldPosition().y + m_SinY * m_BulletSpeed * deltaTime;
+	GetGameObject()->SetPosition(newX, newY);
 	if (m_BounceCount >= 6)
 	{
-		m_Scene.Remove(m_pGameObject);
+		m_Scene.Remove(GetGameObject());
 	}
 	
 }
@@ -68,7 +68,7 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 	if (auto pWall = other->GetComponent<dae::Wall>())
 	{
 		++m_BounceCount;
-		int x[] = { (int)pWall->m_PosX - (int)m_pGameObject->GetPosition().x, (int)pWall->m_PosX + (int)pWall->m_Width - (int)m_pGameObject->GetPosition().x, (int)pWall->m_PosY + (int)m_pGameObject->GetPosition().y + (int)pWall->m_Height, (int)pWall->m_PosY + (int)m_pGameObject->GetPosition().y};
+		int x[] = { (int)pWall->m_PosX - (int)GetGameObject()->GetPosition().x, (int)pWall->m_PosX + (int)pWall->m_Width - (int)GetGameObject()->GetPosition().x, (int)pWall->m_PosY + (int)GetGameObject()->GetPosition().y + (int)pWall->m_Height, (int)pWall->m_PosY + (int)GetGameObject()->GetPosition().y};
 		int len = sizeof(x) / sizeof(x[0]); 
 		if (x[0] < 0)
 		{
@@ -135,7 +135,7 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		{
 			
 		}
-		m_Scene.Remove(m_pGameObject);
+		m_Scene.Remove(GetGameObject());
 	}
 	else if (auto pEnemyspecial = other->GetComponent<dae::RecognizerEnemy>())
 	{
@@ -143,6 +143,6 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		{
 		
 		}
-		m_Scene.Remove(m_pGameObject);
+		m_Scene.Remove(GetGameObject());
 	}
 }

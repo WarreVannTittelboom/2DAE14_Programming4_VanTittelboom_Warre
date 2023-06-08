@@ -32,19 +32,19 @@ dae::Button::~Button()
 
 void dae::Button::Initialize()
 {
-	auto playercol = std::make_shared<dae::CollisionComp>(m_pGameObject, m_Width, m_Height, true);
-	m_pGameObject->AddComponent(playercol);
+	auto playercol = std::make_shared<dae::CollisionComp>(GetGameObject(), m_Width, m_Height, true);
+	GetGameObject()->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	m_pGameObject->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new ButtonObserver());
+	GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new ButtonObserver());
 }
 
 void dae::Button::OnColl(const GameObject* other)
 {
-	if (m_pGameObject->GetPosition().x < 160.f)
+	if (GetGameObject()->GetPosition().x < 160.f)
 	{
 		dae::SceneManager::GetInstance().SetScene("coop1");
 	}
-	else if (m_pGameObject->GetPosition().x >  290.f)
+	else if (GetGameObject()->GetPosition().x >  290.f)
 	{
 		dae::SceneManager::GetInstance().SetScene("versus1");
 	}

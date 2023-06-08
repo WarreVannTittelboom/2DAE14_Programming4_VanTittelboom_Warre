@@ -21,17 +21,16 @@ namespace dae
 		virtual void LateUpdate() {};
 		virtual void Render() const {};
 		virtual void OnColl(const GameObject* other) {};
-
-		GameObject* GetGameObject() { return m_pGameObject; };
-		void SetGameObject(GameObject* pGameObject) { m_pGameObject = pGameObject; };
-
+		GameObject* GGetGameObject() const { return m_pGameObject; }
 		const std::unique_ptr<Subject>& GetSubject() const { return m_pSubject; };
+		GameObject* GetGameObject() const { return m_pGameObject; }
 
 	protected:
 		explicit BaseComp(GameObject* pOwner) : m_pGameObject(pOwner) { m_pSubject = std::make_unique<Subject>(); }
 		std::unique_ptr<Subject> m_pSubject;
-		GameObject* m_pGameObject;
+		
 	private:
+		GameObject* m_pGameObject;
 	};
 }
 

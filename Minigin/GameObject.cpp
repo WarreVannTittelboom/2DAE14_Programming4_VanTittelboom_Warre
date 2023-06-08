@@ -113,7 +113,6 @@ void dae::GameObject::Render() const
 void GameObject::AddComponent(const std::shared_ptr<BaseComp>& comp)
 {
 	m_pComponents.push_back(comp);
-	comp->SetGameObject(this);
 }
 
 bool GameObject::RemoveComponent(std::shared_ptr<dae::BaseComp> comp)
