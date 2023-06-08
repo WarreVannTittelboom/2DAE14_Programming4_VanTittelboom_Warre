@@ -4,6 +4,8 @@
 #include "Scene.h"
 namespace dae
 {
+	class PlayerTank;
+	class TextComp;
 	class TronGame : public Singleton<TronGame>
 	{
 	public:
@@ -18,8 +20,13 @@ namespace dae
 
 		void ReadJsonFile(const std::string& name,Scene& scene);
 
+		void ReadJsonFileReset(const std::string& name, dae::Scene& scene,GameObject* tank);
+
+		void ResetLevel();
+
 		int m_Score = 0;
-		int m_Lives = 1;
+		int m_LivesP1 = 4;
+		int m_LivesP2 = 4;
 	};
 }
 

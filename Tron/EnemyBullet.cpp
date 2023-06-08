@@ -49,6 +49,6 @@ void dae::EnemyBullet::OnColl(const GameObject* other)
 {
 	if (other->GetComponent<dae::Wall>())
 	{
-		m_Scene.Remove(GetGameObject());
+		GetGameObject()->MarkDestroy();
 	}
 }

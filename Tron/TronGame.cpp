@@ -23,6 +23,7 @@
 #include "RecognizerEnemy.h"
 #include <Font.h>
 #include <TextComp.h>
+#include "HUDText.h"
 
 
 
@@ -88,7 +89,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 	std::string file{ "../Data/Json/" };
 	file += name;
 	file += ".json";
-
+	scene.m_FileName = name;
 	if (std::ifstream input{ file })
 	{
 		SetConsoleOutputCP(CP_UTF8);
@@ -174,7 +175,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 						auto enemyComp1 = std::make_shared<dae::BasicEnemy>(enemy1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), pTank1, scene);
 						enemy1->AddComponent(enemyComp1);
 						scene.Add(enemy1);
-
+						scene.m_TotalEnemyCount+= 1;
 					}
 				}
 				if (objectName == specialenemyTag.c_str())
@@ -190,7 +191,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 						auto senemyComp1 = std::make_shared<dae::RecognizerEnemy>(senemy1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), pTank1, scene);
 						senemy1->AddComponent(senemyComp1);
 						scene.Add(senemy1);
-
+						scene.m_TotalEnemyCount += 1;
 					}
 				}
 				if (objectName == wallTag.c_str())
@@ -212,5 +213,93 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 
 			}
 		}
+
 	}
+	if (name != "Main")
+	{
+		auto textObj = std::make_shared<dae::GameObject>();
+		auto textObjComp = std::make_shared<dae::HUDText>(textObj.get(), scene);
+		textObj->AddComponent(textObjComp);
+		scene.Add(textObj);
+	}
+}
+
+
+void dae::TronGame::ReadJsonFileReset(const std::string& name, dae::Scene& scene, GameObject* tank)
+{
+	std::string file{ "../Data/Json/" };
+	file += name;
+	file += ".json";
+
+	if (std::ifstream input{ file })
+	{
+		SetConsoleOutputCP(CP_UTF8);
+		setvbuf(stdout, nullptr, _IOFBF, 1000);
+
+		rapidjson::IStreamWrapper inputWrapper{ input };
+		rapidjson::Document doc;
+		doc.ParseStream(inputWrapper);
+
+		const std::string enemyTag = "Enemies";
+		const std::string specialenemyTag = "RecEnemies";
+
+		std::shared_ptr<GameObject> pTank1(tank);
+
+		for (auto i = doc.Begin(); i != doc.End(); ++i)
+		{
+			{
+				const auto& levelJson = *i;
+				const auto& objectJson = levelJson["object"];
+				const char* object = objectJson.GetString();
+				std::string objectName{ object };
+
+				if (objectName == enemyTag.c_str())
+				{
+					const auto& playerTransformsJson = levelJson["transform"];
+					auto playerTransforms = playerTransformsJson.GetArray();
+
+					for (unsigned int j{}; j < playerTransforms.Size(); j++)
+					{
+						auto transform = playerTransforms[j].GetArray();
+
+						auto enemy1 = std::make_shared<dae::GameObject>();
+						auto enemyComp1 = std::make_shared<dae::BasicEnemy>(enemy1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), pTank1, scene);
+						enemy1->AddComponent(enemyComp1);
+						scene.Add(enemy1);
+					}
+				}
+				if (objectName == specialenemyTag.c_str())
+				{
+					const auto& playerTransformsJson = levelJson["transform"];
+					auto playerTransforms = playerTransformsJson.GetArray();
+
+					for (unsigned int j{}; j < playerTransforms.Size(); j++)
+					{
+						auto transform = playerTransforms[j].GetArray();
+
+						auto senemy1 = std::make_shared<dae::GameObject>();
+						auto senemyComp1 = std::make_shared<dae::RecognizerEnemy>(senemy1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), pTank1, scene);
+						senemy1->AddComponent(senemyComp1);
+						scene.Add(senemy1);
+					}
+				}
+
+			}
+		}
+	}
+}
+
+void dae::TronGame::ResetLevel()
+{
+	auto players = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<PlayerTank>();
+	bool playertwo = false;
+	for (auto player : players)
+	{
+		if(playertwo)
+			player->GetGameObject()->SetPosition(274, -350);
+		else
+			player->GetGameObject()->SetPosition(224 ,-350);
+		playertwo= true;
+	}
+	ReadJsonFileReset(dae::SceneManager::GetInstance().GetActiveScene().m_FileName, dae::SceneManager::GetInstance().GetActiveScene(), players[0]->GetGameObject());
 }

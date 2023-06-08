@@ -16,6 +16,8 @@
 #include <SceneManager.h>
 #include<SceneObject.h>
 #include "TronObservers.h"
+#include <Font.h>
+#include <TextComp.h>
 
 
 dae::Button::Button(GameObject* gameObject, float w, float h)
@@ -43,6 +45,7 @@ void dae::Button::OnColl(const GameObject* other)
 	if (GetGameObject()->GetPosition().x < 160.f)
 	{
 		dae::SceneManager::GetInstance().SetScene("coop1");
+		
 	}
 	else if (GetGameObject()->GetPosition().x >  290.f)
 	{

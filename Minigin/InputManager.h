@@ -25,6 +25,7 @@ namespace dae
 		
 		void AddCommand(std::map<SDL_Scancode, std::shared_ptr<Command>> &inputCommands, unsigned int id);
 		void AddCommand(std::map<dae::controlButton,std::shared_ptr<Command>>& inputCommands, unsigned int id);
+
 	
 	private:
 		using KeyBoardKey = std::pair<unsigned, SDL_Scancode>;

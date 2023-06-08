@@ -21,7 +21,6 @@ namespace dae
 		virtual void LateUpdate() {};
 		virtual void Render() const {};
 		virtual void OnColl(const GameObject* other) {};
-		GameObject* GGetGameObject() const { return m_pGameObject; }
 		const std::unique_ptr<Subject>& GetSubject() const { return m_pSubject; };
 		GameObject* GetGameObject() const { return m_pGameObject; }
 

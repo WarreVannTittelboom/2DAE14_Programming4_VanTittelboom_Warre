@@ -14,10 +14,9 @@ GameObject::GameObject() : m_pParent(nullptr)
 
 dae::GameObject::~GameObject()
 {
-	for (auto Component : m_pComponents)
-	{
-		Component.reset();
-	}
+	
+	m_pComponents.clear();
+	m_pComponents = std::vector<std::shared_ptr<BaseComp>>();
 	for (auto child : m_pChildren)
 	{
 		delete child;

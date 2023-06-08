@@ -66,6 +66,7 @@ namespace dae
 				child->SetPositionDirty();
 		}
 
+
 	private:
 
 		void AddChild(GameObject* pChild) { m_pChildren.push_back(pChild); }

@@ -45,6 +45,20 @@ void dae::SceneManager::RemoveMarkedObjects()
 		scene->RemoveMarkedObjects();
 	}
 }
+//void dae::SceneManager::CheckGoNextScene()
+//{
+//	for (auto& scene : m_Scenes)
+//	{
+//		if (scene->m_IsActive)
+//		{
+//			if (scene->m_TotalEnemyCount != 0 && scene->m_DeadEnemyCount == scene->m_TotalEnemyCount)
+//			{
+//				scene->m_DeadEnemyCount = 0;
+//				SetScene("Level2");
+//			}
+//		}
+//	}
+//}
 
 dae::SceneManager::~SceneManager()
 {

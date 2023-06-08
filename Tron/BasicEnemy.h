@@ -3,10 +3,11 @@
 #include "GameObject.h"
 #include "TronGame.h"
 #include "Scene.h"
-#include <TextureComp.h>
 
 namespace dae
 {
+	class TextureComp;
+
 	class BasicEnemy : public dae::BaseComp
 	{
 	public:

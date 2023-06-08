@@ -2,6 +2,7 @@
 #include "BasicEnemy.h"
 #include "TronObservers.h"
 #include "Timer.h"
+#include "TextureComp.h"
 
 #define PI 3.14159265
 
@@ -261,7 +262,21 @@ bool dae::BasicEnemy::DoDamage()
 	if(m_Health <= 0)
 	{
 		dae::TronGame::GetInstance().m_Score += 100;
-		m_Scene.Remove(GetGameObject());
+		GetGameObject()->MarkDestroy();
+		m_Scene.m_DeadEnemyCount += 1;
+		if (m_Scene.m_TotalEnemyCount != 0 && m_Scene.m_DeadEnemyCount == m_Scene.m_TotalEnemyCount)
+		{
+			m_Scene.m_DeadEnemyCount = 0;
+			dae::TronGame::GetInstance().ResetLevel();
+			SDL_Event event;
+			SDL_zero(event);
+
+			event.type = SDL_KEYDOWN;
+			event.key.keysym.scancode = SDL_SCANCODE_N;
+
+			SDL_PushEvent(&event);
+
+		}
 		return true;
 		
 	}

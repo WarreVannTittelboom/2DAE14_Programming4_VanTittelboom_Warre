@@ -304,11 +304,19 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 		int randomy = 20 + (std::rand() % (482 - 20 + 1));
 		GetGameObject()->SetPosition(randomx, -randomy);
 	}
-	else if (other->GetComponent<dae::BasicEnemy>())
+	else if (other->GetComponent<dae::BasicEnemy>()|| other->GetComponent<dae::RecognizerEnemy>() || other->GetComponent<dae::EnemyBullet>())
 	{
-		dae::TronGame::GetInstance().m_Lives -= 1;
-		m_Scene.Remove(GetGameObject());
-		if (dae::TronGame::GetInstance().m_Lives <= 0)
+		if (m_Id == 2)
+		{
+			dae::TronGame::GetInstance().m_LivesP2 -= 1;
+		}
+		else
+		{
+			dae::TronGame::GetInstance().m_LivesP1 -= 1;
+		}
+		
+		GetGameObject()->MarkDestroy();
+	/*	if (dae::TronGame::GetInstance().m_Lives <= 0)
 		{
 			auto value = dae::TronGame::GetInstance().m_Score;
 			auto text = std::make_shared<dae::GameObject>();
@@ -318,39 +326,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			text->AddComponent(textcomp);
 			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
-		}
-	}
-	else if (other->GetComponent<dae::RecognizerEnemy>())
-	{
-		dae::TronGame::GetInstance().m_Lives -= 1;
-		m_Scene.Remove(GetGameObject());
-		if (dae::TronGame::GetInstance().m_Lives <= 0)
-		{
-			auto value = dae::TronGame::GetInstance().m_Score;
-			auto text = std::make_shared<dae::GameObject>();
-			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
-			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(145, 270);
-			text->AddComponent(textcomp);
-			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-			dae::SceneManager::GetInstance().SetScene("gameoverscene");
-		}
-	}
-	else if (other->GetComponent<dae::EnemyBullet>())
-	{
-		dae::TronGame::GetInstance().m_Lives -= 1;
-		m_Scene.Remove(GetGameObject());
-		if (dae::TronGame::GetInstance().m_Lives <= 0)
-		{
-			auto value = dae::TronGame::GetInstance().m_Score;
-			auto text = std::make_shared<dae::GameObject>();
-			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
-			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(145, 270);
-			text->AddComponent(textcomp);
-			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-			dae::SceneManager::GetInstance().SetScene("gameoverscene");
-		}
+		}*/
 	}
 	else
 	{

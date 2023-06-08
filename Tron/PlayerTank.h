@@ -54,7 +54,7 @@ namespace dae
 
 		bool m_MoveCannonLeft{ false };
 		bool m_MoveCannonRight{ false };
-		
+
 		unsigned int m_Id;
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_playerHorizontalSprite;

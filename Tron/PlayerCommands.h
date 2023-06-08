@@ -13,8 +13,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(false); } }
 
 
 };
@@ -26,8 +26,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(false); } }
 
 
 };
@@ -39,8 +39,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(false); } }
 
 
 
@@ -53,8 +53,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy()&& GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy()&& GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(false); } }
 
 };
 
@@ -65,8 +65,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetDoShoot(false); } }
 
 
 };
@@ -79,8 +79,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonLeft(false); } }
 
 
 };
@@ -93,8 +93,8 @@ public:
 		:Command(go)
 	{
 	};
-	void Execute() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(true); }
-	void Release() override { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(false); }
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(true); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveCannonRight(false); } }
 
 
 };
@@ -108,6 +108,8 @@ public:
 	};
 	void Execute() override 
 	{ 
+		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
+		{ 
 		if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop1")
 
 		{
@@ -145,6 +147,7 @@ public:
 		{
 			dae::SceneManager::GetInstance().SetScene("versus1");
 		}
+	}
 	}
 	void Release() override { }
 

@@ -43,8 +43,6 @@ void dae::Minigin::Initialize()
 	{
 		std::cout << "Error: SDL_Mixer Init error";
 	}
-
-
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,

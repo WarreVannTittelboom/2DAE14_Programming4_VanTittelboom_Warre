@@ -30,7 +30,7 @@ void dae::PlayerBullet::Initialize()
 	auto playerBulletCol = std::make_shared<dae::CollisionComp>(GetGameObject(), 8.f, 8.f, true);
 	GetGameObject()->AddComponent(playerBulletCol);
 	m_Scene.AddCollider(playerBulletCol);
-	if (m_Id == 1)
+	if (m_Id == 2)
 	{
 		auto playerBulletSprite = std::make_shared<dae::TextureComp>(GetGameObject(), "../Data/Player2Bullet.png", 8, 8, true);
 		GetGameObject()->AddComponent(playerBulletSprite);
@@ -54,7 +54,7 @@ void dae::PlayerBullet::Update()
 	GetGameObject()->SetPosition(newX, newY);
 	if (m_BounceCount >= 6)
 	{
-		m_Scene.Remove(GetGameObject());
+		GetGameObject()->MarkDestroy();
 	}
 	
 }
@@ -135,7 +135,7 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		{
 			
 		}
-		m_Scene.Remove(GetGameObject());
+		GetGameObject()->MarkDestroy();
 	}
 	else if (auto pEnemyspecial = other->GetComponent<dae::RecognizerEnemy>())
 	{
@@ -143,6 +143,6 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		{
 		
 		}
-		m_Scene.Remove(GetGameObject());
+		GetGameObject()->MarkDestroy();
 	}
 }
