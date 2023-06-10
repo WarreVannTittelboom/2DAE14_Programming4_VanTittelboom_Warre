@@ -6,6 +6,7 @@
 #include <SceneManager.h>
 #include "TronObservers.h"
 #include "Wall.h"
+#include "BasicEnemy.h"
 
 
 
@@ -31,9 +32,8 @@ void dae::EnemyBullet::Initialize()
 	m_Scene.AddCollider(playerBulletCol);
 	auto playerBulletSprite = std::make_shared<dae::TextureComp>(GetGameObject(), "../Data/EnemyBullet.png", 8, 8, true);
 	GetGameObject()->AddComponent(playerBulletSprite);
-	GetGameObject()->SetPosition(m_StartPosX + 16, m_StartPosY - 16);
+	GetGameObject()->SetPosition(m_StartPosX + 16 , m_StartPosY - 16);
 	GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new EnemyBulletObserver());
-	GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new PlayerBulletObserver());
 }
 
 void dae::EnemyBullet::Update()
@@ -47,8 +47,9 @@ void dae::EnemyBullet::Update()
 
 void dae::EnemyBullet::OnColl(const GameObject* other)
 {
-	if (other->GetComponent<dae::Wall>())
-	{
-		GetGameObject()->MarkDestroy();
-	}
+	 
+		if (other->GetComponent<dae::Wall>())
+		{
+			GetGameObject()->SetPosition(200, 200);
+		}
 }

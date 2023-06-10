@@ -61,6 +61,8 @@ void dae::PlayerTank::Initialize()
 
 		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
 
+		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
 
@@ -81,6 +83,8 @@ void dae::PlayerTank::Initialize()
 		kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(GetGameObject());
 
 		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(GetGameObject());
+
+		kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(GetGameObject());
 
 
 		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
@@ -113,6 +117,8 @@ void dae::PlayerTank::Initialize()
 
 		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(GetGameObject());
 
+		kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
 
@@ -133,6 +139,8 @@ void dae::PlayerTank::Initialize()
 		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(GetGameObject());
 
 		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
+
+		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
 
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 1);
@@ -163,6 +171,8 @@ void dae::PlayerTank::Initialize()
 		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(GetGameObject());
 
 		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
+
+		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
 
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
@@ -309,24 +319,32 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 		if (m_Id == 2)
 		{
 			dae::TronGame::GetInstance().m_LivesP2 -= 1;
+			dae::TronGame::GetInstance().m_DeadP2 = true;
 		}
 		else
 		{
 			dae::TronGame::GetInstance().m_LivesP1 -= 1;
+			dae::TronGame::GetInstance().m_DeadP1 = true;
+		}
+		GetGameObject()->SetPosition(-800, 800);
+		//GetGameObject()->MarkDestroy();
+		if (dae::TronGame::GetInstance().m_DeadP1 && dae::TronGame::GetInstance().m_DeadP2 || (dae::TronGame::GetInstance().m_DeadP1 && (m_Scene.m_FileName == "SingleLevel1" || m_Scene.m_FileName == "SingleLevel2" || m_Scene.m_FileName == "SingleLevel3")))
+		{
+			m_Scene.m_DeadEnemyCount = 0;
+			dae::TronGame::GetInstance().m_DeadP2 = false;
+			dae::TronGame::GetInstance().m_DeadP1 = false;
+			dae::TronGame::GetInstance().ResetLevelForNext();
 		}
 		
-		GetGameObject()->MarkDestroy();
-	/*	if (dae::TronGame::GetInstance().m_Lives <= 0)
+
+		if (dae::TronGame::GetInstance().m_LivesP1 < 0 && 0 > dae::TronGame::GetInstance().m_LivesP2 ||(( m_Scene.m_FileName == "SingleLevel1" || m_Scene.m_FileName == "SingleLevel2" || m_Scene.m_FileName == "SingleLevel3") && dae::TronGame::GetInstance().m_LivesP1 < 0))
 		{
+			dae::TronGame::GetInstance().m_LivesP2 = 3;
+			dae::TronGame::GetInstance().m_LivesP1 = 3;
 			auto value = dae::TronGame::GetInstance().m_Score;
-			auto text = std::make_shared<dae::GameObject>();
-			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
-			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Score: " + std::to_string(value), font);
-			textcomp->SetPos(145, 270);
-			text->AddComponent(textcomp);
-			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
-		}*/
+			dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::TextComp>()->SetText("Score: " + std::to_string((value)));
+		}
 	}
 	else
 	{

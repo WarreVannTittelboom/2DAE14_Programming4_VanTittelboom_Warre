@@ -5,14 +5,14 @@
 #include "PlayerTank.h"
 
 
-dae::RecognizerEnemy::RecognizerEnemy(GameObject* gameObject, float x, float y, float w, float h, std::shared_ptr<GameObject> playerTank, Scene& scene)
+dae::RecognizerEnemy::RecognizerEnemy(GameObject* gameObject, float x, float y, float w, float h,  Scene& scene)
 	:BaseComp(gameObject)
 	, m_Scene(scene)
 	, m_PosX(x)
 	, m_PosY(y)
 	, m_Width(w)
 	, m_Height(h)
-	, m_PlayerTank(playerTank)
+	
 {
 }
 
@@ -30,15 +30,17 @@ void dae::RecognizerEnemy::Initialize()
 	auto playercol = std::make_shared<dae::CollisionComp>(GetGameObject(), m_Width, m_Height, true);
 	GetGameObject()->AddComponent(playercol);
 	m_Scene.AddCollider(playercol);
-	GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new EnemyCollisionObserver(m_PlayerTank));
+	GetGameObject()->GetComponent<CollisionComp>()->GetSubject()->AddObserver(new EnemyCollisionObserver());
 }
 
 
 void dae::RecognizerEnemy::Update()
 {
 
-	float playerPosX = m_PlayerTank->GetPosition().x;
-	float playerPosY = m_PlayerTank->GetPosition().y;
+	//float playerPosX = m_PlayerTank->GetPosition().x;
+	//float playerPosY = m_PlayerTank->GetPosition().y;
+	float playerPosX = 50.f;
+	float playerPosY = 50.f;
 
 	float valueDiffX{ 0.f };
 	float valueDiffY{ 0.f };
@@ -231,19 +233,14 @@ bool dae::RecognizerEnemy::DoDamage()
 	if (m_Health <= 0)
 	{
 		dae::TronGame::GetInstance().m_Score += 250;
-		GetGameObject()->MarkDestroy();
+		GetGameObject()->SetPosition(1000.f, 1000.f);
+		//GetGameObject()->MarkDestroy();
 		m_Scene.m_DeadEnemyCount += 1;
 		if (m_Scene.m_TotalEnemyCount != 0 && m_Scene.m_DeadEnemyCount == m_Scene.m_TotalEnemyCount)
 		{
 			m_Scene.m_DeadEnemyCount = 0;
-			dae::TronGame::GetInstance().ResetLevel();
-			SDL_Event event;
-			SDL_zero(event);
-
-			event.type = SDL_KEYDOWN;
-			event.key.keysym.scancode = SDL_SCANCODE_N;
-
-			SDL_PushEvent(&event);
+			dae::TronGame::GetInstance().ResetLevelForNext();
+			dae::TronGame::GetInstance().LoadNextScene();
 
 		}
 		return true;

@@ -21,17 +21,38 @@ void dae::HUDText::Initialize()
 		m_LivesCountP2->SetPos(365, 40);
 		GetGameObject()->AddComponent(m_LivesCountP2);
 	}
-	m_ScoreCount = std::make_shared<dae::TextComp>(GetGameObject(), "Lives: " + std::to_string(dae::TronGame::GetInstance().m_Score), font);
-	m_ScoreCount->SetPos(385, 470);
-	GetGameObject()->AddComponent(m_ScoreCount);
+	if (m_Scene.m_FileName != "VersusLevel1" && m_Scene.m_FileName != "VersusLevel2" && m_Scene.m_FileName != "VersusLevel3")
+	{
+		m_ScoreCount = std::make_shared<dae::TextComp>(GetGameObject(), "Lives: " + std::to_string(dae::TronGame::GetInstance().m_Score), font);
+		m_ScoreCount->SetPos(365, 470);
+		GetGameObject()->AddComponent(m_ScoreCount);
+	}
+	
 }
 
 void dae::HUDText::Update()
 {
-	m_LivesCountP1->SetText("Lives P1: " + std::to_string(dae::TronGame::GetInstance().m_LivesP1));
+	if (dae::TronGame::GetInstance().m_LivesP1 < 0)
+	{
+		m_LivesCountP1->SetText("Lives P1: 0");
+	}
+	else
+	{
+		m_LivesCountP1->SetText("Lives P1: " + std::to_string(dae::TronGame::GetInstance().m_LivesP1));
+	}
 	if (m_Scene.m_FileName != "SingleLevel1" && m_Scene.m_FileName != "SingleLevel2" && m_Scene.m_FileName != "SingleLevel3")
 	{
-		m_LivesCountP2->SetText("Lives P2: " + std::to_string(dae::TronGame::GetInstance().m_LivesP2));
+		if (dae::TronGame::GetInstance().m_LivesP2 < 0)
+		{
+			m_LivesCountP2->SetText("Lives P2: 0");
+		}
+		else
+		{
+			m_LivesCountP2->SetText("Lives P2: " + std::to_string(dae::TronGame::GetInstance().m_LivesP2));
+		}
 	}
-	m_ScoreCount->SetText("Score: " + std::to_string(dae::TronGame::GetInstance().m_Score));
+	if (m_Scene.m_FileName != "VersusLevel1" && m_Scene.m_FileName != "VersusLevel2" && m_Scene.m_FileName != "VersusLevel3")
+	{
+		m_ScoreCount->SetText("Score: " + std::to_string(dae::TronGame::GetInstance().m_Score));
+	}
 }

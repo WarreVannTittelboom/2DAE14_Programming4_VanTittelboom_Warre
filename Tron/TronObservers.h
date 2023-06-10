@@ -17,9 +17,9 @@ namespace dae
 class CollisionObserver : public Observer
 {
 public:
-	explicit CollisionObserver(std::shared_ptr<GameObject> playerTank)
+	explicit CollisionObserver()
 	{
-		m_pPlayerTank = playerTank;
+		//m_pPlayerTank = playerTank;
 	}
 	~CollisionObserver() override = default;
 	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
@@ -49,7 +49,7 @@ public:
 		}
 	}
 private:
-	std::shared_ptr<GameObject>  m_pPlayerTank{};
+	//std::shared_ptr<GameObject>  m_pPlayerTank{};
 };
 
 class PlayerBulletObserver : public Observer
@@ -65,16 +65,11 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			if (auto pPlayerBullet1 = e->GetComponent<dae::PlayerBullet>())
-			{		
-				pPlayerBullet1->OnColl(o);
-			} 
-			else if (auto pPlayerBullet = e->GetComponent<dae::EnemyBullet>())
+			if (auto pPlayerbullet = e->GetComponent<dae::PlayerBullet>())
 			{
-				pPlayerBullet->OnColl(o);
+				pPlayerbullet->OnColl(o);
 			}
 		}
-		break;
 		}
 	}
 };
@@ -132,9 +127,8 @@ private:
 class EnemyCollisionObserver : public Observer
 {
 public:
-	explicit EnemyCollisionObserver(std::shared_ptr<GameObject> playerTank)
+	explicit EnemyCollisionObserver()
 	{
-		m_pPlayerTank = playerTank;
 	}
 	~EnemyCollisionObserver() override = default;
 	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
@@ -162,7 +156,6 @@ public:
 		}
 	}
 private:
-	std::shared_ptr<GameObject>  m_pPlayerTank{};
 };
 
 class EnemyBulletObserver : public Observer
@@ -178,13 +171,13 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			if (o->GetComponent<dae::PlayerTank>() && e->GetComponent<dae::EnemyBullet>())
+			if (o->GetComponent<dae::Wall>() && !(o->GetComponent<dae::BasicEnemy>()) && e->GetComponent<dae::EnemyBullet>())
 			{
-				o->GetComponent<dae::PlayerTank>()->OnColl(e);
+				e->GetComponent<dae::EnemyBullet>()->OnColl(o);
 			}
 			else if (o->GetComponent<dae::PlayerTank>() && e->GetComponent<dae::EnemyBullet>())
 			{
-				e->GetComponent<dae::EnemyBullet>()->OnColl(o);
+				o->GetComponent<dae::PlayerTank>()->OnColl(e);
 			}
 		}
 		break;

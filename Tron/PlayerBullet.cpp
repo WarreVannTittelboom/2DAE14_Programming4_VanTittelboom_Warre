@@ -54,7 +54,8 @@ void dae::PlayerBullet::Update()
 	GetGameObject()->SetPosition(newX, newY);
 	if (m_BounceCount >= 6)
 	{
-		GetGameObject()->MarkDestroy();
+		//GetGameObject()->MarkDestroy();
+		GetGameObject()->SetPosition(200, 200);
 	}
 	
 }
@@ -65,7 +66,38 @@ void dae::PlayerBullet::Render() const
 
 void dae::PlayerBullet::OnColl(const GameObject* other)
 {
-	if (auto pWall = other->GetComponent<dae::Wall>())
+	if (auto pTank = other->GetComponent<dae::PlayerTank>())
+	{
+		if (m_Id != pTank->GetId() && (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3"))
+		{
+			if (!((dae::SceneManager::GetInstance().GetActiveScene().GetName() == "Menu") || (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "gameoverscene")))
+			{
+				if (pTank->GetId() == 1)
+				{
+					dae::TronGame::GetInstance().m_LivesP1 -= 1;
+				}
+				else if (pTank->GetId() == 2)
+				{
+					dae::TronGame::GetInstance().m_LivesP2 -= 1;
+				}
+
+
+				if (dae::TronGame::GetInstance().m_LivesP1 < 0 || dae::TronGame::GetInstance().m_LivesP2 < 0)
+				{
+					
+					
+					dae::SceneManager::GetInstance().SetScene("gameoverscene");
+					dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::TextComp>()->SetText("Player " + std::to_string((m_Id)) + " won");
+				}
+				else 
+				{
+					dae::TronGame::GetInstance().ResetLevelForNext();
+					dae::TronGame::GetInstance().LoadNextScene();
+				}
+			}
+		}
+	}
+	else if (auto pWall = other->GetComponent<dae::Wall>())
 	{
 		++m_BounceCount;
 		int x[] = { (int)pWall->m_PosX - (int)GetGameObject()->GetPosition().x, (int)pWall->m_PosX + (int)pWall->m_Width - (int)GetGameObject()->GetPosition().x, (int)pWall->m_PosY + (int)GetGameObject()->GetPosition().y + (int)pWall->m_Height, (int)pWall->m_PosY + (int)GetGameObject()->GetPosition().y};
@@ -112,30 +144,14 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 			}
 		}
 	}
-	else if (auto pTank = other->GetComponent<dae::PlayerTank>())
-	{
-		if(m_Id != pTank->GetId() && (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3"))
-	{
-			if (!((dae::SceneManager::GetInstance().GetActiveScene().GetName() == "Menu") || (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "gameoverscene")))
-			{
-			auto text = std::make_shared<dae::GameObject>();
-			auto font = std::make_shared<dae::Font>("../Data/Lingua.otf", 40);
-			auto textcomp = std::make_shared<dae::TextComp>(text.get(), "Player " + std::to_string((m_Id + 1)) + " won", font);
-			textcomp->SetPos(135, 270);
-			text->AddComponent(textcomp);
-			dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
-
-			dae::SceneManager::GetInstance().SetScene("gameoverscene");
-			}
-	}
-	}
+	 
 	else if (auto pEnemy = other->GetComponent<dae::BasicEnemy>())
 	{
 		if (pEnemy->DoDamage())
 		{
 			
 		}
-		GetGameObject()->MarkDestroy();
+		GetGameObject()->SetPosition(200, 200);
 	}
 	else if (auto pEnemyspecial = other->GetComponent<dae::RecognizerEnemy>())
 	{
@@ -143,6 +159,6 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		{
 		
 		}
-		GetGameObject()->MarkDestroy();
+		GetGameObject()->SetPosition(200, 200);
 	}
 }

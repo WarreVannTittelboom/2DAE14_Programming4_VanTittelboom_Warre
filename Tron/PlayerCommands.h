@@ -110,6 +110,8 @@ public:
 	{ 
 		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
 		{ 
+			dae::TronGame::GetInstance().ResetLevelForNext();
+
 		if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop1")
 
 		{
@@ -148,6 +150,26 @@ public:
 			dae::SceneManager::GetInstance().SetScene("versus1");
 		}
 	}
+	}
+	void Release() override { }
+
+
+};
+
+class ReturnToMenu: public Command
+{
+public:
+	ReturnToMenu(dae::GameObject* go)
+		:Command(go)
+	{
+	};
+	void Execute() override
+	{
+		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
+		{
+			dae::TronGame::GetInstance().ResetLevelForNext();
+			dae::TronGame::GetInstance().ResetGame();
+		}
 	}
 	void Release() override { }
 

@@ -10,7 +10,7 @@ namespace dae
 	class RecognizerEnemy : public dae::BaseComp
 	{
 	public:
-		explicit RecognizerEnemy(GameObject* gameObject, float x, float y, float w, float h, std::shared_ptr<GameObject> playerTank, Scene& scene);
+		explicit RecognizerEnemy(GameObject* gameObject, float x, float y, float w, float h, Scene& scene);
 		~RecognizerEnemy();
 		RecognizerEnemy(const RecognizerEnemy& other) = delete;
 		RecognizerEnemy(RecognizerEnemy&& other) = delete;
@@ -36,7 +36,6 @@ namespace dae
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_enemyHorizontalSprite;
 		std::shared_ptr<TextureComp> m_enemyVerticalSprite;
-		std::shared_ptr<GameObject> m_PlayerTank;
 	};
 }
 

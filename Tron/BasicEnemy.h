@@ -11,7 +11,7 @@ namespace dae
 	class BasicEnemy : public dae::BaseComp
 	{
 	public:
-		explicit BasicEnemy(GameObject* gameObject, float x, float y, float w, float h, std::shared_ptr<GameObject> playerTank, Scene& scene);
+		explicit BasicEnemy(GameObject* gameObject, float x, float y, float w, float h, Scene& scene);
 		~BasicEnemy();
 		BasicEnemy(const BasicEnemy& other) = delete;
 		BasicEnemy(BasicEnemy&& other) = delete;
@@ -39,7 +39,6 @@ namespace dae
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_enemyHorizontalSprite;
 		std::shared_ptr<TextureComp> m_enemyVerticalSprite;
-		std::shared_ptr<GameObject> m_PlayerTank;
 	};
 }
 
