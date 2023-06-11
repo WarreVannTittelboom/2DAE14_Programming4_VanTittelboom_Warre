@@ -24,7 +24,12 @@
     "object": "RecEnemies",
     "transform": [
       [ 40, 250, 32, 32 ],
-      [ 400, 30, 32, 32 ],
+      [ 400, 30, 32, 32 ]
+    ]
+  },
+  {
+    "object": "Enemies",
+    "transform": [
       [ 420, 450, 32, 32 ]
     ]
   },
