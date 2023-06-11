@@ -1,16 +1,13 @@
 #pragma once
 #include "PlayerTank.h"
 #include <CollisionComp.h>
-#include <Scene.h>
 #include <map>
 #include <InputManager.h>
 #include "TronGame.h"
-#include <TextureComp.h>
 #include "PlayerCommands.h"
 #include <Timer.h>
 #include "PlayerBullet.h"
 #include <math.h>  // for sin and cos
-#include <GameObject.h>
 #include <Scene.h>
 #include <SceneManager.h>
 #include<SceneObject.h>

@@ -19,7 +19,6 @@ class CollisionObserver : public Observer
 public:
 	explicit CollisionObserver()
 	{
-		//m_pPlayerTank = playerTank;
 	}
 	~CollisionObserver() override = default;
 	void OnNotify(const dae::GameObject* o, const dae::GameObject* e, Event event) override
@@ -28,9 +27,6 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			//check if colling with enemy or bullet
-			//if (auto pEnemy = entity->GetComponent<dae::test>())
-			
 			if (o->GetComponent<dae::PlayerTank>())
 			{
 				o->GetComponent<dae::PlayerTank>()->OnColl(e);
@@ -49,7 +45,6 @@ public:
 		}
 	}
 private:
-	//std::shared_ptr<GameObject>  m_pPlayerTank{};
 };
 
 class PlayerBulletObserver : public Observer
@@ -87,9 +82,12 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			if (auto pPlayerBullet = e->GetComponent<dae::Button>())
+			if (auto pBullet = e->GetComponent<dae::Button>())
 			{
-				pPlayerBullet->OnColl(o);
+				if (o->GetComponent<dae::PlayerTank>())
+				{
+					pBullet->OnColl(o);
+				}
 			}
 		}
 		break;
@@ -110,9 +108,7 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			//check if colling with enemy or bullet
-			//if (auto pEnemy = entity->GetComponent<dae::test>())
-			if (auto pPlayerBullet = o->GetComponent<dae::PlayerTank>())
+			if (auto pPlayerTank = o->GetComponent<dae::PlayerTank>())
 			{
 				o->GetComponent<dae::PlayerTank>()->OnColl(e);
 			}
@@ -137,8 +133,6 @@ public:
 		{
 		case dae::Event::CollEvent:
 		{
-			//check if colling with enemy or bullet
-			//if (auto pEnemy = entity->GetComponent<dae::test>())
 			if (o->GetComponent<dae::PlayerTank>())
 			{
 				o->GetComponent<dae::PlayerTank>()->OnColl(e);

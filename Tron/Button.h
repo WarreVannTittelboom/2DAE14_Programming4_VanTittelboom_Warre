@@ -1,11 +1,7 @@
 #pragma once
-#include <BaseComp.h>
-#include <GameObject.h>
-#include <Scene.h>
+#include "Scene.h"
 #include "BaseComp.h"
 #include "GameObject.h"
-#include "TronGame.h"
-#include <TextureComp.h>
 
 
 namespace dae
@@ -14,7 +10,7 @@ namespace dae
 	{
 	public:
 		explicit Button(GameObject* gameObject, float w, float h);
-		~Button();
+		~Button() = default;
 		Button(const Button& other) = delete;
 		Button(Button&& other) = delete;
 		Button& operator=(const Button& other) = delete;

@@ -25,16 +25,7 @@ namespace dae
 		bool RemoveComponent(std::shared_ptr<dae::BaseComp> comp);
 
 		void SetLocalPos(const glm::vec3& pos);
-
-
-	
-
 		void SetParent(GameObject* pParent, bool keepWorldPos);
-
-		
-		
-
-		
 		void SetPosition(float x, float y);
 		void SetPosition(float x, float y,float z);
 		void SetPosition(int x, int y);
@@ -58,6 +49,7 @@ namespace dae
 		const glm::vec3& GetPosition() { return m_localPosition; };
 		const glm::vec3 GetWorldPosition();
 		void UpdateWorldPos();
+		void SetEnabled(bool enabled) { m_Enabled = enabled; }
 
 		void SetPositionDirty()
 		{
@@ -83,6 +75,7 @@ namespace dae
 		glm::vec3 m_localPosition;
 
 		bool m_MarkedForDestroy = false;
+		bool m_Enabled = true;
 		
 	};
 

@@ -16,7 +16,6 @@ namespace dae
 		void LateUpdate();
 		void Render();
 		void RemoveMarkedObjects();
-		//void CheckGoNextScene();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

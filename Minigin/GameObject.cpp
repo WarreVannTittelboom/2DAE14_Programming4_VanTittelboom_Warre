@@ -51,6 +51,8 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update()
 {
+	if (m_Enabled)
+	{
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->Update();
@@ -62,25 +64,31 @@ void dae::GameObject::Update()
 			child->Update();
 		}
 	}
+	}
 }
 
 void dae::GameObject::FixedUpdate(float fDT)
 {
-	for (size_t i = 0; i < m_pComponents.size(); i++)
+	if (m_Enabled)
 	{
-		m_pComponents[i]->FixedUpdate(fDT);
-	}
-	if (m_pChildren.size() != 0)
-	{
-		for (auto child : m_pChildren)
+		for (size_t i = 0; i < m_pComponents.size(); i++)
 		{
-			child->FixedUpdate(fDT);
+			m_pComponents[i]->FixedUpdate(fDT);
+		}
+		if (m_pChildren.size() != 0)
+		{
+			for (auto child : m_pChildren)
+			{
+				child->FixedUpdate(fDT);
+			}
 		}
 	}
 }
 
 void dae::GameObject::LateUpdate()
 {
+	if (m_Enabled)
+	{ 
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->LateUpdate();
@@ -92,19 +100,23 @@ void dae::GameObject::LateUpdate()
 			child->LateUpdate();
 		}
 	}
+	}
 }
 
 void dae::GameObject::Render() const
 {
-	for (size_t i = 0; i < m_pComponents.size(); i++)
+	if (m_Enabled)
 	{
-		m_pComponents[i]->Render();
-	}
-	if (m_pChildren.size() != 0)
-	{
-		for (auto child : m_pChildren)
+		for (size_t i = 0; i < m_pComponents.size(); i++)
 		{
-			child->Render();
+			m_pComponents[i]->Render();
+		}
+		if (m_pChildren.size() != 0)
+		{
+			for (auto child : m_pChildren)
+			{
+				child->Render();
+			}
 		}
 	}
 }

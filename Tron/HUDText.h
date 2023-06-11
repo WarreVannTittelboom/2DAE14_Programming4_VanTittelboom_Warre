@@ -1,6 +1,4 @@
 #pragma once
-#include <BaseComp.h>
-#include <GameObject.h>
 #include <Scene.h>
 #include "BaseComp.h"
 #include "GameObject.h"

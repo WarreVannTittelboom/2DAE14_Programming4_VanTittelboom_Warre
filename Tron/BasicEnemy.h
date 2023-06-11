@@ -12,7 +12,7 @@ namespace dae
 	{
 	public:
 		explicit BasicEnemy(GameObject* gameObject, float x, float y, float w, float h, Scene& scene);
-		~BasicEnemy();
+		~BasicEnemy() = default;
 		BasicEnemy(const BasicEnemy& other) = delete;
 		BasicEnemy(BasicEnemy&& other) = delete;
 		BasicEnemy& operator=(const BasicEnemy& other) = delete;
@@ -24,7 +24,6 @@ namespace dae
 
 		void ShootCannon(float degreesAngle);
 		bool DoDamage();
-		bool m_Active = true;
 	private:
 		int m_Health{3};
 		float m_EnemySpeed{ 40.f };

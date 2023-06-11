@@ -33,8 +33,10 @@
 
 void dae::TronGame::CreateScenes()
 {
+	//background music
 	ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1, 10);
 
+	//create scenes
 	auto& menuScene = dae::SceneManager::GetInstance().CreateScene("Menu");
 	auto& coopScene1 = dae::SceneManager::GetInstance().CreateScene("coop1");
 	auto& versusScene1 = dae::SceneManager::GetInstance().CreateScene("versus1");
@@ -68,7 +70,7 @@ void dae::TronGame::CreateScenes()
 	ReadJsonFile("VersusLevel2", versusScene2);
 	ReadJsonFile("VersusLevel3", versusScene3);
 
-	//menu buttons
+	//menu buttons for selecting mode
 	auto button1 = std::make_shared<dae::GameObject>();
 	button1->SetPosition(40, -300);
 	auto button1Comp = std::make_shared<dae::Button>(button1.get(), 100.f, 100.f);
@@ -99,6 +101,20 @@ void dae::TronGame::CreateScenes()
 	hstextObj->AddComponent(hstextObjComp);
 	dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(hstextObj);
 
+	//util input
+	std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
+
+	auto inputs = std::make_shared<dae::GameObject>();
+
+	kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(inputs.get());
+
+	kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(inputs.get());
+
+	kInputMap[SDL_SCANCODE_M] = std::make_shared<ToggleMute>(inputs.get());
+
+	dae::InputManager::GetInstance().AddCommand(kInputMap,11);
+
+	//set menu scen as active scene
 	dae::SceneManager::GetInstance().SetScene("Menu");
 }
 
@@ -193,7 +209,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 						auto enemyComp1 = std::make_shared<dae::BasicEnemy>(enemy1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), scene);
 						enemy1->AddComponent(enemyComp1);
 						scene.Add(enemy1);
-						scene.m_TotalEnemyCount+= 1;
+						scene.m_TotalEnemyCount += 1;
 					}
 				}
 				if (objectName == specialenemyTag.c_str())
@@ -222,7 +238,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 						auto transform = playerTransforms[j].GetArray();
 
 						auto wall1 = std::make_shared<dae::GameObject>();
-						auto wallComp1 = std::make_shared<dae::Wall>(wall1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), std::string(transform[4].GetString()),scene);
+						auto wallComp1 = std::make_shared<dae::Wall>(wall1.get(), transform[0].GetFloat(), transform[1].GetFloat(), transform[2].GetFloat(), transform[3].GetFloat(), std::string(transform[4].GetString()), scene);
 						wall1->AddComponent(wallComp1);
 						scene.Add(wall1);
 
@@ -233,6 +249,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 		}
 
 	}
+	//add hud to every scene except main
 	if (name != "Main")
 	{
 		auto textObj = std::make_shared<dae::GameObject>();
@@ -240,17 +257,6 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 		textObj->AddComponent(textObjComp);
 		scene.Add(textObj);
 	}
-	auto inputs = std::make_shared<dae::GameObject>();
-
-	std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
-
-	kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(inputs.get());
-
-	kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(inputs.get());
-	
-	kInputMap[SDL_SCANCODE_M] = std::make_shared<ToggleMute>(inputs.get());
-	
-	dae::InputManager::GetInstance().AddCommand(kInputMap, 11);
 
 }
 
@@ -293,7 +299,7 @@ void dae::TronGame::ReadJsonFileReset(const std::string& name, dae::Scene& scene
 				{
 					const auto& playerTransform = levelJson["transform"];
 					auto transform = playerTransform.GetArray();
-					
+
 					PosXP1 = transform[0].GetInt();
 					PosYP1 = transform[1].GetInt();
 				}
@@ -353,24 +359,17 @@ void dae::TronGame::ReadJsonFileReset(const std::string& name, dae::Scene& scene
 		{
 			if (playertwo)
 			{
-
 				if (m_LivesP2 >= 0)
 				{
 					player->GetGameObject()->SetPosition(PosXP2, PosYP2);
 				}
-				
-
 			}
-
 			else
 			{
-
 				if (m_LivesP1 >= 0)
 				{
 					player->GetGameObject()->SetPosition(PosXP1, PosYP1);
 				}
-				
-
 			}
 			playertwo = true;
 		}
@@ -379,52 +378,48 @@ void dae::TronGame::ReadJsonFileReset(const std::string& name, dae::Scene& scene
 
 void dae::TronGame::ResetLevelForNext()
 {
+	dae::SceneManager::GetInstance().GetActiveScene().m_DeadEnemyCount = 0;
 	auto players = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<PlayerTank>();
 	bool playertwo = false;
 	for (auto player : players)
 	{
 		if (playertwo)
 		{
-			
-			
-				player->GetGameObject()->SetPosition(800, 800);
-			
+			player->GetGameObject()->SetPosition(800, 800);
 		}
-		
+
 		else
-			{
-				
-				
-				
-					player->GetGameObject()->SetPosition(800, 800);
-				
-			}
-		playertwo= true;
+		{
+
+			player->GetGameObject()->SetPosition(800, 800);
+
+		}
+		playertwo = true;
 	}
 	auto enemies = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<BasicEnemy>();
 	for (auto enemy : enemies)
 	{
 		enemy->GetGameObject()->SetPosition(-1000, -1000);
-		enemy->m_Active = false;
+		enemy->GetGameObject()->SetEnabled(false);
 	}
 	auto senemies = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<RecognizerEnemy>();
 	for (auto senemy : senemies)
 	{
 		senemy->GetGameObject()->SetPosition(-1000, -1000);
-		senemy->m_Active = false;
+		senemy->GetGameObject()->SetEnabled(false);
 	}
 
 	auto bulllets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<PlayerBullet>();
 	for (auto bullet : bulllets)
 	{
 		bullet->GetGameObject()->SetPosition(1000, 1000);
-		bullet->m_Active = false;
+		bullet->GetGameObject()->SetEnabled(false);
 	}
 	auto enemyBullets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<EnemyBullet>();
 	for (auto enemybullet : enemyBullets)
 	{
 		enemybullet->GetGameObject()->SetPosition(-1000, 1000);
-		enemybullet->m_Active = false;
+		enemybullet->GetGameObject()->SetEnabled(false);
 	}
 
 	ReadJsonFileReset(dae::SceneManager::GetInstance().GetActiveScene().m_FileName, dae::SceneManager::GetInstance().GetActiveScene());
@@ -439,13 +434,14 @@ void dae::TronGame::LoadNextScene()
 	event.key.keysym.scancode = SDL_SCANCODE_N;
 
 	SDL_PushEvent(&event);
-	
+
 	m_DeadP2 = false;
 	m_DeadP1 = false;
 }
 
 void dae::TronGame::ResetGame()
 {
+	dae::SceneManager::GetInstance().GetActiveScene().m_DeadEnemyCount = 0;
 	dae::SceneManager::GetInstance().SetScene("Menu");
 	m_Score = 0;
 	m_LivesP1 = 3;
@@ -458,18 +454,13 @@ void dae::TronGame::ResetGame()
 	{
 		if (playertwo)
 		{
-			
-			
-				player->GetGameObject()->SetPosition(224, -350);
-			
+			player->GetGameObject()->SetPosition(224, -350);
 		}
 
 		else
 		{
-			
-			
-				player->GetGameObject()->SetPosition(224, -310);
-			
+			player->GetGameObject()->SetPosition(224, -310);
+
 		}
 		playertwo = true;
 	}
@@ -477,7 +468,7 @@ void dae::TronGame::ResetGame()
 
 void dae::TronGame::SaveScoresToFile(const std::vector<int>& scores)\
 {
-	
+
 	std::ofstream file(m_HighScoresFile);
 
 	if (file.is_open()) {
@@ -488,7 +479,7 @@ void dae::TronGame::SaveScoresToFile(const std::vector<int>& scores)\
 	}
 }
 
-std::vector<int> dae::TronGame::ReadScoresFromFile() 
+std::vector<int> dae::TronGame::ReadScoresFromFile()
 {
 	std::vector<int> scores;
 	std::ifstream file(m_HighScoresFile);

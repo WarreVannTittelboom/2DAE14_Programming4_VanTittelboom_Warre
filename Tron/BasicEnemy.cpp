@@ -16,10 +16,6 @@ dae::BasicEnemy::BasicEnemy(GameObject* gameObject, float x, float y, float w, f
 {
 }
 
-dae::BasicEnemy::~BasicEnemy()
-{
-}
-
 void dae::BasicEnemy::Initialize()
 {
 	GetGameObject()->SetPosition(m_PosX, -m_PosY);
@@ -36,7 +32,6 @@ void dae::BasicEnemy::Initialize()
 
 void dae::BasicEnemy::Update()
 {
-	if (m_Active)
 	{
 		float playerPosX = 0.f;
 		float playerPosY = 0.f;
@@ -160,7 +155,6 @@ void dae::BasicEnemy::Update()
 
 void dae::BasicEnemy::OnColl(const GameObject* other)
 {
-	if (m_Active)
 	{
 		if (!((other->GetComponent<dae::CollisionComp>()->m_Pos.x + other->GetComponent<dae::CollisionComp>()->m_Width - 2) > GetGameObject()->GetWorldPosition().x))
 
@@ -204,7 +198,7 @@ bool dae::BasicEnemy::DoDamage()
 	if(m_Health <= 0)
 	{
 		dae::TronGame::GetInstance().m_Score += 100;
-		GetGameObject()->SetPosition(1000.f, 1000.f);
+		GetGameObject()->SetPosition(-1000.f, -1000.f);
 		//GetGameObject()->MarkDestroy();
 		m_Scene.m_DeadEnemyCount += 1;
 		if (m_Scene.m_TotalEnemyCount != 0 && m_Scene.m_DeadEnemyCount == m_Scene.m_TotalEnemyCount)

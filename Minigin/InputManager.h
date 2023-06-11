@@ -34,7 +34,5 @@ namespace dae
 		
 		ControllerInput* m_pController;
 		bool GetControllerInput(std::vector < std::pair <dae::controlInput , std::shared_ptr<Command >> > & commands) const;
-
 	};
-
 }

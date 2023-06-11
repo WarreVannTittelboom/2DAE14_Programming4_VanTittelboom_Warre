@@ -22,7 +22,6 @@ namespace dae
 		void OnColl(const GameObject* other) override;
 		
 		bool DoDamage();
-		bool m_Active = true;
 	private:
 		int m_Health{3};
 		float m_EnemySpeed{ 80.f };

@@ -1,35 +1,12 @@
 #include "Button.h"
-#include <TextureComp.h>
-#include "PlayerTank.h"
-#include <CollisionComp.h>
-#include <Scene.h>
-#include <map>
-#include <InputManager.h>
 #include "TronGame.h"
-#include <TextureComp.h>
-#include "PlayerCommands.h"
-#include <Timer.h>
-#include "PlayerBullet.h"
-#include <math.h>  // for sin and cos
-#include <GameObject.h>
-#include <Scene.h>
-#include <SceneManager.h>
-#include<SceneObject.h>
 #include "TronObservers.h"
-#include <Font.h>
-#include <TextComp.h>
-#include "TronGame.h"
-
 
 dae::Button::Button(GameObject* gameObject, float w, float h)
 	: BaseComp(gameObject)
 	, m_Scene(dae::SceneManager::GetInstance().GetActiveScene())
 	, m_Width(w)
 	, m_Height(h)
-{
-}
-
-dae::Button::~Button()
 {
 }
 

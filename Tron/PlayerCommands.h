@@ -113,7 +113,6 @@ public:
 	}
 	void Release() override 
 	{ 
-		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr && dae::SceneManager::GetInstance().GetActiveScene().GetName() != "Menu")
 		{
 			dae::TronGame::GetInstance().ResetLevelForNext();
 
@@ -171,11 +170,8 @@ public:
 	}
 	void Release() override 
 	{ 
-		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
-		{
 			dae::TronGame::GetInstance().ResetLevelForNext();
 			dae::TronGame::GetInstance().ResetGame();
-		}
 	}
 
 
@@ -195,10 +191,7 @@ public:
 	}
 	void Release() override 
 	{ 
-		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
-		{
 			dae::TronGame::GetInstance().DoMute();
-		}
 	}
 
 

@@ -2,7 +2,6 @@
 #include <CollisionComp.h>
 #include "PlayerTank.h"
 #include <Timer.h>
-#include <Scene.h>
 #include <SceneManager.h>
 #include "TronObservers.h"
 #include "Wall.h"
@@ -49,7 +48,6 @@ void dae::PlayerBullet::Initialize()
 
 void dae::PlayerBullet::Update()
 {
-	if (m_Active)
 	{ 
 	float deltaTime = Timer::GetInstance().GetDeltaTime();
 	float newX = GetGameObject()->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
@@ -70,7 +68,6 @@ void dae::PlayerBullet::Render() const
 
 void dae::PlayerBullet::OnColl(const GameObject* other)
 {
-	if(m_Active)
 	{ 
 	if (auto pTank = other->GetComponent<dae::PlayerTank>())
 	{

@@ -24,8 +24,6 @@ namespace dae
 		glm::ivec2 m_Pos{};
 		float m_Width;
 		float m_Height;
-	private:
-		
 	};
 }
 

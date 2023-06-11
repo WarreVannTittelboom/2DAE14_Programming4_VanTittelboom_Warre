@@ -9,7 +9,7 @@ namespace dae
 	{
 	public:
 		explicit EnemyBullet(GameObject* gameObject, float x, float y, float cosx, float siny, Scene& scene);
-		~EnemyBullet();
+		~EnemyBullet() = default;
 		EnemyBullet(const EnemyBullet& other) = delete;
 		EnemyBullet(EnemyBullet&& other) = delete;
 		EnemyBullet& operator=(const EnemyBullet& other) = delete;
@@ -18,7 +18,6 @@ namespace dae
 		void Initialize() override;
 		void Update() override;
 		void OnColl(const GameObject* other) override;
-		bool m_Active = true;
 	private:
 		float m_BulletSpeed{ 80.f };
 		float m_StartPosX{ 0.f };
