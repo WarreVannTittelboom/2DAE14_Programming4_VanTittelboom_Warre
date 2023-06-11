@@ -108,52 +108,54 @@ public:
 	};
 	void Execute() override 
 	{ 
-		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
-		{ 
+		
+	
+	}
+	void Release() override 
+	{ 
+		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr && dae::SceneManager::GetInstance().GetActiveScene().GetName() != "Menu")
+		{
 			dae::TronGame::GetInstance().ResetLevelForNext();
 
-		if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop1")
+			if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop1")
 
-		{
-			dae::SceneManager::GetInstance().SetScene("coop2");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop2")
-		{
-			dae::SceneManager::GetInstance().SetScene("coop3");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop3")
-		{
-			dae::SceneManager::GetInstance().SetScene("coop1");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo1")
-		{
-			dae::SceneManager::GetInstance().SetScene("solo2");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo2")
-		{
-			dae::SceneManager::GetInstance().SetScene("solo3");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo3")
-		{
-			dae::SceneManager::GetInstance().SetScene("solo1");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1")
-		{
-			dae::SceneManager::GetInstance().SetScene("versus2");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2")
-		{
-			dae::SceneManager::GetInstance().SetScene("versus3");
-		}
-		else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3")
-		{
-			dae::SceneManager::GetInstance().SetScene("versus1");
+			{
+				dae::SceneManager::GetInstance().SetScene("coop2");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop2")
+			{
+				dae::SceneManager::GetInstance().SetScene("coop3");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "coop3")
+			{
+				dae::SceneManager::GetInstance().SetScene("coop1");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo1")
+			{
+				dae::SceneManager::GetInstance().SetScene("solo2");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo2")
+			{
+				dae::SceneManager::GetInstance().SetScene("solo3");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "solo3")
+			{
+				dae::SceneManager::GetInstance().SetScene("solo1");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1")
+			{
+				dae::SceneManager::GetInstance().SetScene("versus2");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2")
+			{
+				dae::SceneManager::GetInstance().SetScene("versus3");
+			}
+			else if (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3")
+			{
+				dae::SceneManager::GetInstance().SetScene("versus1");
+			}
 		}
 	}
-	}
-	void Release() override { }
-
-
 };
 
 class ReturnToMenu: public Command
@@ -165,13 +167,40 @@ public:
 	};
 	void Execute() override
 	{
+		
+	}
+	void Release() override 
+	{ 
 		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
 		{
 			dae::TronGame::GetInstance().ResetLevelForNext();
 			dae::TronGame::GetInstance().ResetGame();
 		}
 	}
-	void Release() override { }
 
 
 };
+
+
+class ToggleMute : public Command
+{
+public:
+	ToggleMute(dae::GameObject* go)
+		:Command(go)
+	{
+	};
+	void Execute() override
+	{
+		
+	}
+	void Release() override 
+	{ 
+		if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr)
+		{
+			dae::TronGame::GetInstance().DoMute();
+		}
+	}
+
+
+};
+

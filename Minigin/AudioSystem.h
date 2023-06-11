@@ -28,6 +28,7 @@ namespace dae
 		virtual void Enqueue(const std::string& filename, int loops = 0, int volume = 50);
 		virtual void CheckQueue();
 		virtual void StopQueue();
+		virtual void Mute(bool isMuted);
 
 	protected:
 		class AudioSystemImpl;
@@ -46,6 +47,7 @@ namespace dae
 		void Enqueue(const std::string&, int = 0, int = 50)override {}
 		void CheckQueue() override {}
 		void StopQueue() override {}
+		void Mute(bool isMuted)override {};
 	};
 
 	class LoggedAudioSystem final : public AudioSystem
@@ -61,5 +63,6 @@ namespace dae
 		void Enqueue(const std::string& filename, int loops = 0, int volume = 50) override;
 		void CheckQueue() override;
 		void StopQueue() override;
+		void Mute(bool isMuted)override;
 	};
 }

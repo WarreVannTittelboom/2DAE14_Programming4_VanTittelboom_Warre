@@ -20,7 +20,7 @@ namespace dae
 		LeftShoulder = 0x0100,
 		RightShoulder = 0x0200,
 		ButtonA = 0x1000,
-		ButtonB = 0x2002,
+		ButtonB = 0x2000,
 		ButtonX = 0x4000,
 		ButtonY = 0x8000,
 	};

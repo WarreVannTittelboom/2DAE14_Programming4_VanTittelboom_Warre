@@ -9,6 +9,7 @@
 #include "RecognizerEnemy.h"
 #include <Font.h>
 #include <TextComp.h>
+#include "HighScoreMenu.h"
 
 dae::PlayerBullet::PlayerBullet(GameObject* gameObject, float x, float y,float cosx,float siny,Scene& scene,unsigned int id)
 	: BaseComp(gameObject)
@@ -81,13 +82,14 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 					dae::TronGame::GetInstance().m_LivesP2 -= 1;
 				}
 
-
 				if (dae::TronGame::GetInstance().m_LivesP1 < 0 || dae::TronGame::GetInstance().m_LivesP2 < 0)
 				{
-					
-					
+					dae::TronGame::GetInstance().m_LivesP2 = 3;
+					dae::TronGame::GetInstance().m_LivesP1 = 3;
+					dae::TronGame::GetInstance().ResetLevelForNext();
 					dae::SceneManager::GetInstance().SetScene("gameoverscene");
 					dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::TextComp>()->SetText("Player " + std::to_string((m_Id)) + " won");
+					dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::HighScoreMenu>()->LoadScores();
 				}
 				else 
 				{

@@ -15,6 +15,7 @@ public:
 	void Enqueue(const std::string& filename, int loops = 0, int volume = 50);
 	void CheckQueue();
 	void StopQueue() { m_IsActive = false; };
+	void Mute(bool isMuted);
 
 private:
 	void PlaySound(AudioClip* clip);
@@ -100,6 +101,18 @@ void dae::AudioSystem::AudioSystemImpl::CheckQueue()
 	}
 }
 
+void dae::AudioSystem::AudioSystemImpl::Mute(bool isMuted)
+{
+	if (isMuted)
+	{
+		Mix_Pause(-1);
+	}
+	else
+	{
+		Mix_Resume(-1);
+	}
+}
+
 void dae::AudioSystem::AudioSystemImpl::PlaySound(AudioClip* clip)
 {
 	clip->Play();
@@ -137,6 +150,11 @@ void dae::AudioSystem::StopQueue()
 	m_pImpl->StopQueue();
 }
 
+void dae::AudioSystem::Mute(bool isMuted)
+{
+	m_pImpl->Mute(isMuted);
+}
+
 void dae::LoggedAudioSystem::Enqueue(const std::string& filename, int loops, int volume)
 {
 	AudioSystem::Enqueue(filename, loops, volume);
@@ -150,4 +168,9 @@ void dae::LoggedAudioSystem::CheckQueue()
 void dae::LoggedAudioSystem::StopQueue()
 {
 	AudioSystem::StopQueue();
+}
+
+void dae::LoggedAudioSystem::Mute(bool isMuted)
+{
+	AudioSystem::Mute(isMuted);
 }

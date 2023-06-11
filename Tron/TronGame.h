@@ -32,11 +32,15 @@ namespace dae
 
 		std::vector<int> ReadScoresFromFile();
 
+		void DoMute();
+
 		int m_Score = 0;
 		int m_LivesP1 = 3;
 		bool m_DeadP1 = false;
 		int m_LivesP2 = 3;
 		bool m_DeadP2 = false;
+
+		bool m_IsMuted = false;
 
 		std::string m_HighScoresFile{ "../Data/highscores.txt" };
 	};

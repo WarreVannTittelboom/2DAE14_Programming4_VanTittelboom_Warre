@@ -60,9 +60,8 @@ void dae::PlayerTank::Initialize()
 
 		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(GetGameObject());
 
-		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
 
-		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);
@@ -83,9 +82,8 @@ void dae::PlayerTank::Initialize()
 
 		kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(GetGameObject());
 
-		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(GetGameObject());
 
-		kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 
 		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
@@ -116,9 +114,9 @@ void dae::PlayerTank::Initialize()
 
 		kInputMap[SDL_SCANCODE_X] = std::make_shared<CannonRight>(GetGameObject());
 
-		kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(GetGameObject());
 
-		kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(GetGameObject());
+
+
 
 
 		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
@@ -139,9 +137,8 @@ void dae::PlayerTank::Initialize()
 
 		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(GetGameObject());
 
-		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
 
-		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 1);
@@ -171,9 +168,8 @@ void dae::PlayerTank::Initialize()
 
 		cInputMap[controlButton::RightShoulder] = std::make_shared<CannonRight>(GetGameObject());
 
-		cInputMap[controlButton::ButtonY] = std::make_shared<NextScene>(GetGameObject());
 
-		cInputMap[controlButton::ButtonX] = std::make_shared<ReturnToMenu>(GetGameObject());
+
 
 
 		dae::InputManager::GetInstance().AddCommand(cInputMap, 0);

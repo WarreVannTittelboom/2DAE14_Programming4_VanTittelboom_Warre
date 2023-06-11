@@ -26,6 +26,8 @@
 #include "HUDText.h"
 #include "EnemyBullet.h"
 #include "HighScoreMenu.h"
+#include "ServiceLocator.h"
+#include "PlayerCommands.h"
 
 
 
@@ -236,6 +238,17 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 		textObj->AddComponent(textObjComp);
 		scene.Add(textObj);
 	}
+	auto inputs = std::make_shared<dae::GameObject>();
+
+	std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
+
+	kInputMap[SDL_SCANCODE_N] = std::make_shared<NextScene>(inputs.get());
+
+	kInputMap[SDL_SCANCODE_E] = std::make_shared<ReturnToMenu>(inputs.get());
+	
+	kInputMap[SDL_SCANCODE_M] = std::make_shared<ToggleMute>(inputs.get());
+	
+	dae::InputManager::GetInstance().AddCommand(kInputMap, 11);
 }
 
 
@@ -416,7 +429,7 @@ void dae::TronGame::LoadNextScene()
 	SDL_Event event;
 	SDL_zero(event);
 
-	event.type = SDL_KEYDOWN;
+	event.type = SDL_KEYUP;
 	event.key.keysym.scancode = SDL_SCANCODE_N;
 
 	SDL_PushEvent(&event);
@@ -483,6 +496,13 @@ std::vector<int> dae::TronGame::ReadScoresFromFile()
 	}
 
 	return scores;
+}
+
+
+void dae::TronGame::DoMute()
+{
+	m_IsMuted = !m_IsMuted;
+	ServiceLocator::GetInstance().GetSoundSystem().Mute(m_IsMuted);
 }
 
 

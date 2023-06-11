@@ -46,9 +46,16 @@ bool dae::InputManager::ProcessInput()
 			{
 				if (e.key.keysym.scancode == k.first.second)
 				{
-					for (auto c : k.second)
+					if (k.first.first == 11)
 					{
-						c->Release();
+						k.second[0]->Release();
+					}
+					else 
+					{
+						for (auto c : k.second)
+						{
+							c->Release();
+						}
 					}
 				}
 			}
