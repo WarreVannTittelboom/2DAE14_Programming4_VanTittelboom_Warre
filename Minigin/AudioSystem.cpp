@@ -5,7 +5,7 @@
 class dae::AudioSystem::AudioSystemImpl final
 {
 public:
-	AudioSystemImpl() = default;
+	AudioSystemImpl();
 	~AudioSystemImpl();
 	AudioSystemImpl(const AudioSystemImpl& other) = delete;
 	AudioSystemImpl(AudioSystemImpl&& other) noexcept = delete;
@@ -14,65 +14,90 @@ public:
 
 	void Enqueue(const std::string& filename, int loops = 0, int volume = 50);
 	void CheckQueue();
-	void StopQueue(){ m_IsActive = false; };
+	void StopQueue() { m_IsActive = false; };
 
 private:
 	void PlaySound(AudioClip* clip);
 	bool LoadSound(AudioClip* clip);
 
-	std::mutex m_Mutex;
+	std::jthread m_thread;
+	std::mutex m_QueueMutex;
 	std::queue<AudioClip*> m_pAudioQueue{};
+	std::mutex m_ClipMutex;
+	std::vector<AudioClip*> m_Clips{};
 	bool m_IsActive = true;
 };
 
+dae::AudioSystem::AudioSystemImpl::AudioSystemImpl()
+{
+	Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 2048);
+	m_thread = std::jthread(&AudioSystemImpl::CheckQueue, this);
+}
+
+
 dae::AudioSystem::AudioSystemImpl::~AudioSystemImpl()
 {
-	for (size_t i = 0; i < m_pAudioQueue.size(); ++i)
+	m_IsActive = false;
+	if (m_thread.joinable())
 	{
-		m_pAudioQueue.pop();
+		m_thread.join();
 	}
+
+	{
+		std::lock_guard<std::mutex> lock(m_QueueMutex);
+		while (!m_pAudioQueue.empty())
+		{
+			delete m_pAudioQueue.front();
+			m_pAudioQueue.pop();
+		}
+	}
+
+	{
+		std::lock_guard<std::mutex> lock(m_ClipMutex);
+		for (AudioClip* clip : m_Clips)
+		{
+			delete clip;
+		}
+		m_Clips.clear();
+	}
+	Mix_CloseAudio();
 }
 
 void dae::AudioSystem::AudioSystemImpl::Enqueue(const std::string& filename, int loops, int volume)
 {
-	m_Mutex.lock();
+	std::lock_guard<std::mutex> lock(m_QueueMutex);
 	m_pAudioQueue.push(new AudioClip(filename, loops, volume));
-	m_Mutex.unlock();
 }
 
 void dae::AudioSystem::AudioSystemImpl::CheckQueue()
 {
-	std::vector<AudioClip*> clips{};
 	while (m_IsActive)
 	{
-		if (!m_pAudioQueue.empty())
+		AudioClip* clip = nullptr;
+
 		{
-			m_Mutex.lock();
-			clips.push_back(m_pAudioQueue.front());
-			m_pAudioQueue.pop();
-			m_Mutex.unlock();
-			if (LoadSound(clips.front()))
+			std::lock_guard<std::mutex> lock(m_QueueMutex);
+			if (!m_pAudioQueue.empty())
 			{
-				PlaySound(clips.front());
+				clip = m_pAudioQueue.front();
+				m_pAudioQueue.pop();
 			}
 		}
-		if (!clips.empty())
+
+		if (clip != nullptr)
 		{
-			for (size_t i = 0; i < clips.size(); ++i)
+			if (LoadSound(clip))
 			{
-				if (clips[i]->IsPlaying()){continue;}
-				delete clips[i];
-				clips[i] = nullptr;
-				clips.erase(clips.begin() + i);
+				PlaySound(clip);
+				std::lock_guard<std::mutex> lock(m_ClipMutex);
+				m_Clips.push_back(clip);
+			}
+			else
+			{
+				delete clip;
 			}
 		}
 	}
-	for (auto ac : clips)
-	{
-		delete ac;
-		ac = nullptr;
-	}
-	clips.clear();
 }
 
 void dae::AudioSystem::AudioSystemImpl::PlaySound(AudioClip* clip)
@@ -88,14 +113,11 @@ bool dae::AudioSystem::AudioSystemImpl::LoadSound(AudioClip* clip)
 dae::AudioSystem::AudioSystem()
 	:m_pImpl(new AudioSystemImpl())
 {
-	Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 2048);
-	m_thread = std::thread(&AudioSystem::CheckQueue, this);
+
 }
 
 dae::AudioSystem::~AudioSystem()
 {
-	m_thread.join();
-	Mix_CloseAudio();
 	delete m_pImpl;
 	m_pImpl = nullptr;
 }
@@ -113,4 +135,19 @@ void dae::AudioSystem::CheckQueue()
 void dae::AudioSystem::StopQueue()
 {
 	m_pImpl->StopQueue();
+}
+
+void dae::LoggedAudioSystem::Enqueue(const std::string& filename, int loops, int volume)
+{
+	AudioSystem::Enqueue(filename, loops, volume);
+}
+
+void dae::LoggedAudioSystem::CheckQueue()
+{
+	AudioSystem::CheckQueue();
+}
+
+void dae::LoggedAudioSystem::StopQueue()
+{
+	AudioSystem::StopQueue();
 }

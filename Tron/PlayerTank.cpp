@@ -20,6 +20,7 @@
 #include "RecognizerEnemy.h"
 #include <Font.h>
 #include <TextComp.h>
+#include "HighScoreMenu.h"
 
 #define PI 3.14159265
 
@@ -344,6 +345,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 			auto value = dae::TronGame::GetInstance().m_Score;
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
 			dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::TextComp>()->SetText("Score: " + std::to_string((value)));
+			dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::HighScoreMenu>()->LoadScores();
 		}
 	}
 	else

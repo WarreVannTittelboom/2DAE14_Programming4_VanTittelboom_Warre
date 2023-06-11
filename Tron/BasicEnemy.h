@@ -24,6 +24,7 @@ namespace dae
 
 		void ShootCannon(float degreesAngle);
 		bool DoDamage();
+		bool m_Active = true;
 	private:
 		int m_Health{3};
 		float m_EnemySpeed{ 40.f };
@@ -39,6 +40,8 @@ namespace dae
 		Scene& m_Scene;
 		std::shared_ptr<TextureComp> m_enemyHorizontalSprite;
 		std::shared_ptr<TextureComp> m_enemyVerticalSprite;
+
+	
 	};
 }
 

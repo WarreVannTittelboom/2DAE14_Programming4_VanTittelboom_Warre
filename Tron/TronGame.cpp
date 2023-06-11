@@ -25,6 +25,7 @@
 #include <TextComp.h>
 #include "HUDText.h"
 #include "EnemyBullet.h"
+#include "HighScoreMenu.h"
 
 
 
@@ -89,6 +90,10 @@ void dae::TronGame::CreateScenes()
 	textcomp->SetPos(135, 270);
 	text->AddComponent(textcomp);
 	dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(text);
+	auto hstextObj = std::make_shared<dae::GameObject>();
+	auto hstextObjComp = std::make_shared<dae::HighScoreMenu>(hstextObj.get(), dae::SceneManager::GetInstance().GetScene("gameoverscene"));
+	hstextObj->AddComponent(hstextObjComp);
+	dae::SceneManager::GetInstance().GetScene("gameoverscene").Add(hstextObj);
 
 	dae::SceneManager::GetInstance().SetScene("Menu");
 }
@@ -384,6 +389,7 @@ void dae::TronGame::ResetLevelForNext()
 	for (auto enemy : enemies)
 	{
 		enemy->GetGameObject()->SetPosition(-1000, -1000);
+		enemy->m_Active = false;
 	}
 	auto senemies = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<RecognizerEnemy>();
 	for (auto senemy : senemies)
@@ -449,3 +455,34 @@ void dae::TronGame::ResetGame()
 		playertwo = true;
 	}
 }
+
+void dae::TronGame::SaveScoresToFile(const std::vector<int>& scores)\
+{
+	
+	std::ofstream file(m_HighScoresFile);
+
+	if (file.is_open()) {
+		for (const auto& score : scores) {
+			file << score << '\n';
+		}
+		file.close();
+	}
+}
+
+std::vector<int> dae::TronGame::ReadScoresFromFile() 
+{
+	std::vector<int> scores;
+	std::ifstream file(m_HighScoresFile);
+
+	if (file.is_open()) {
+		int score;
+		while (file >> score) {
+			scores.push_back(score);
+		}
+		file.close();
+	}
+
+	return scores;
+}
+
+

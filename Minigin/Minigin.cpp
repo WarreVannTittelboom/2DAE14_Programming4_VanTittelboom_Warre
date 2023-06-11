@@ -60,7 +60,7 @@ void dae::Minigin::Initialize()
 
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
-	ServiceLocator::GetInstance().RegisterSoundSystem(new dae::AudioSystem());
+	ServiceLocator::GetInstance().RegisterSoundSystem(new dae::LoggedAudioSystem());
 }
 
 void dae::Minigin::Cleanup()
@@ -83,7 +83,8 @@ void dae::Minigin::Run()
 		auto lastTime = chrono::high_resolution_clock::now();
 		bool doContinue = true;
 		float lag = 0.0f;
-		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1,20);
+		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1,10);
+		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/test.wav", 1, 10);
 		while (doContinue)
 		{
 			sceneManager.RemoveMarkedObjects();

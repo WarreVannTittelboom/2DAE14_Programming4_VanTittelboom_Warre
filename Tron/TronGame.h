@@ -28,11 +28,17 @@ namespace dae
 
 		void ResetGame();
 
+		void SaveScoresToFile(const std::vector<int>& scores);
+
+		std::vector<int> ReadScoresFromFile();
+
 		int m_Score = 0;
 		int m_LivesP1 = 3;
 		bool m_DeadP1 = false;
 		int m_LivesP2 = 3;
 		bool m_DeadP2 = false;
+
+		std::string m_HighScoresFile{ "../Data/highscores.txt" };
 	};
 	
 }

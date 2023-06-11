@@ -24,5 +24,6 @@ private:
 	Mix_Chunk* m_pChunk = nullptr;
 	int m_Volume;
 	int m_Loops;
-	int m_Channel;
+	int m_Channel = 0;
 };
+

@@ -54,6 +54,9 @@
     <ClCompile Include="HUDText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HighScoreMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TronGame.h">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="HUDText.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreMenu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

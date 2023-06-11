@@ -36,12 +36,36 @@ void dae::RecognizerEnemy::Initialize()
 
 void dae::RecognizerEnemy::Update()
 {
-
-	//float playerPosX = m_PlayerTank->GetPosition().x;
-	//float playerPosY = m_PlayerTank->GetPosition().y;
-	float playerPosX = 50.f;
-	float playerPosY = 50.f;
-
+	float playerPosX = 0.f;
+	float playerPosY = 0.f;
+	auto players = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<dae::PlayerTank>();
+	if (players.size() > 1)
+	{
+		float x1 = players[0]->GetGameObject()->GetPosition().x;
+		float y1 = players[0]->GetGameObject()->GetPosition().y;
+		float x2 = players[1]->GetGameObject()->GetPosition().x;
+		float y2 = players[1]->GetGameObject()->GetPosition().y;
+		auto dis1 = sqrt(pow(int(x1 - GetGameObject()->GetPosition().x), 2) + pow(int(y1 - GetGameObject()->GetPosition().y), 2) * 1.0);
+		auto dis2 = sqrt(pow(int(x2 - GetGameObject()->GetPosition().x), 2) + pow(int(y2 - GetGameObject()->GetPosition().y), 2) * 1.0);
+		if (dis2 > dis1)
+		{
+			playerPosX = x1;
+			playerPosY = y1;
+		}
+		else
+		{
+			playerPosX = x2;
+			playerPosY = y2;
+		}
+	}
+	else
+	{
+		if (players.size() > 0)
+		{
+			playerPosX = players[0]->GetGameObject()->GetPosition().x;
+			playerPosY = players[0]->GetGameObject()->GetPosition().y;
+		}
+	}
 	float valueDiffX{ 0.f };
 	float valueDiffY{ 0.f };
 	float diffX = playerPosX - GetGameObject()->GetPosition().x;

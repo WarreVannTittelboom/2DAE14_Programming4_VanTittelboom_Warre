@@ -166,6 +166,7 @@
     <ClCompile Include="BasicEnemy.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="HighScoreMenu.cpp" />
     <ClCompile Include="HUDText.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PlayerCommands.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="BasicEnemy.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="HighScoreMenu.h" />
     <ClInclude Include="HUDText.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="PlayerCommands.h" />

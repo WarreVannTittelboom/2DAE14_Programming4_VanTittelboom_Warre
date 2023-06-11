@@ -15,21 +15,25 @@ using namespace std::literals::chrono_literals;
 
 namespace dae
 {
-	class AudioSystemAbs
+	class AudioSystem
 	{
 	public:
-		AudioSystemAbs() = default;
-		virtual ~AudioSystemAbs() = default;
-		AudioSystemAbs(const AudioSystemAbs& other) = delete;
-		AudioSystemAbs(AudioSystemAbs&& other) noexcept = delete;
-		AudioSystemAbs& operator=(const AudioSystemAbs& other) = delete;
-		AudioSystemAbs& operator=(AudioSystemAbs&& other) noexcept = delete;
+		AudioSystem();
+		virtual ~AudioSystem();
+		AudioSystem(const AudioSystem& other) = delete;
+		AudioSystem(AudioSystem&& other) noexcept = delete;
+		AudioSystem& operator=(const AudioSystem& other) = delete;
+		AudioSystem& operator=(AudioSystem&& other) noexcept = delete;
 
-		virtual void Enqueue(const std::string& filename, int loops = 0, int volume = 50) = 0;
-		virtual void CheckQueue() = 0;
-		virtual void StopQueue() = 0;
+		virtual void Enqueue(const std::string& filename, int loops = 0, int volume = 50);
+		virtual void CheckQueue();
+		virtual void StopQueue();
+
+	protected:
+		class AudioSystemImpl;
+		AudioSystemImpl* m_pImpl = nullptr;
 	};
-	class NullAudioSystem final : public AudioSystemAbs
+	class NullAudioSystem final : public AudioSystem
 	{
 	public:
 		NullAudioSystem() = default;
@@ -41,26 +45,21 @@ namespace dae
 
 		void Enqueue(const std::string&, int = 0, int = 50)override {}
 		void CheckQueue() override {}
-		void StopQueue() override{}
+		void StopQueue() override {}
 	};
 
-	class AudioSystem final : public AudioSystemAbs
+	class LoggedAudioSystem final : public AudioSystem
 	{
 	public:
-		AudioSystem();
-		~AudioSystem() override;
-		AudioSystem(const AudioSystem& other) = delete;
-		AudioSystem(AudioSystem&& other) noexcept = delete;
-		AudioSystem& operator=(const AudioSystem& other) = delete;
-		AudioSystem& operator=(AudioSystem&& other) noexcept = delete;
+		LoggedAudioSystem() = default;
+		~LoggedAudioSystem() override = default;
+		LoggedAudioSystem(const LoggedAudioSystem& other) = delete;
+		LoggedAudioSystem(LoggedAudioSystem&& other) noexcept = delete;
+		LoggedAudioSystem& operator=(const LoggedAudioSystem& other) = delete;
+		LoggedAudioSystem& operator=(LoggedAudioSystem&& other) noexcept = delete;
 
 		void Enqueue(const std::string& filename, int loops = 0, int volume = 50) override;
 		void CheckQueue() override;
 		void StopQueue() override;
-
-	private:
-		class AudioSystemImpl;
-		AudioSystemImpl* m_pImpl = nullptr;
-		std::thread m_thread;
 	};
 }
