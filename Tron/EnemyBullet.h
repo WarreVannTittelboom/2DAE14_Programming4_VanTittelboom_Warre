@@ -18,6 +18,7 @@ namespace dae
 		void Initialize() override;
 		void Update() override;
 		void OnColl(const GameObject* other) override;
+		bool m_Active = true;
 	private:
 		float m_BulletSpeed{ 80.f };
 		float m_StartPosX{ 0.f };

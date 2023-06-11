@@ -74,7 +74,6 @@ void dae::Minigin::Cleanup()
 
 void dae::Minigin::Run()
 {
-
 	{
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
@@ -83,8 +82,6 @@ void dae::Minigin::Run()
 		auto lastTime = chrono::high_resolution_clock::now();
 		bool doContinue = true;
 		float lag = 0.0f;
-		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1,10);
-		ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/test.wav", 1, 10);
 		while (doContinue)
 		{
 			sceneManager.RemoveMarkedObjects();

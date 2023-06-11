@@ -21,6 +21,7 @@
 #include <Font.h>
 #include <TextComp.h>
 #include "HighScoreMenu.h"
+#include "ServiceLocator.h"
 
 #define PI 3.14159265
 
@@ -241,6 +242,7 @@ void dae::PlayerTank::Update()
 	{
 		if (m_ShootCannonCooldown >= 0.5f)
 		{
+			ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/shoot.wav", 0, 4);
 			m_ShootCannonCooldown = 0.0f;
 			auto bulletGo = std::make_shared<dae::GameObject>();
 			float cosX = float(cos((m_TurretMoveIter * 10.f) * (PI / 180.0f)));

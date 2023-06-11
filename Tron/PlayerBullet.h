@@ -19,6 +19,7 @@ public:
 	void Update() override;
 	void Render() const override;
 	void OnColl(const GameObject* other) override;
+	bool m_Active = true;
 private:
 	float m_BulletSpeed{ 80.f };
 	int m_BounceCount{ 0 };

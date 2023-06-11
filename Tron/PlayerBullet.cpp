@@ -49,6 +49,8 @@ void dae::PlayerBullet::Initialize()
 
 void dae::PlayerBullet::Update()
 {
+	if (m_Active)
+	{ 
 	float deltaTime = Timer::GetInstance().GetDeltaTime();
 	float newX = GetGameObject()->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
 	float newY = GetGameObject()->GetWorldPosition().y + m_SinY * m_BulletSpeed * deltaTime;
@@ -57,6 +59,7 @@ void dae::PlayerBullet::Update()
 	{
 		//GetGameObject()->MarkDestroy();
 		GetGameObject()->SetPosition(200, 200);
+	}
 	}
 	
 }
@@ -67,6 +70,8 @@ void dae::PlayerBullet::Render() const
 
 void dae::PlayerBullet::OnColl(const GameObject* other)
 {
+	if(m_Active)
+	{ 
 	if (auto pTank = other->GetComponent<dae::PlayerTank>())
 	{
 		if (m_Id != pTank->GetId() && (dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus1" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus2" || dae::SceneManager::GetInstance().GetActiveScene().GetName() == "versus3"))
@@ -162,5 +167,6 @@ void dae::PlayerBullet::OnColl(const GameObject* other)
 		
 		}
 		GetGameObject()->SetPosition(200, 200);
+	}
 	}
 }

@@ -38,18 +38,24 @@ void dae::EnemyBullet::Initialize()
 
 void dae::EnemyBullet::Update()
 {
-	float deltaTime = Timer::GetInstance().GetDeltaTime();
-	float newX = GetGameObject()->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
-	float newY = GetGameObject()->GetWorldPosition().y + m_SinY * m_BulletSpeed * deltaTime;
-	GetGameObject()->SetPosition(newX, newY);
+	if (m_Active)
+	{
+		float deltaTime = Timer::GetInstance().GetDeltaTime();
+		float newX = GetGameObject()->GetWorldPosition().x + m_CosX * m_BulletSpeed * deltaTime;
+		float newY = GetGameObject()->GetWorldPosition().y + m_SinY * m_BulletSpeed * deltaTime;
+		GetGameObject()->SetPosition(newX, newY);
+	}
 
 }
 
 void dae::EnemyBullet::OnColl(const GameObject* other)
 {
-	 
+	if (m_Active)
+	{
 		if (other->GetComponent<dae::Wall>())
 		{
 			GetGameObject()->SetPosition(200, 200);
+
 		}
+	}
 }

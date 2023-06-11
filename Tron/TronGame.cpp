@@ -33,6 +33,8 @@
 
 void dae::TronGame::CreateScenes()
 {
+	ServiceLocator::GetInstance().GetSoundSystem().Enqueue("../Data/theme.wav", -1, 10);
+
 	auto& menuScene = dae::SceneManager::GetInstance().CreateScene("Menu");
 	auto& coopScene1 = dae::SceneManager::GetInstance().CreateScene("coop1");
 	auto& versusScene1 = dae::SceneManager::GetInstance().CreateScene("versus1");
@@ -249,6 +251,7 @@ void dae::TronGame::ReadJsonFile(const std::string& name, Scene& scene)
 	kInputMap[SDL_SCANCODE_M] = std::make_shared<ToggleMute>(inputs.get());
 	
 	dae::InputManager::GetInstance().AddCommand(kInputMap, 11);
+
 }
 
 
@@ -408,17 +411,20 @@ void dae::TronGame::ResetLevelForNext()
 	for (auto senemy : senemies)
 	{
 		senemy->GetGameObject()->SetPosition(-1000, -1000);
+		senemy->m_Active = false;
 	}
 
 	auto bulllets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<PlayerBullet>();
 	for (auto bullet : bulllets)
 	{
 		bullet->GetGameObject()->SetPosition(1000, 1000);
+		bullet->m_Active = false;
 	}
 	auto enemyBullets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<EnemyBullet>();
 	for (auto enemybullet : enemyBullets)
 	{
 		enemybullet->GetGameObject()->SetPosition(-1000, 1000);
+		enemybullet->m_Active = false;
 	}
 
 	ReadJsonFileReset(dae::SceneManager::GetInstance().GetActiveScene().m_FileName, dae::SceneManager::GetInstance().GetActiveScene());
