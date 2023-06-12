@@ -391,9 +391,7 @@ void dae::TronGame::ResetLevelForNext()
 
 		else
 		{
-
 			player->GetGameObject()->SetPosition(800, 800);
-
 		}
 		playertwo = true;
 	}
@@ -402,12 +400,14 @@ void dae::TronGame::ResetLevelForNext()
 	{
 		enemy->GetGameObject()->SetPosition(-1000, -1000);
 		enemy->GetGameObject()->SetEnabled(false);
+		//enemy->GetGameObject()->MarkDestroy();
 	}
 	auto senemies = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<RecognizerEnemy>();
 	for (auto senemy : senemies)
 	{
 		senemy->GetGameObject()->SetPosition(-1000, -1000);
 		senemy->GetGameObject()->SetEnabled(false);
+		//senemy->GetGameObject()->MarkDestroy();
 	}
 
 	auto bulllets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<PlayerBullet>();
@@ -415,12 +415,14 @@ void dae::TronGame::ResetLevelForNext()
 	{
 		bullet->GetGameObject()->SetPosition(1000, 1000);
 		bullet->GetGameObject()->SetEnabled(false);
+		//bullet->GetGameObject()->MarkDestroy();
 	}
 	auto enemyBullets = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<EnemyBullet>();
 	for (auto enemybullet : enemyBullets)
 	{
 		enemybullet->GetGameObject()->SetPosition(-1000, 1000);
 		enemybullet->GetGameObject()->SetEnabled(false);
+		//enemybullet->GetGameObject()->MarkDestroy();
 	}
 
 	ReadJsonFileReset(dae::SceneManager::GetInstance().GetActiveScene().m_FileName, dae::SceneManager::GetInstance().GetActiveScene());

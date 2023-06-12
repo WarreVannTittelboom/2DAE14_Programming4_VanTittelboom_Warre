@@ -20,10 +20,15 @@ namespace dae
 
 		bool CheckCollision(CollisionComp* pCollider);
 
+		void SetRemoved(bool removed);
+
+		bool IsRemoved() const;
+		bool IsActive() const { return m_Active; }
 		bool m_Active;
 		glm::ivec2 m_Pos{};
 		float m_Width;
 		float m_Height;
+		bool m_Removed;
 	};
 }
 

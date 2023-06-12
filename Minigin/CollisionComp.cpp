@@ -4,11 +4,12 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-dae::CollisionComp::CollisionComp(GameObject* gameObject,float width, float height, bool active)
+dae::CollisionComp::CollisionComp(GameObject* gameObject, float width, float height, bool active)
 	: BaseComp(gameObject)
 	, m_Width(width)
 	, m_Height(height)
 	, m_Active(active)
+	, m_Removed(false) // Initialize removed flag to false
 {
 }
 
@@ -19,32 +20,46 @@ dae::CollisionComp::~CollisionComp()
 
 void dae::CollisionComp::Initialize()
 {
-	m_Pos = glm::ivec2{ GetGameObject()->GetWorldPosition().x, GetGameObject()->GetWorldPosition().y};
+	m_Pos = glm::ivec2{ GetGameObject()->GetWorldPosition().x, GetGameObject()->GetWorldPosition().y };
 }
-
 
 void dae::CollisionComp::Update()
 {
 	m_Pos = glm::ivec2{ GetGameObject()->GetWorldPosition().x, GetGameObject()->GetWorldPosition().y };
 }
 
-bool dae::CollisionComp::CheckCollision(CollisionComp* pCollider) 
+bool dae::CollisionComp::CheckCollision(CollisionComp* pCollider)
 {
-	Update();
-	pCollider->Update();
-	if (!pCollider->m_Active || !m_Active) { return false; }
-	
-	// If one rectangle is on left side of the other
-	if ( (m_Pos.x + m_Width) < pCollider->GetGameObject()->GetWorldPosition().x || (pCollider->GetGameObject()->GetWorldPosition().x + pCollider->m_Width) < m_Pos.x)
+	if (pCollider != nullptr && !pCollider->IsRemoved()) // Check if collider is not removed
 	{
-		return false;
-	}
+		Update();
+		pCollider->Update();
+		if (!pCollider->IsActive() || !m_Active)
+			return false;
 
-	// If one rectangle is under the other
-	if (m_Pos.y > (pCollider->GetGameObject()->GetWorldPosition().y + m_Height) || pCollider->GetGameObject()->GetWorldPosition().y  > (m_Pos.y  + pCollider->m_Height) )
-	{
-		return false;
-	}
+		// If one rectangle is on the left side of the other
+		if ((m_Pos.x + m_Width) < pCollider->GetGameObject()->GetWorldPosition().x || (pCollider->GetGameObject()->GetWorldPosition().x + pCollider->m_Width) < m_Pos.x)
+		{
+			return false;
+		}
 
-	return true;
+		// If one rectangle is under the other
+		if (m_Pos.y > (pCollider->GetGameObject()->GetWorldPosition().y + m_Height) || pCollider->GetGameObject()->GetWorldPosition().y > (m_Pos.y + pCollider->m_Height))
+		{
+			return false;
+		}
+
+		return true;
+	}
+	return false;
+}
+
+void dae::CollisionComp::SetRemoved(bool removed)
+{
+	m_Removed = removed;
+}
+
+bool dae::CollisionComp::IsRemoved() const
+{
+	return m_Removed;
 }

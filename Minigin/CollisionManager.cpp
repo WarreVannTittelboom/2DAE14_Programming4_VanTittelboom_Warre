@@ -15,38 +15,36 @@ void dae::CollisionManager::RemoveCollider(dae::CollisionComp* pCollider)
 	{
 		if (pCollider == m_pColliders[i])
 		{
+			m_pColliders[i]->SetRemoved(true); // Set the removed flag to true
 			m_pColliders[i] = m_pColliders.back();
 			m_pColliders.pop_back();
 			m_ShouldSkipLoop = true;
+			break; // Exit the loop after removing the collider
 		}
 	}
 }
 
 void dae::CollisionManager::Update()
 {
-	m_ShouldSkipLoop = false;
-
 	for (size_t i{}; i < m_pColliders.size(); ++i)
 	{
 		auto pCollider = m_pColliders[i];
-		if (pCollider->m_Active)
+		if (pCollider->IsActive() && !pCollider->IsRemoved()) // Check if collider is active and not removed
 		{
 			for (size_t j{}; j < m_pColliders.size(); ++j)
 			{
-				if (m_ShouldSkipLoop) 
-				{
-					m_ShouldSkipLoop = false;
+				if (m_ShouldSkipLoop)
 					break;
-				}
-				
+
 				auto pOther = m_pColliders[j];
-				if (pCollider == pOther) { continue; }
+				if (pCollider == pOther || pOther->IsRemoved()) // Skip removed colliders
+					continue;
 
 				if (pCollider->CheckCollision(pOther))
-				{ 
-					if (pOther->GetGameObject()) 
-					{ 
-						pCollider->GetSubject()->Notify(pOther->GetGameObject(),pCollider->GetGameObject(), dae::Event::CollEvent);
+				{
+					if (pOther->GetGameObject())
+					{
+						pCollider->GetSubject()->Notify(pOther->GetGameObject(), pCollider->GetGameObject(), dae::Event::CollEvent);
 					}
 				}
 			}
