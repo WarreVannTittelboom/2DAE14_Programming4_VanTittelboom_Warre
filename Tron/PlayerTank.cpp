@@ -336,6 +336,7 @@ void dae::PlayerTank::OnColl(const GameObject* other)
 		{
 			dae::TronGame::GetInstance().m_LivesP2 = 3;
 			dae::TronGame::GetInstance().m_LivesP1 = 3;
+			dae::TronGame::GetInstance().ResetLevelForNext();
 			auto value = dae::TronGame::GetInstance().m_Score;
 			dae::SceneManager::GetInstance().SetScene("gameoverscene");
 			dae::SceneManager::GetInstance().GetActiveScene().FindObjectOfType<dae::TextComp>()->SetText("Score: " + std::to_string((value)));
