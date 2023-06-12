@@ -35,7 +35,7 @@ namespace dae
 		inline T* FindObjectOfType() const
 		{
 			std::vector<GameObject*> gameObjects;
-			for (int i = 0; m_Objects.size() > i; ++i)
+			for (unsigned int i = 0; m_Objects.size() > i; ++i)
 			{
 				GameObject* curr = static_cast<GameObject*>(m_Objects[i].get());
 				gameObjects.push_back(curr);
@@ -57,7 +57,7 @@ namespace dae
 			std::vector<T*> objects;
 
 			std::vector<GameObject*> gameObjects; 
-			for (int i = 0; m_Objects.size() > i; ++i)
+			for (unsigned int i = 0; m_Objects.size() > i; ++i)
 			{
 				GameObject* curr = static_cast<GameObject*>(m_Objects[i].get());
 				gameObjects.push_back(curr);
