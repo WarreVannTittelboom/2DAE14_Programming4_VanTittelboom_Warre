@@ -34,6 +34,10 @@ namespace dae
 
 		void DoMute();
 
+		bool Raycast2D(const glm::vec2& origin, const glm::vec2& direction, const glm::vec2& center, float radius, glm::vec2& hitResult);
+
+		bool IsWallBetween(const glm::vec2& playerPos, const glm::vec2& enemyPos);
+
 		int m_Score = 0;
 		int m_LivesP1 = 3;
 		bool m_DeadP1 = false;

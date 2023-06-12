@@ -28,6 +28,7 @@
 #include "HighScoreMenu.h"
 #include "ServiceLocator.h"
 #include "PlayerCommands.h"
+#include "Wall.h"
 
 
 
@@ -502,4 +503,39 @@ void dae::TronGame::DoMute()
 	ServiceLocator::GetInstance().GetSoundSystem().Mute(m_IsMuted);
 }
 
+bool  dae::TronGame::Raycast2D(const glm::vec2& origin, const glm::vec2& direction, const glm::vec2& center, float radius, glm::vec2& hitResult) {
+	glm::vec2 oc = center - origin;
+	float a = glm::dot(direction, direction);
+	float b = glm::dot(oc, direction);
+	float c = glm::dot(oc, oc) - radius * radius;
+	float discriminant = b * b - a * c;
 
+	if (discriminant >= 0) {
+		float t = (-b - glm::sqrt(discriminant)) / a;
+		hitResult = origin + t * direction;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool dae::TronGame::IsWallBetween(const glm::vec2& playerPos, const glm::vec2& enemyPos) 
+{
+	auto walls = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<Wall>();
+	glm::vec2 direction = enemyPos - playerPos;
+	float distance = glm::length(direction);
+	glm::vec2 normalizedDirection = glm::normalize(direction);
+
+	for (auto wall : walls) {
+		// Perform a raycast between player and enemy
+		glm::vec2 hitResult;
+		if (Raycast2D(playerPos, normalizedDirection, glm::vec2(wall->m_PosX + wall->m_Width/2, wall->m_PosY + wall->m_Height / 2), distance, hitResult)) {
+			// A wall has been hit, there is obstruction
+			return true;
+		}
+	}
+
+	// No walls hit, line of sight is clear
+	return false;
+}

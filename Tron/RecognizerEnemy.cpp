@@ -3,6 +3,7 @@
 #include "TronObservers.h"
 #include "Timer.h"
 #include "PlayerTank.h"
+#include <random>
 
 
 dae::RecognizerEnemy::RecognizerEnemy(GameObject* gameObject, float x, float y, float w, float h,  Scene& scene)
@@ -36,49 +37,193 @@ void dae::RecognizerEnemy::Initialize()
 
 void dae::RecognizerEnemy::Update()
 {
+	switch (m_CurrentState)
 	{
-		float playerPosX = 0.f;
-		float playerPosY = 0.f;
-		auto players = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<dae::PlayerTank>();
-		if (players.size() > 1)
+	case RecognizerEnemyState::Wander:
+		if (CheckPlayerInRange())
 		{
-			float x1 = players[0]->GetGameObject()->GetPosition().x;
-			float y1 = players[0]->GetGameObject()->GetPosition().y;
-			float x2 = players[1]->GetGameObject()->GetPosition().x;
-			float y2 = players[1]->GetGameObject()->GetPosition().y;
-			auto dis1 = sqrt(pow(int(x1 - GetGameObject()->GetPosition().x), 2) + pow(int(y1 - GetGameObject()->GetPosition().y), 2) * 1.0);
-			auto dis2 = sqrt(pow(int(x2 - GetGameObject()->GetPosition().x), 2) + pow(int(y2 - GetGameObject()->GetPosition().y), 2) * 1.0);
-			if (dis2 > dis1)
-			{
-				playerPosX = x1;
-				playerPosY = y1;
-			}
-			else
-			{
-				playerPosX = x2;
-				playerPosY = y2;
-			}
+			DoMoveToPlayer();
+			m_CurrentState = RecognizerEnemyState::MoveToPlayer;
 		}
 		else
 		{
-			if (players.size() > 0)
-			{
-				playerPosX = players[0]->GetGameObject()->GetPosition().x;
-				playerPosY = players[0]->GetGameObject()->GetPosition().y;
-			}
+			DoWander();
 		}
+		break;
+	case RecognizerEnemyState::MoveToPlayer:
+		if (!CheckPlayerInRange())
+		{
+			DoMoveToLastPlayerPos();
+			m_CurrentState = RecognizerEnemyState::MoveToLastPlayerPos;
+		}
+		else
+		{
+			DoMoveToPlayer();
+		}
+		break;
+	case RecognizerEnemyState::MoveToLastPlayerPos:
+		if (CheckPlayerInRange())
+		{
+			DoMoveToPlayer();
+			m_CurrentState = RecognizerEnemyState::MoveToPlayer;
+		}
+		else if (HasReachedLastPlayerPos())
+		{
+			DoWander();
+			m_CurrentState = RecognizerEnemyState::Wander;
+		}
+		else
+		{
+			DoMoveToLastPlayerPos();
+		}
+		break;
+	}
+
+	if (m_ChangeDirMaxTime <= m_ChangeDirTimer)
+	{
+		RandomizeDirection();
+		m_ChangeDirTimer = 0.f;
+	}
+	else
+	{
+		m_ChangeDirTimer += Timer::GetInstance().GetDeltaTime();
+	}
+	UpdateMovement();
+}
+
+bool dae::RecognizerEnemy::HasReachedLastPlayerPos()
+{
+	m_StuckTimer += Timer::GetInstance().GetDeltaTime();
+	float minRange = 60.f;
+	float distance = float(sqrt(pow(GetGameObject()->GetPosition().x - m_LastPlayerPosX, 2) + pow(GetGameObject()->GetPosition().y - m_LastPlayerPosY, 2) * 1.0));
+	if (distance <= minRange)
+	{
+		return true;
+	}
+	else if (m_StuckTimer >= m_MaxStuckTimer)
+	{
+		m_StuckTimer = 0.f;
+		return true;
+	}
+	return false;
+}
+
+bool dae::RecognizerEnemy::CheckPlayerInRange()
+{
+	auto players = dae::SceneManager::GetInstance().GetActiveScene().FindObjectsOfType<dae::PlayerTank>();
+	if (players.size() > 1)
+	{
+		float x1 = players[0]->GetGameObject()->GetPosition().x;
+		float y1 = players[0]->GetGameObject()->GetPosition().y;
+		float x2 = players[1]->GetGameObject()->GetPosition().x;
+		float y2 = players[1]->GetGameObject()->GetPosition().y;
+		auto dis1 = sqrt(pow(int(x1 - GetGameObject()->GetPosition().x), 2) + pow(int(y1 - GetGameObject()->GetPosition().y), 2) * 1.0);
+		auto dis2 = sqrt(pow(int(x2 - GetGameObject()->GetPosition().x), 2) + pow(int(y2 - GetGameObject()->GetPosition().y), 2) * 1.0);
+		if (dis2 > dis1)
+		{
+			m_PlayerTargetPosX = x1;
+			m_PlayerTargetPosY = y1;
+		}
+		else
+		{
+			m_PlayerTargetPosX = x2;
+			m_PlayerTargetPosY = y2;
+		}
+	}
+	else
+	{
+		if (players.size() > 0)
+		{
+			m_PlayerTargetPosX = players[0]->GetGameObject()->GetPosition().x;
+			m_PlayerTargetPosY = players[0]->GetGameObject()->GetPosition().y;
+		}
+	}
+	bool blocking = dae::TronGame::GetInstance().IsWallBetween(glm::vec2(m_PlayerTargetPosX, m_PlayerTargetPosY), glm::vec2(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y));
+	if (!blocking)
+		{ 
+		m_LastPlayerPosX = m_PlayerTargetPosX;
+		m_LastPlayerPosY = m_PlayerTargetPosY;
+		return true;
+		}
+		return false;
+}
+
+void dae::RecognizerEnemy::RandomizeDirection()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(0, 3);
+	m_Direction =  dist(gen);
+}
+
+void dae::RecognizerEnemy::UpdateMovement()
+{
+	if (m_Wander)
+	{
+		float deltaTime = Timer::GetInstance().GetDeltaTime();
+		if ((!m_BlockMoveLeft) && m_Direction == 0)
+		{
+
+			GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+			m_enemyHorizontalSprite.get()->m_IsActive = true;
+			m_enemyVerticalSprite.get()->m_IsActive = false;
+			m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
+			m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+		}
+		else if ((!m_BlockMoveRight) && m_Direction == 1)
+		{
+
+			GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+			m_enemyHorizontalSprite.get()->m_IsActive = true;
+			m_enemyVerticalSprite.get()->m_IsActive = false;
+			m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
+			m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+
+		}
+		else if ((!m_BlockMoveUp) && m_Direction == 2)
+		{
+
+			GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+			m_enemyHorizontalSprite.get()->m_IsActive = false;
+			m_enemyVerticalSprite.get()->m_IsActive = true;
+			m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+			m_enemyVerticalSprite.get()->m_FlipVertical = false;
+
+		}
+		else if ((!m_BlockMoveDown) && m_Direction == 3)
+		{
+
+			GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+			m_enemyHorizontalSprite.get()->m_IsActive = false;
+			m_enemyVerticalSprite.get()->m_IsActive = true;
+			m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+			m_enemyVerticalSprite.get()->m_FlipVertical = true;
+
+		}
+		else
+		{
+			ColEdgeCases();
+		}
+		m_BlockMoveRight = false;
+		m_BlockMoveLeft = false;
+		m_BlockMoveUp = false;
+		m_BlockMoveDown = false;
+	}
+
+
+		else
+		{ 
 		float valueDiffX{ 0.f };
 		float valueDiffY{ 0.f };
-		float diffX = playerPosX - GetGameObject()->GetPosition().x;
+		float diffX = m_TargetPosX - GetGameObject()->GetPosition().x;
 		if (diffX < 0) { valueDiffX = diffX * -1; }
 		else { valueDiffX = diffX; }
-		float diffY = playerPosY - GetGameObject()->GetPosition().y;
+		float diffY = m_TargetPosY - GetGameObject()->GetPosition().y;
 		if (diffY < 0) { valueDiffY = diffY * -1; }
 		else { valueDiffY = diffY; }
 		float deltaTime = Timer::GetInstance().GetDeltaTime();
 		if (valueDiffX > valueDiffY && diffX < 0 && (!m_BlockMoveLeft))
 		{
-
 			GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
 			m_enemyHorizontalSprite.get()->m_IsActive = true;
 			m_enemyVerticalSprite.get()->m_IsActive = false;
@@ -117,117 +262,142 @@ void dae::RecognizerEnemy::Update()
 		}
 		else
 		{
-			if (m_BlockMoveLeft && (!m_BlockMoveUp))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = false;
-
-			}
-			else if (m_BlockMoveLeft && m_BlockMoveUp && (!m_BlockMoveDown))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = true;
-			}
-			else if (m_BlockMoveLeft && (!m_BlockMoveRight))
-			{
-
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveRight && (!m_BlockMoveUp))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveRight && m_BlockMoveUp && (!m_BlockMoveDown))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = true;
-			}
-			else if (m_BlockMoveRight && (!m_BlockMoveLeft))
-			{
-
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-
-			else if (m_BlockMoveUp && (!m_BlockMoveLeft))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveUp && m_BlockMoveLeft && (!m_BlockMoveRight))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveUp && (!m_BlockMoveDown))
-			{
-
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = true;
-			}
-
-			else if (m_BlockMoveDown && (!m_BlockMoveLeft))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveDown && m_BlockMoveLeft && (!m_BlockMoveRight))
-			{
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_IsActive = false;
-				m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
-				m_enemyHorizontalSprite.get()->m_FlipVertical = false;
-			}
-			else if (m_BlockMoveDown && (!m_BlockMoveUp))
-			{
-
-				GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
-				m_enemyHorizontalSprite.get()->m_IsActive = false;
-				m_enemyVerticalSprite.get()->m_IsActive = true;
-				m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
-				m_enemyVerticalSprite.get()->m_FlipVertical = false;
-			}
-
-
+			ColEdgeCases();
 		}
 		m_BlockMoveRight = false;
 		m_BlockMoveLeft = false;
 		m_BlockMoveUp = false;
 		m_BlockMoveDown = false;
+	
+		}
+}
+void dae::RecognizerEnemy::ColEdgeCases()
+{
+	float deltaTime = Timer::GetInstance().GetDeltaTime();
+	if (m_Wander) { RandomizeDirection(); }
+	if (m_BlockMoveLeft && (!m_BlockMoveUp))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = false;
+
 	}
+	else if (m_BlockMoveLeft && m_BlockMoveUp && (!m_BlockMoveDown))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = true;
+	}
+	else if (m_BlockMoveLeft && (!m_BlockMoveRight))
+	{
+
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveRight && (!m_BlockMoveUp))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveRight && m_BlockMoveUp && (!m_BlockMoveDown))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = true;
+	}
+	else if (m_BlockMoveRight && (!m_BlockMoveLeft))
+	{
+
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+
+	else if (m_BlockMoveUp && (!m_BlockMoveLeft))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveUp && m_BlockMoveLeft && (!m_BlockMoveRight))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveUp && (!m_BlockMoveDown))
+	{
+
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = true;
+	}
+
+	else if (m_BlockMoveDown && (!m_BlockMoveLeft))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x - (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = true;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveDown && m_BlockMoveLeft && (!m_BlockMoveRight))
+	{
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_IsActive = false;
+		m_enemyHorizontalSprite.get()->m_FlipHorizontal = false;
+		m_enemyHorizontalSprite.get()->m_FlipVertical = false;
+	}
+	else if (m_BlockMoveDown && (!m_BlockMoveUp))
+	{
+
+		GetGameObject()->SetPosition(GetGameObject()->GetPosition().x, GetGameObject()->GetPosition().y + (deltaTime * m_EnemySpeed), GetGameObject()->GetPosition().z);
+		m_enemyHorizontalSprite.get()->m_IsActive = false;
+		m_enemyVerticalSprite.get()->m_IsActive = true;
+		m_enemyVerticalSprite.get()->m_FlipHorizontal = false;
+		m_enemyVerticalSprite.get()->m_FlipVertical = false;
+	}
+
+
+}
+void dae::RecognizerEnemy::DoWander()
+{
+	m_Wander = true;
+}
+void dae::RecognizerEnemy::DoMoveToLastPlayerPos()
+{
+	m_Wander = false;
+	m_TargetPosX = m_LastPlayerPosX;
+	m_TargetPosY = m_LastPlayerPosY;
+
+}
+
+void dae::RecognizerEnemy::DoMoveToPlayer()
+{
+	m_Wander = false;
+	m_TargetPosX = m_PlayerTargetPosX;
+	m_TargetPosY = m_PlayerTargetPosY;
 }
 
 void dae::RecognizerEnemy::OnColl(const GameObject* other)
@@ -275,3 +445,4 @@ bool dae::RecognizerEnemy::DoDamage()
 	}
 	return false;
 }
+
