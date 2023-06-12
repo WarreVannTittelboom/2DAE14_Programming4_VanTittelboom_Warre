@@ -17,12 +17,38 @@ namespace dae
 		PlayerTank& operator=(const PlayerTank& other) = delete;
 		PlayerTank& operator=(PlayerTank&& other) = delete;
 
+		enum Direction {
+			Left,
+			Right,
+			Up,
+			Down
+		};
+
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;
 		void OnColl(const GameObject* other) override;
 	
-		void SetMoveLeft(bool moveLeft) { m_MoveLeft = moveLeft; }
+		void SetMoveDir(bool moveLeft,Direction dir) 
+		{ 
+			if (dir == Direction::Left)
+			{
+				m_MoveLeft = moveLeft;
+			}
+			else if (dir == Direction::Right)
+			{
+				m_MoveRight = moveLeft;
+			}
+			else if (dir == Direction::Up)
+			{
+				m_MoveUp = moveLeft;
+			}
+			else if (dir == Direction::Down)
+			{
+				m_MoveDown = moveLeft;
+			}
+		}
+
 		void SetMoveRight(bool moveRight) { m_MoveRight = moveRight; }
 		void SetMoveUp(bool moveUp) { m_MoveUp = moveUp; }
 		void SetMoveDown(bool moveDown) { m_MoveDown = moveDown; }
@@ -32,6 +58,8 @@ namespace dae
 		void SetMoveCannonLeft(bool moveCannonLeft) { m_MoveCannonLeft = moveCannonLeft; }
 		void SetMoveCannonRight(bool moveCannonRight) { m_MoveCannonRight = moveCannonRight; }
 		unsigned int GetId() { return m_Id; }
+
+		
 	
 	private:
 		void InitTurretSprites();

@@ -44,13 +44,13 @@ void dae::PlayerTank::Initialize()
 	{
 		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
 
-		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(GetGameObject());
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Left );
 
-		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(GetGameObject());
+		cInputMap[controlButton::DpadRight] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Right);
 
-		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(GetGameObject());
+		cInputMap[controlButton::DpadUp] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Up);
 
-		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(GetGameObject());
+		cInputMap[controlButton::DpadDown] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Down);
 
 		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(GetGameObject());
 
@@ -66,13 +66,13 @@ void dae::PlayerTank::Initialize()
 
 		std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
 
-		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(GetGameObject());
+		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Left);
 
-		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(GetGameObject());
+		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Right);
 
-		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(GetGameObject());
+		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Up);
 
-		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(GetGameObject());
+		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Down);
 
 		kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(GetGameObject());
 
@@ -98,13 +98,13 @@ void dae::PlayerTank::Initialize()
 
 		std::map<SDL_Scancode, std::shared_ptr<Command>> kInputMap{};
 
-		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MoveLeft>(GetGameObject());
+		kInputMap[SDL_SCANCODE_LEFT] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Left);
 
-		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MoveRight>(GetGameObject());
+		kInputMap[SDL_SCANCODE_RIGHT] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Right);
 
-		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MoveUp>(GetGameObject());
+		kInputMap[SDL_SCANCODE_UP] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Up);
 
-		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MoveDown>(GetGameObject());
+		kInputMap[SDL_SCANCODE_DOWN] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Down);
 
 		kInputMap[SDL_SCANCODE_LCTRL] = std::make_shared<DoShoot>(GetGameObject());
 
@@ -120,14 +120,13 @@ void dae::PlayerTank::Initialize()
 		dae::InputManager::GetInstance().AddCommand(kInputMap, m_Id);
 
 		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Left);
 
-		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(GetGameObject());
+		cInputMap[controlButton::DpadRight] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Right);
 
-		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(GetGameObject());
+		cInputMap[controlButton::DpadUp] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Up);
 
-		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(GetGameObject());
-
-		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(GetGameObject());
+		cInputMap[controlButton::DpadDown] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Down);
 
 		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(GetGameObject());
 
@@ -152,13 +151,13 @@ void dae::PlayerTank::Initialize()
 	{
 		std::map<controlButton, std::shared_ptr<Command>> cInputMap{};
 
-		cInputMap[controlButton::DpadLeft] = std::make_shared<MoveLeft>(GetGameObject());
+		cInputMap[controlButton::DpadLeft] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Left);
 
-		cInputMap[controlButton::DpadRight] = std::make_shared<MoveRight>(GetGameObject());
+		cInputMap[controlButton::DpadRight] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Right);
 
-		cInputMap[controlButton::DpadUp] = std::make_shared<MoveUp>(GetGameObject());
+		cInputMap[controlButton::DpadUp] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Up);
 
-		cInputMap[controlButton::DpadDown] = std::make_shared<MoveDown>(GetGameObject());
+		cInputMap[controlButton::DpadDown] = std::make_shared<MovePlayer>(GetGameObject(), Direction::Down);
 
 		cInputMap[controlButton::ButtonA] = std::make_shared<DoShoot>(GetGameObject());
 

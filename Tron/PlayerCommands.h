@@ -6,56 +6,17 @@
 #include "TronGame.h"
 #include <Scene.h>
 
-class MoveLeft : public Command
+class MovePlayer : public Command
 {
 public:
-	MoveLeft(dae::GameObject* go)
+	MovePlayer(dae::GameObject* go, dae::PlayerTank::Direction dir)
 		:Command(go)
 	{
+		m_Dir = dir;
 	};
-	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(true); } }
-	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveLeft(false); } }
-
-
-};
-
-class MoveRight : public Command
-{
-public:
-	MoveRight(dae::GameObject* go)
-		:Command(go)
-	{
-	};
-	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(true); } }
-	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveRight(false); } }
-
-
-};
-
-class MoveUp : public Command
-{
-public:
-	MoveUp(dae::GameObject* go)
-		:Command(go)
-	{
-	};
-	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(true); } }
-	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveUp(false); } }
-
-
-
-};
-
-class MoveDown : public Command
-{
-public:
-	MoveDown(dae::GameObject* go)
-		:Command(go)
-	{
-	};
-	void Execute() override { if (!GetObj()->IsMarkedForDestroy()&& GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(true); } }
-	void Release() override { if (!GetObj()->IsMarkedForDestroy()&& GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDown(false); } }
-
+	void Execute() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDir(true, m_Dir); } }
+	void Release() override { if (!GetObj()->IsMarkedForDestroy() && GetObj() != nullptr) { GetObj()->GetComponent<dae::PlayerTank>()->SetMoveDir(false, m_Dir); } }
+	dae::PlayerTank::Direction m_Dir;
 };
 
 class DoShoot : public Command
